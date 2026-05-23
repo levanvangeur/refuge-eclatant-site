@@ -1,0 +1,281 @@
+/* ═══════════════════════════════════════════════════════════
+   Listing page — Clair-Obscur
+═══════════════════════════════════════════════════════════ */
+
+/* ── Hero ──────────────────────────────────────────────── */
+#listing-hero {
+  padding: 8rem 2rem 4rem;
+  text-align: center;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.listing-hero-content { max-width: 640px; margin: 0 auto; }
+
+.listing-hero-title {
+  margin: 0.5rem 0 1rem;
+}
+
+.listing-hero-sub {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+/* ── Grille ────────────────────────────────────────────── */
+#properties-section {
+  padding: 4rem 1.5rem 6rem;
+  background: var(--bg);
+}
+
+.listing-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+#properties-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
+  gap: 2rem;
+}
+
+/* ── Skeleton loaders ──────────────────────────────────── */
+.prop-skeleton {
+  height: 480px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  animation: skeleton-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* ── Carte appartement ─────────────────────────────────── */
+.prop-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  transition: border-color .3s, transform .3s var(--ease-out-expo);
+}
+
+.prop-card:hover {
+  border-color: var(--border-light);
+  transform: translateY(-2px);
+}
+
+/* ── Photos / carrousel ────────────────────────────────── */
+.prop-card-photos {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.prop-photo-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+
+.prop-photo-slide.active { opacity: 1; }
+
+.prop-photo-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.prop-photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Flèches nav */
+.prop-photo-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(6, 6, 8, .65);
+  border: 1px solid rgba(255,255,255,.1);
+  color: var(--text);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .2s;
+  z-index: 2;
+}
+
+.prop-card-photos:hover .prop-photo-nav { opacity: 1; }
+
+.prop-photo-nav.prev { left: 0.5rem; }
+.prop-photo-nav.next { right: 0.5rem; }
+
+/* Dots */
+.prop-photo-dots {
+  position: absolute;
+  bottom: 0.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+  z-index: 2;
+}
+
+.prop-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.35);
+  cursor: pointer;
+  transition: background .2s, transform .2s;
+}
+
+.prop-dot.active {
+  background: var(--gold);
+  transform: scale(1.2);
+}
+
+/* ── Corps de la carte ─────────────────────────────────── */
+.prop-card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.prop-card-name {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--text);
+}
+
+.prop-card-tagline {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.prop-card-desc {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.prop-card-cta {
+  margin-top: 1rem;
+  align-self: flex-start;
+}
+
+/* ── Scroll reveal ─────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .65s var(--ease-out-expo), transform .65s var(--ease-out-expo);
+}
+.reveal.revealed { opacity: 1; transform: translateY(0); }
+
+/* ── Footer ────────────────────────────────────────────── */
+#footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem;
+  background: var(--bg);
+}
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  text-align: center;
+}
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--gold);
+}
+.footer-copy { font-size: 0.75rem; color: var(--text-dim); }
+
+/* ── Admin drawer tabs ─────────────────────────────────── */
+.drw-tab {
+  flex: 1;
+  padding: 0.65rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--adm-text-muted, #8a8a95);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color .2s, border-color .2s;
+}
+.drw-tab.active {
+  color: var(--gold, #c9a96e);
+  border-bottom-color: var(--gold, #c9a96e);
+}
+
+/* ── Admin list item ───────────────────────────────────── */
+.adm-list-item {
+  padding: 0.65rem 0.75rem;
+  background: var(--adm-surface-2, #1a1a1e);
+  border: 1px solid var(--adm-border, #2a2a30);
+}
+
+/* ── Toast ─────────────────────────────────────────────── */
+#toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 9999;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.82rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  min-width: 200px;
+  max-width: 320px;
+  animation: toast-in .3s var(--ease-out-expo);
+}
+.toast-success { border-left: 3px solid #4caf84; }
+.toast-error   { border-left: 3px solid #e05050; }
+.toast-info    { border-left: 3px solid var(--gold); }
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive ────────────────────────────────────────── */
+@media (max-width: 600px) {
+  #listing-hero { padding: 6rem 1.25rem 3rem; }
+  #properties-section { padding: 2.5rem 1rem 4rem; }
+  #properties-grid { gap: 1.25rem; }
+}

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Clair-Obscur — Location courte durée</title>
+  <meta name="description" id="page-desc" content="Site vitrine premium — Location courte durée">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#060608">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- ══ NAVIGATION ═══════════════════════════════════════════ -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo" id="nav-logo">Clair-Obscur</a>
+  <div style="display:flex;align-items:center;gap:0.75rem;">
+    <a href="/listing.html" class="btn-primary nav-book-btn" id="hero-cta">
+      <i data-lucide="calendar-check" style="width:14px;height:14px;"></i>
+      Réserver votre prochain séjour
+    </a>
+    <button id="admin-nav-btn" onclick="handleAdminTrigger()" title="Administration" aria-label="Administration">
+      <i data-lucide="settings-2" style="width:18px;height:18px;"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- ══ HERO ══════════════════════════════════════════════════ -->
+<section id="hero">
+  <div id="hero-bg"></div>
+  <div id="hero-overlay"></div>
+  <div id="hero-content">
+    <p class="text-eyebrow hero-eyebrow" id="hero-eyebrow">Bienvenue au</p>
+    <h1 class="text-hero hero-title" id="hero-title">Clair-Obscur</h1>
+    <p class="hero-tagline" id="hero-tagline">Un havre de paix au cœur de la ville</p>
+  </div>
+  <div class="scroll-indicator">
+    <span>Découvrir</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══ ARRIVÉE + DÉPART ═══════════════════════════════════════ -->
+<section id="arrivee-depart" style="background:var(--bg);border-top:1px solid var(--border);">
+  <div class="section">
+    <div class="arrivee-depart-grid">
+      <div id="arrivee">
+        <div class="section-header reveal">
+          <p class="text-eyebrow">Check-in</p>
+          <span class="divider-line"></span>
+          <h2 class="text-section-title">Arrivée</h2>
+        </div>
+        <div id="arrivee-container"></div>
+      </div>
+      <div class="arrivee-depart-sep"></div>
+      <div id="depart">
+        <div class="section-header reveal">
+          <p class="text-eyebrow">Check-out</p>
+          <span class="divider-line"></span>
+          <h2 class="text-section-title">Départ</h2>
+        </div>
+        <div id="depart-container"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WI-FI ══════════════════════════════════════════════════ -->
+<section id="wifi" style="background:var(--bg);border-top:1px solid var(--border);">
+  <div class="section">
+    <div class="section-header reveal">
+      <p class="text-eyebrow">Connexion internet</p>
+      <span class="divider-line"></span>
+      <h2 class="text-section-title">Wi-Fi</h2>
+    </div>
+    <div id="wifi-container"></div>
+  </div>
+</section>
+
+<!-- ══ ÉQUIPEMENTS ════════════════════════════════════════════ -->
+<section id="equipements" style="background:var(--surface);border-top:1px solid var(--border);">
+  <div class="section">
+    <div class="section-header reveal">
+      <p class="text-eyebrow">Guide interactif</p>
+      <span class="divider-line"></span>
+      <h2 class="text-section-title">Équipements</h2>
+      <p style="color:var(--text-muted);margin-top:1rem;font-size:0.9rem;">Cliquez sur un équipement pour les instructions.</p>
+    </div>
+    <div id="equip-container" class="guide-accordion">
+      <div class="skeleton" style="height:200px;border-radius:2px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONFORT ════════════════════════════════════════════════ -->
+<section id="confort" style="background:var(--bg);border-top:1px solid var(--border);">
+  <div class="section">
+    <div class="section-header reveal">
+      <p class="text-eyebrow">Espaces & prestations</p>
+      <span class="divider-line"></span>
+      <h2 class="text-section-title">Confort</h2>
+      <p style="color:var(--text-muted);margin-top:1rem;font-size:0.9rem;">Cliquez sur un élément pour en savoir plus.</p>
+    </div>
+    <div id="confort-container" class="guide-accordion">
+      <div class="skeleton" style="height:160px;border-radius:2px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STATIONNEMENT ══════════════════════════════════════════ -->
+<section id="stationnement" style="background:var(--bg);border-top:1px solid var(--border);">
+  <div class="section">
+    <div class="section-header reveal">
+      <p class="text-eyebrow">Se garer</p>
+      <span class="divider-line"></span>
+      <h2 class="text-section-title">Stationnement</h2>
+    </div>
+    <div id="stationnement-container"></div>
+  </div>
+</section>
+
+<!-- ══ RÈGLEMENT INTÉRIEUR ════════════════════════════════════ -->
+<section id="reglement" style="background:var(--surface);border-top:1px solid var(--border);">
+  <div class="section">
+    <div class="section-header reveal">
+      <p class="text-eyebrow">À respecter</p>
+      <span class="divider-line"></span>
+      <h2 class="text-section-title">Règlement intérieur</h2>
+    </div>
+    <div id="reglement-container"></div>
+  </div>
+</section>
+
+<!-- ══ CONTACT / ASSISTANCE ══════════════════════════════════ -->
+<section id="contact" style="background:var(--bg);border-top:1px solid var(--border);">
+  <div class="section">
+    <div class="section-header reveal">
+      <p class="text-eyebrow">On est là pour vous</p>
+      <span class="divider-line"></span>
+      <h2 class="text-section-title">Contact<br><em>& Assistance</em></h2>
+    </div>
+    <div id="contact-container"></div>
+  </div>
+</section>
+
+<!-- ══ À DÉCOUVRIR ════════════════════════════════════════════ -->
+<section id="decouvrir" style="background:var(--surface);border-top:1px solid var(--border);">
+  <div class="section">
+    <div class="section-header reveal">
+      <p class="text-eyebrow">Autour de vous</p>
+      <span class="divider-line"></span>
+      <h2 class="text-section-title">À découvrir</h2>
+    </div>
+    <div id="decouvrir-container"></div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════ -->
+<footer>
+  <p id="footer-name" style="font-family:var(--font-display);font-size:1.1rem;font-weight:300;color:var(--text-muted);">Clair-Obscur</p>
+  <p>© <span id="footer-year"></span> · Tous droits réservés</p>
+</footer>
+
+<!-- ══ LIGHTBOX ══════════════════════════════════════════════ -->
+<div id="lightbox" role="dialog" aria-modal="true">
+  <button class="lightbox-close" id="lightbox-close"><i data-lucide="x" style="width:24px;height:24px;"></i></button>
+  <button class="lightbox-nav lightbox-prev" id="lightbox-prev"><i data-lucide="chevron-left" style="width:28px;height:28px;"></i></button>
+  <img id="lightbox-img" src="" alt="">
+  <button class="lightbox-nav lightbox-next" id="lightbox-next"><i data-lucide="chevron-right" style="width:28px;height:28px;"></i></button>
+</div>
+
+<!-- ══ BOUTON AIDE FLOTTANT ═══════════════════════════════════ -->
+<button id="help-btn" aria-label="Besoin d'aide ?">
+  <i data-lucide="life-buoy" style="width:18px;height:18px;color:var(--gold);"></i>
+  <span>Besoin d'aide ?</span>
+</button>
+<div id="help-modal" role="dialog">
+  <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:1.25rem;">
+    <div>
+      <p class="text-eyebrow" style="margin-bottom:0.25rem;">Assistance</p>
+      <h3 style="font-family:var(--font-display);font-size:1.3rem;font-weight:300;">Comment puis-je vous aider ?</h3>
+    </div>
+    <button onclick="closeHelp()" style="color:var(--text-dim);padding:0.25rem;">
+      <i data-lucide="x" style="width:18px;height:18px;"></i>
+    </button>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:0.75rem;">
+    <a id="help-phone-link" href="#" class="help-contact-row">
+      <i data-lucide="phone" style="width:16px;height:16px;color:var(--gold);flex-shrink:0;"></i>
+      <div><p style="font-size:0.72rem;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase;">Appeler</p>
+      <p id="help-phone-num" style="font-size:0.88rem;color:var(--text);">+33 6 00 00 00 00</p></div>
+    </a>
+    <a id="help-email-link" href="#" class="help-contact-row">
+      <i data-lucide="mail" style="width:16px;height:16px;color:var(--gold);flex-shrink:0;"></i>
+      <div><p style="font-size:0.72rem;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase;">Email</p>
+      <p id="help-email-addr" style="font-size:0.88rem;color:var(--text);">contact@example.fr</p></div>
+    </a>
+  </div>
+</div>
+
+<!-- ══ ADMIN — LOGIN ══════════════════════════════════════════ -->
+<div id="admin-login-modal" class="adm-modal-overlay" style="display:none;">
+  <div class="adm-modal-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
+      <div>
+        <p style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;">Administration</p>
+        <h2 style="font-family:var(--font-display);font-size:1.6rem;font-weight:300;">Connexion</h2>
+      </div>
+      <button onclick="closeAdminLogin()" style="color:var(--text-dim);padding:0.25rem;">
+        <i data-lucide="x" style="width:20px;height:20px;"></i>
+      </button>
+    </div>
+    <form id="admin-login-form">
+      <div class="adm-form-group">
+        <label class="adm-label">Identifiant</label>
+        <input type="text" id="adm-username" class="adm-input" placeholder="admin" autocomplete="username" required>
+      </div>
+      <div class="adm-form-group">
+        <label class="adm-label">Mot de passe</label>
+        <input type="password" id="adm-password" class="adm-input" placeholder="••••••••" autocomplete="current-password" required>
+      </div>
+      <div id="adm-login-error" style="display:none;margin-bottom:1rem;padding:0.6rem 0.875rem;background:rgba(224,85,85,0.1);border:1px solid rgba(224,85,85,0.3);color:#e05555;font-size:0.8rem;"></div>
+      <button type="submit" class="adm-btn adm-btn-gold" style="width:100%;justify-content:center;margin-top:0.5rem;">
+        <i data-lucide="log-in" style="width:14px;height:14px;"></i>
+        Se connecter
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ══ ADMIN — DRAWER ═════════════════════════════════════════ -->
+<div id="drawer-backdrop" onclick="closeAdminDrawer()"></div>
+
+<aside id="admin-drawer" role="complementary" aria-label="Panneau d'administration">
+
+  <div class="drawer-header">
+    <div>
+      <p style="font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.15rem;">Mode édition</p>
+      <p style="font-size:0.95rem;font-weight:500;" id="drawer-prop-name">—</p>
+    </div>
+    <div style="display:flex;gap:0.5rem;align-items:center;">
+      <button class="adm-btn adm-btn-ghost adm-btn-sm" onclick="adminLogout()" title="Déconnexion">
+        <i data-lucide="log-out" style="width:13px;height:13px;"></i>
+      </button>
+      <button class="adm-btn adm-btn-ghost adm-btn-sm" onclick="closeAdminDrawer()" title="Fermer">
+        <i data-lucide="x" style="width:14px;height:14px;"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="drawer-tabs" id="drawer-tabs">
+    <button class="drw-tab active" data-tab="info"     onclick="switchDrawerTab('info')">Logement</button>
+    <button class="drw-tab"        data-tab="equip"    onclick="switchDrawerTab('equip')">Équipements</button>
+    <button class="drw-tab"        data-tab="rules"    onclick="switchDrawerTab('rules')">Contenu</button>
+    <button class="drw-tab"        data-tab="booking"  onclick="switchDrawerTab('booking')">Réservation</button>
+    <button class="drw-tab"        data-tab="settings" onclick="switchDrawerTab('settings')">Paramètres</button>
+  </div>
+
+  <div class="drawer-body">
+
+    <!-- ── Logement ── -->
+    <div class="drw-panel active" id="drw-info">
+      <form onsubmit="adminSaveProp(event)">
+        <div class="adm-form-group">
+          <label class="adm-label">Nom du logement</label>
+          <input type="text" class="adm-input" id="dp-name" placeholder="Clair-Obscur">
+        </div>
+        <div class="adm-form-group">
+          <label class="adm-label">Tagline</label>
+          <input type="text" class="adm-input" id="dp-tagline" placeholder="Un havre de paix…">
+        </div>
+        <div class="adm-form-group">
+          <label class="adm-label">Description</label>
+          <textarea class="adm-input" id="dp-desc" rows="4" placeholder="Description détaillée…"></textarea>
+        </div>
+        <div class="adm-form-group">
+          <label class="adm-label">Statut</label>
+          <select class="adm-input" id="dp-active">
+            <option value="1">Actif</option>
+            <option value="0">Inactif</option>
+          </select>
+        </div>
+        <button type="submit" class="adm-btn adm-btn-gold" style="width:100%;justify-content:center;">
+          <i data-lucide="save" style="width:13px;height:13px;"></i> Enregistrer
+        </button>
+      </form>
+      <div class="adm-separator"></div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.6rem;">
+        <p class="adm-label" style="margin:0;">Photos d'accueil</p>
+        <small style="color:var(--adm-text-dim);font-size:0.7rem;">Défilent en fondu sur la page d'accueil</small>
+      </div>
+      <div id="dp-hero-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.4rem;margin-bottom:0.5rem;"></div>
+      <label style="display:flex;align-items:center;justify-content:center;gap:0.4rem;padding:0.55rem;border:1px dashed var(--adm-border);border-radius:3px;cursor:pointer;font-size:0.75rem;color:var(--adm-text-muted);">
+        <i data-lucide="image-plus" style="width:14px;height:14px;"></i> Ajouter une photo
+        <input type="file" accept="image/*" multiple style="display:none;" onchange="adminUploadHeroImages(this)">
+      </label>
+
+    </div>
+
+    <!-- ── Équipements ── -->
+    <div class="drw-panel" id="drw-equip">
+
+      <!-- Formulaire partagé (caché par défaut) -->
+      <div id="equip-form-block" style="display:none;background:var(--adm-surface-2);padding:1rem;margin-bottom:1.25rem;border:1px solid var(--adm-border);">
+        <p class="adm-label" style="margin-bottom:0.75rem;" id="equip-form-title">Nouvel équipement</p>
+        <input type="hidden" id="ef-id">
+        <input type="hidden" id="ef-category">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+          <div class="adm-form-group"><label class="adm-label">Nom</label><input type="text" class="adm-input" id="ef-name" placeholder="Télévision 4K"></div>
+          <div class="adm-form-group">
+            <label class="adm-label">Icône</label>
+            <select class="adm-input" id="ef-icon">
+              <option value="wrench">🔧 Outil</option>
+              <option value="tv-2">📺 TV</option>
+              <option value="wifi">📶 WiFi</option>
+              <option value="wind">💨 Clim / Ventilateur</option>
+              <option value="flame">🔥 Plaque de cuisson</option>
+              <option value="square">⬜ Four</option>
+              <option value="droplets">💧 Lave-vaisselle</option>
+              <option value="coffee">☕ Cafetière</option>
+              <option value="moon">🌙 Literie</option>
+              <option value="sun">☀️ Store / Volet</option>
+              <option value="droplet">🚿 Douche</option>
+              <option value="zap">⚡ Électricité</option>
+              <option value="thermometer">🌡️ Chauffage</option>
+              <option value="key">🔑 Clé / Accès</option>
+              <option value="lock">🔒 Cadenas</option>
+              <option value="trash-2">🗑️ Poubelle</option>
+              <option value="utensils">🍴 Ustensiles</option>
+              <option value="refrigerator">🧊 Réfrigérateur</option>
+              <option value="sofa">🛋️ Canapé</option>
+              <option value="bath">🛁 Baignoire</option>
+              <option value="trees">🌳 Terrasse / Balcon</option>
+              <option value="glass-water">🍹 Bar américain</option>
+              <option value="info">ℹ️ Info</option>
+            </select>
+          </div>
+        </div>
+        <div class="adm-form-group"><label class="adm-label">Instructions</label><textarea class="adm-input" id="ef-instructions" rows="3" placeholder="Comment utiliser…"></textarea></div>
+        <div class="adm-form-group"><label class="adm-label">Astuce</label><input type="text" class="adm-input" id="ef-tips" placeholder="Conseil pratique…"></div>
+        <div style="display:flex;gap:0.5rem;">
+          <button class="adm-btn adm-btn-gold adm-btn-sm" onclick="adminSaveEquip()"><i data-lucide="save" style="width:12px;height:12px;"></i> Sauvegarder</button>
+          <button class="adm-btn adm-btn-ghost adm-btn-sm" onclick="closeEquipForm()">Annuler</button>
+        </div>
+      </div>
+
+      <!-- Section Équipements -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;">
+        <p class="adm-section-title" style="margin:0;">Équipements</p>
+        <button class="adm-btn adm-btn-gold adm-btn-sm" onclick="openEquipForm('equipement')">
+          <i data-lucide="plus" style="width:13px;height:13px;"></i> Ajouter
+        </button>
+      </div>
+      <div id="drw-equip-list" style="margin-bottom:1.75rem;"></div>
+
+      <!-- Section Confort -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;">
+        <p class="adm-section-title" style="margin:0;">Confort</p>
+        <button class="adm-btn adm-btn-gold adm-btn-sm" onclick="openEquipForm('confort')">
+          <i data-lucide="plus" style="width:13px;height:13px;"></i> Ajouter
+        </button>
+      </div>
+      <div id="drw-confort-list"></div>
+
+    </div>
+
+    <!-- ── Contenu ── -->
+    <div class="drw-panel" id="drw-rules">
+
+      <!-- ARRIVÉE -->
+      <p class="adm-section-title">Arrivée</p>
+      <div class="adm-form-group">
+        <label class="adm-label">Heure check-in</label>
+        <input type="time" class="adm-input" id="dr-checkin-time">
+      </div>
+      <div class="adm-form-group">
+        <label class="adm-label">Instructions <span style="font-weight:400;color:var(--adm-text-dim,#666);">— une ligne = une étape</span></label>
+        <textarea class="adm-input" id="dr-checkin-inst" rows="5"
+          placeholder="Récupérer les clés dans la boîte (code 1234)&#10;Entrer par l'ascenseur, 3e étage&#10;Profiter du séjour !"></textarea>
+      </div>
+
+      <div class="adm-separator"></div>
+
+      <!-- DÉPART -->
+      <p class="adm-section-title">Départ</p>
+      <div class="adm-form-group">
+        <label class="adm-label">Heure check-out</label>
+        <input type="time" class="adm-input" id="dr-checkout-time">
+      </div>
+      <div class="adm-form-group">
+        <label class="adm-label">Instructions <span style="font-weight:400;color:var(--adm-text-dim,#666);">— une ligne = une étape</span></label>
+        <textarea class="adm-input" id="dr-checkout-inst" rows="5"
+          placeholder="Déposer les clés sur le comptoir&#10;Éteindre toutes les lumières&#10;Fermer la porte à clé"></textarea>
+      </div>
+
+      <div class="adm-separator"></div>
+
+      <!-- WI-FI, STATIONNEMENT, RÈGLEMENT, DÉCOUVRIR — bouton save indépendant -->
+      <p class="adm-section-title">Wi-Fi</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+        <div class="adm-form-group"><label class="adm-label">Réseau</label><input type="text" class="adm-input" id="dr-wifi-name" placeholder="MonWifi"></div>
+        <div class="adm-form-group"><label class="adm-label">Mot de passe</label><input type="text" class="adm-input" id="dr-wifi-pass" placeholder="••••"></div>
+      </div>
+
+      <div class="adm-separator"></div>
+      <p class="adm-section-title">Stationnement</p>
+      <div class="adm-form-group"><textarea class="adm-input" id="dr-parking" rows="3" placeholder="Parking public à 50m, code d'accès…"></textarea></div>
+
+      <div class="adm-separator"></div>
+      <p class="adm-section-title">Règlement intérieur</p>
+      <div class="adm-form-group"><textarea class="adm-input" id="dr-house-rules" rows="5" placeholder="• Pas de fête&#10;• Non fumeur…"></textarea></div>
+      <div class="adm-form-group"><label class="adm-label">Instructions poubelles</label><textarea class="adm-input" id="dr-trash" rows="2" placeholder="Local, codes, tri sélectif…"></textarea></div>
+
+      <div class="adm-separator"></div>
+      <p class="adm-section-title">À découvrir</p>
+      <div class="adm-form-group"><textarea class="adm-input" id="dr-places" rows="5" placeholder="• Restaurant Le Mistral — 2 min à pied&#10;• Marché du Cours Saleya — 10 min…"></textarea></div>
+
+      <button class="adm-btn adm-btn-gold" style="width:100%;justify-content:center;" onclick="adminSaveRules()">
+        <i data-lucide="save" style="width:13px;height:13px;"></i> Enregistrer le contenu
+      </button>
+    </div>
+
+
+    <!-- ── Réservation ── -->
+    <div class="drw-panel" id="drw-booking">
+      <div id="booking-list" style="margin-bottom:1.25rem;display:flex;flex-direction:column;gap:0.5rem;"></div>
+      <p class="adm-section-title" style="margin-bottom:0.75rem;">Ajouter un lien</p>
+      <form onsubmit="adminAddBooking(event)">
+        <div class="adm-form-group"><label class="adm-label">Nom affiché</label><input type="text" class="adm-input" id="db-label" placeholder="Réservation directe, Airbnb…"></div>
+        <div class="adm-form-group"><label class="adm-label">Lien de réservation *</label><input type="url" class="adm-input" id="db-url" placeholder="https://…"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+          <div class="adm-form-group"><label class="adm-label">Prix / nuit</label><input type="number" class="adm-input" id="db-price" placeholder="120" min="0"></div>
+          <div class="adm-form-group"><label class="adm-label">Devise</label>
+            <select class="adm-input" id="db-currency">
+              <option value="EUR">EUR €</option>
+              <option value="USD">USD $</option>
+              <option value="GBP">GBP £</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="adm-btn adm-btn-gold" style="width:100%;justify-content:center;">
+          <i data-lucide="plus" style="width:13px;height:13px;"></i> Ajouter
+        </button>
+      </form>
+    </div>
+
+    <!-- ── Paramètres ── -->
+    <div class="drw-panel" id="drw-settings">
+      <form onsubmit="adminSaveSettings(event)">
+        <p class="adm-section-title">Contact voyageur</p>
+        <div class="adm-form-group"><label class="adm-label">Nom du site</label><input type="text" class="adm-input" id="ds-sitename" placeholder="Clair-Obscur"></div>
+        <div class="adm-form-group"><label class="adm-label">Téléphone d'aide</label><input type="text" class="adm-input" id="ds-phone" placeholder="+33 6 00 00 00 00"></div>
+        <div class="adm-form-group"><label class="adm-label">Email d'aide</label><input type="email" class="adm-input" id="ds-email" placeholder="contact@example.fr"></div>
+        <button type="submit" class="adm-btn adm-btn-gold" style="width:100%;justify-content:center;">
+          <i data-lucide="save" style="width:13px;height:13px;"></i> Enregistrer
+        </button>
+      </form>
+      <div class="adm-separator"></div>
+      <form onsubmit="adminChangePassword(event)">
+        <p class="adm-section-title">Changer le mot de passe</p>
+        <div class="adm-form-group"><label class="adm-label">Mot de passe actuel</label><input type="password" class="adm-input" id="ds-cur-pass" required></div>
+        <div class="adm-form-group"><label class="adm-label">Nouveau mot de passe</label><input type="password" class="adm-input" id="ds-new-pass" required placeholder="Nouveau mot de passe"></div>
+        <div class="adm-form-group"><label class="adm-label">Confirmer</label><input type="password" class="adm-input" id="ds-confirm-pass" required></div>
+        <button type="submit" class="adm-btn adm-btn-ghost" style="width:100%;justify-content:center;">
+          <i data-lucide="key" style="width:13px;height:13px;"></i> Changer le mot de passe
+        </button>
+      </form>
+    </div>
+
+  </div>
+</aside>
+
+<!-- ══ Modal placement hotspot (admin) ═══════════════════════ -->
+<div id="hotspot-modal">
+  <div style="width:100%;max-width:min(920px,92vw);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+      <div>
+        <p style="font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);">Mode placement</p>
+        <p id="hm-room-name" style="font-size:0.9rem;font-weight:500;color:#eee;">—</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <p style="font-size:0.75rem;color:var(--adm-text-muted);">Cliquez sur la photo pour placer un point</p>
+        <button onclick="closeHotspotModal()" style="background:none;border:1px solid var(--adm-border);color:#aaa;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+          <i data-lucide="x" style="width:14px;height:14px;"></i>
+        </button>
+      </div>
+    </div>
+    <div id="hotspot-modal-img-wrap" onclick="handleHotspotPhotoClick(event)">
+      <img id="hm-photo" src="" alt="">
+      <div id="hotspot-place-form">
+        <div style="display:flex;margin-bottom:0.6rem;border:1px solid var(--adm-border);">
+          <button id="hm-mode-existing" class="hm-mode-btn active" type="button">Équipement</button>
+          <button id="hm-mode-free"     class="hm-mode-btn"        type="button">Note</button>
+        </div>
+        <div id="hm-block-existing">
+          <p style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--adm-text-muted);margin-bottom:0.35rem;">Choisir un équipement</p>
+          <select id="hm-equip-select" class="adm-input adm-input-sm" style="margin-bottom:0.5rem;"></select>
+        </div>
+        <div id="hm-block-free" style="display:none;">
+          <p style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--adm-text-muted);margin-bottom:0.25rem;">Titre</p>
+          <input type="text" id="hm-free-label" class="adm-input adm-input-sm" placeholder="Balcon" style="margin-bottom:0.3rem;">
+          <p style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--adm-text-muted);margin-bottom:0.25rem;">Description (optionnel)</p>
+          <textarea id="hm-free-desc" class="adm-input adm-input-sm" rows="2" placeholder="Vue sur les toits…" style="margin-bottom:0.4rem;"></textarea>
+        </div>
+        <div style="display:flex;gap:0.4rem;margin-top:0.25rem;">
+          <button id="hm-confirm-btn" class="adm-btn adm-btn-gold adm-btn-xs" type="button" style="flex:1;justify-content:center;">✓ OK</button>
+          <button id="hm-cancel-btn"  class="adm-btn adm-btn-ghost adm-btn-xs" type="button">✕</button>
+        </div>
+      </div>
+    </div>
+    <div id="hm-hotspots-list" style="margin-top:0.75rem;display:flex;flex-wrap:wrap;gap:0.5rem;"></div>
+  </div>
+</div>
+
+<!-- ══ Toast container ════════════════════════════════════════ -->
+<div id="toast-container"></div>
+
+<script src="/js/main.js"></script>
+</body>
+</html>

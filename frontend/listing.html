@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nos appartements — Clair-Obscur</title>
+  <meta name="description" content="Découvrez nos appartements de charme disponibles en location courte durée.">
+  <meta name="theme-color" content="#060608">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/listing.css">
+</head>
+<body>
+
+<!-- ══ NAVIGATION ═══════════════════════════════════════════ -->
+<nav id="navbar">
+  <a href="/" class="nav-logo" id="nav-logo">Clair-Obscur</a>
+  <button id="admin-nav-btn" onclick="handleAdminTrigger()" title="Administration" aria-label="Administration">
+    <i data-lucide="settings-2" style="width:18px;height:18px;"></i>
+  </button>
+</nav>
+
+<!-- ══ HERO ══════════════════════════════════════════════════ -->
+<section id="listing-hero">
+  <div class="listing-hero-content">
+    <p class="text-eyebrow">Location courte durée</p>
+    <h1 class="text-hero listing-hero-title">Nos <em>appartements</em></h1>
+    <p class="listing-hero-sub">Choisissez votre logement et réservez en direct, sans frais de service.</p>
+  </div>
+</section>
+
+<!-- ══ GRILLE DES APPARTEMENTS ═══════════════════════════════ -->
+<section id="properties-section">
+  <div class="listing-container">
+    <div id="properties-grid">
+      <!-- Skeleton loaders -->
+      <div class="prop-skeleton"></div>
+      <div class="prop-skeleton"></div>
+      <div class="prop-skeleton"></div>
+    </div>
+    <p id="no-properties" style="display:none;text-align:center;color:var(--text-muted);padding:4rem 0;font-size:1rem;">
+      Aucun appartement disponible pour le moment.
+    </p>
+  </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════ -->
+<footer id="footer">
+  <div class="footer-inner">
+    <p class="footer-brand" id="footer-name">Clair-Obscur</p>
+    <p class="footer-copy">© <span id="footer-year"></span> — Tous droits réservés</p>
+  </div>
+</footer>
+
+<!-- ══ TOAST ══════════════════════════════════════════════════ -->
+<div id="toast-container"></div>
+
+<!-- ══ ADMIN : MODAL LOGIN ════════════════════════════════════ -->
+<div id="admin-login-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;align-items:center;justify-content:center;">
+  <div style="background:var(--surface-2);border:1px solid var(--border);padding:2rem;width:min(380px,90vw);border-radius:2px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+      <p style="font-family:var(--font-display);font-size:1.3rem;font-weight:300;">Administration</p>
+      <button onclick="closeAdminLogin()" style="color:var(--text-muted);"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
+    </div>
+    <form id="admin-login-form">
+      <div style="margin-bottom:0.75rem;"><input type="text" id="adm-username" placeholder="Identifiant" autocomplete="username" style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:0.6rem 0.75rem;font-family:var(--font-body);font-size:0.85rem;"></div>
+      <div style="margin-bottom:1rem;"><input type="password" id="adm-password" placeholder="Mot de passe" autocomplete="current-password" style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:0.6rem 0.75rem;font-family:var(--font-body);font-size:0.85rem;"></div>
+      <p id="adm-login-error" style="display:none;color:#e05050;font-size:0.8rem;margin-bottom:0.75rem;"></p>
+      <button type="submit" style="width:100%;background:var(--gold);color:var(--bg);border:none;padding:0.7rem;font-family:var(--font-body);font-size:0.85rem;font-weight:500;cursor:pointer;letter-spacing:0.05em;">Connexion</button>
+    </form>
+  </div>
+</div>
+
+<!-- ══ ADMIN : DRAWER ════════════════════════════════════════ -->
+<div id="admin-drawer" style="position:fixed;top:0;right:0;height:100%;width:min(420px,100vw);background:var(--adm-bg,#101012);border-left:1px solid var(--adm-border,#2a2a30);z-index:900;transform:translateX(100%);transition:transform .35s cubic-bezier(0.16,1,0.3,1);display:flex;flex-direction:column;overflow:hidden;">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.25rem 0.75rem;border-bottom:1px solid var(--adm-border,#2a2a30);flex-shrink:0;">
+    <p style="font-family:var(--font-display);font-size:1.1rem;font-weight:300;color:var(--adm-text,#f0f0f0);">Administration</p>
+    <button onclick="closeAdminDrawer()" style="color:var(--adm-text-muted,#8a8a95);"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
+  </div>
+
+  <!-- Tabs -->
+  <div style="display:flex;border-bottom:1px solid var(--adm-border,#2a2a30);flex-shrink:0;">
+    <button class="drw-tab active" data-tab="props" onclick="switchTab('props')">Appartements</button>
+    <button class="drw-tab" data-tab="settings" onclick="switchTab('settings')">Paramètres</button>
+  </div>
+
+  <!-- Drawer body -->
+  <div style="flex:1;overflow-y:auto;padding:1.25rem;" id="drawer-body">
+
+    <!-- ── Appartements ── -->
+    <div class="drw-panel" id="drw-props">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+        <p style="font-size:0.82rem;color:var(--adm-text-muted,#8a8a95);">Gérez vos appartements</p>
+        <button class="adm-btn adm-btn-gold adm-btn-sm" onclick="openNewPropForm()">
+          <i data-lucide="plus" style="width:13px;height:13px;"></i> Nouveau
+        </button>
+      </div>
+
+      <!-- Formulaire création/édition -->
+      <div id="prop-form-block" style="display:none;background:var(--adm-surface-2,#1a1a1e);padding:1rem;margin-bottom:1rem;border:1px solid var(--adm-border,#2a2a30);">
+        <p class="adm-label" id="prop-form-title" style="margin-bottom:0.75rem;">Nouvel appartement</p>
+        <input type="hidden" id="pf-id">
+        <div class="adm-form-group"><label class="adm-label">Nom *</label><input type="text" class="adm-input" id="pf-name" placeholder="Villa Lumière"></div>
+        <div class="adm-form-group"><label class="adm-label">Accroche</label><input type="text" class="adm-input" id="pf-tagline" placeholder="Un havre de paix…"></div>
+        <div class="adm-form-group"><label class="adm-label">Description</label><textarea class="adm-input" id="pf-desc" rows="3" placeholder="Description de l'appartement…"></textarea></div>
+        <div class="adm-form-group" id="pf-active-group" style="display:none;">
+          <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+            <input type="checkbox" id="pf-active" style="accent-color:var(--gold);"> <span class="adm-label" style="margin:0;">Visible sur le site</span>
+          </label>
+        </div>
+        <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+          <button class="adm-btn adm-btn-gold adm-btn-sm" onclick="adminSaveProp()"><i data-lucide="save" style="width:12px;height:12px;"></i> Sauvegarder</button>
+          <button class="adm-btn adm-btn-ghost adm-btn-sm" onclick="closePropForm()">Annuler</button>
+        </div>
+      </div>
+
+      <!-- Liste des appartements -->
+      <div id="props-list"><p style="color:var(--adm-text-muted,#8a8a95);font-size:0.82rem;">Chargement…</p></div>
+
+      <!-- Galerie de l'appartement sélectionné -->
+      <div id="prop-gallery-block" style="display:none;margin-top:1.25rem;border-top:1px solid var(--adm-border,#2a2a30);padding-top:1rem;">
+        <p class="adm-label" style="margin-bottom:0.5rem;">Photo principale <small style="color:var(--adm-text-dim,#555560);font-weight:300;">(image hero)</small></p>
+        <div id="prop-main-img-preview" style="margin-bottom:0.5rem;"></div>
+        <label style="display:flex;align-items:center;justify-content:center;gap:0.4rem;padding:0.5rem;border:1px dashed var(--adm-border,#2a2a30);cursor:pointer;font-size:0.75rem;color:var(--adm-text-muted,#8a8a95);margin-bottom:1rem;">
+          <i data-lucide="image" style="width:14px;height:14px;"></i> Changer la photo hero
+          <input type="file" accept="image/*" style="display:none;" onchange="adminUploadMainImg(this)">
+        </label>
+
+        <div class="adm-separator"></div>
+        <p class="adm-label" style="margin-bottom:0.5rem;">Galerie de présentation</p>
+        <div id="prop-gallery-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.4rem;margin-bottom:0.5rem;"></div>
+        <label style="display:flex;align-items:center;justify-content:center;gap:0.4rem;padding:0.5rem;border:1px dashed var(--adm-border,#2a2a30);cursor:pointer;font-size:0.75rem;color:var(--adm-text-muted,#8a8a95);">
+          <i data-lucide="image-plus" style="width:14px;height:14px;"></i> Ajouter une photo
+          <input type="file" accept="image/*" style="display:none;" onchange="adminUploadGalleryImg(this)">
+        </label>
+      </div>
+    </div>
+
+    <!-- ── Paramètres ── -->
+    <div class="drw-panel" id="drw-settings" style="display:none;">
+      <form onsubmit="adminSaveSettings(event)">
+        <p class="adm-section-title">Contact & assistance</p>
+        <div class="adm-form-group"><label class="adm-label">Téléphone</label><input type="tel" class="adm-input" id="ds-phone" placeholder="+33 6 00 00 00 00"></div>
+        <div class="adm-form-group"><label class="adm-label">Email</label><input type="email" class="adm-input" id="ds-email" placeholder="contact@example.fr"></div>
+        <div class="adm-form-group"><label class="adm-label">Nom du site</label><input type="text" class="adm-input" id="ds-sitename" placeholder="Clair-Obscur"></div>
+        <button type="submit" class="adm-btn adm-btn-gold" style="width:100%;justify-content:center;">
+          <i data-lucide="save" style="width:13px;height:13px;"></i> Enregistrer
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
+<div id="admin-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:850;" onclick="closeAdminDrawer()"></div>
+
+<script src="/js/listing.js"></script>
+</body>
+</html>
