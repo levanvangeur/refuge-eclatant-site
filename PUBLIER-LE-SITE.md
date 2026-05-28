@@ -1,11 +1,11 @@
-# Guide Clair-Obscur — Comment ça marche
+# Guide Refuge Éclatant — Comment ça marche
 
 ## L'idée générale
 
-Vous configurez tout **sur votre ordinateur** (en local), puis vous envoyez les modifications sur le site en ligne. C'est simple et gratuit !
+Vous configurez tout **sur votre ordinateur** (en local), puis vous envoyez les modifications en ligne.
 
 ```
-Votre ordi  →  GitHub  →  Site en ligne (Render)
+Votre ordi  →  GitHub  →  Netlify (déploiement automatique)
 ```
 
 ---
@@ -24,48 +24,43 @@ Le site s'ouvre automatiquement dans votre navigateur :
 
 ## Workflow habituel
 
-### 1. Configurer le site
+### 1. Configurer le contenu du site
+Deux options possibles :
+
+**Option A — Directement en ligne (recommandé)**
+1. Allez sur https://refuge-eclatant.logementsparay.fr/admin
+2. Connectez-vous (admin / votre mot de passe)
+3. Modifiez photos, pièces, règles, etc.
+4. Les changements sont sauvegardés immédiatement
+
+**Option B — En local puis publier**
 1. Double-cliquez `DEMARRER-EN-LOCAL.bat`
 2. Allez sur http://localhost:3000/admin
-3. Modifiez ce que vous voulez (photos, pièces, règles...)
+3. Modifiez ce que vous voulez
 4. Fermez la fenêtre noire quand vous avez terminé
 
-### 2. Publier en ligne
+### 2. Publier une modification de code
 1. Double-cliquez **`PUBLIER-MES-MODIFICATIONS.bat`**
-2. Attendez 2-3 minutes que Render redéploie
+   (ou lancez `.\PUBLIER.ps1 "Description"` dans PowerShell)
+2. Netlify redéploie automatiquement en ~1 minute
 3. Votre site en ligne est à jour !
 
 ---
 
 ## Points importants
 
-- **L'admin du site en ligne ne sauvegarde pas** — faites toujours vos modifications en local
-- **Les photos et les données sont dans Git** — elles ne se perdent plus entre les redémarrages
-- Le site en ligne est en lecture seule pour les voyageurs
+- **Les données et photos sont dans le cloud** (Turso + Cloudinary) — elles persistent entre les déploiements
+- **L'admin en ligne fonctionne** — vous pouvez modifier le contenu directement sur le site
+- **Aucun délai de démarrage** — Netlify Functions démarrent instantanément (contrairement à Render)
 
 ---
 
 ## Le site en ligne
 
-Adresse : https://clair-obscur-site.onrender.com
-
-> Sur le plan gratuit, le serveur "s'endort" apres 15 min sans visiteur.
-> Le premier visiteur attend ~20 secondes. C'est normal.
+Adresse : https://refuge-eclatant.logementsparay.fr
 
 ---
 
 ## Mot de passe admin
 
-**Par défaut : `azerty`** — changez-le dès que possible dans l'espace admin local → Paramètres.
-
----
-
-## Premiere installation de GitHub Desktop (si pas encore fait)
-
-Si vous n'avez pas encore GitHub Desktop :
-1. Téléchargez sur https://desktop.github.com
-2. Connectez-vous avec votre compte GitHub
-3. Fichier → Cloner un dépôt → clair-obscur-site
-4. Choisissez l'emplacement sur votre ordinateur
-
-Ensuite les scripts `.bat` s'occupent de tout !
+**Par défaut : `azerty`** — changez-le dès que possible dans l'espace admin → Paramètres → Sécurité.
