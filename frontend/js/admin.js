@@ -315,7 +315,7 @@ window.uploadPropImage = async function(input) {
     toast('Upload en cours…', 'info');
     const res = await apiFetchForm(`/api/properties/${selectedPropId}/image`, fd);
     document.getElementById('prop-img-preview').innerHTML =
-      `<img src="/uploads/${res.filename}?t=${Date.now()}" style="max-height:200px;border:1px solid var(--border);">`;
+      `<img src="${imgUrl(res.filename)}?t=${Date.now()}" style="max-height:200px;border:1px solid var(--border);">`;
     toast('Image mise à jour');
   } catch (err) {
     toast(err.message, 'error');
@@ -374,7 +374,7 @@ window.loadRoomsForProp = async function() {
           <div class="img-grid" id="imgs-${room.id}">
             ${(room.images || []).map(img => `
               <div class="img-thumb">
-                <img src="/uploads/${img.filename}" alt="${esc(img.alt_text || '')}">
+                <img src="${imgUrl(img.filename)}" alt="${esc(img.alt_text || '')}">
                 <button class="img-thumb-del" onclick="deleteRoomImage(${room.id}, ${img.id})" title="Supprimer">
                   <i data-lucide="x" style="width:12px;height:12px;"></i>
                 </button>
@@ -806,6 +806,11 @@ window.toast = function(msg, type = 'success') {
 // ══════════════════════════════════════════════════════════
 // UTILITAIRE XSS
 // ══════════════════════════════════════════════════════════
+function imgUrl(filename) {
+  if (!filename) return '';
+  return /^https?:\/\//.test(filename) ? filename : '/uploads/' + filename;
+}
+
 function esc(str) {
   if (!str) return '';
   return String(str)

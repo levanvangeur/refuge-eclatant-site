@@ -13,6 +13,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 
@@ -20,7 +22,7 @@
 <nav id="navbar">
   <a href="#hero" class="nav-logo" id="nav-logo">Clair-Obscur</a>
   <div style="display:flex;align-items:center;gap:0.75rem;">
-    <a href="/listing.html" class="btn-primary nav-book-btn" id="hero-cta">
+    <a href="https://paray-appart-location.onrender.com" target="_blank" class="btn-primary nav-book-btn" id="hero-cta">
       <i data-lucide="calendar-check" style="width:14px;height:14px;"></i>
       Réserver votre prochain séjour
     </a>
@@ -44,6 +46,9 @@
     <div class="scroll-line"></div>
   </div>
 </section>
+
+<!-- ══ QUICKINFO BAR ══════════════════════════════════════════ -->
+<div id="quickinfo-bar"><div id="quickinfo-inner"></div></div>
 
 <!-- ══ ARRIVÉE + DÉPART ═══════════════════════════════════════ -->
 <section id="arrivee-depart" style="background:var(--bg);border-top:1px solid var(--border);">
@@ -88,7 +93,7 @@
     <div class="section-header reveal">
       <p class="text-eyebrow">Guide interactif</p>
       <span class="divider-line"></span>
-      <h2 class="text-section-title">Équipements</h2>
+      <h2 class="text-section-title">Équipements et confort</h2>
       <p style="color:var(--text-muted);margin-top:1rem;font-size:0.9rem;">Cliquez sur un équipement pour les instructions.</p>
     </div>
     <div id="equip-container" class="guide-accordion">
@@ -97,20 +102,6 @@
   </div>
 </section>
 
-<!-- ══ CONFORT ════════════════════════════════════════════════ -->
-<section id="confort" style="background:var(--bg);border-top:1px solid var(--border);">
-  <div class="section">
-    <div class="section-header reveal">
-      <p class="text-eyebrow">Espaces & prestations</p>
-      <span class="divider-line"></span>
-      <h2 class="text-section-title">Confort</h2>
-      <p style="color:var(--text-muted);margin-top:1rem;font-size:0.9rem;">Cliquez sur un élément pour en savoir plus.</p>
-    </div>
-    <div id="confort-container" class="guide-accordion">
-      <div class="skeleton" style="height:160px;border-radius:2px;"></div>
-    </div>
-  </div>
-</section>
 
 <!-- ══ STATIONNEMENT ══════════════════════════════════════════ -->
 <section id="stationnement" style="background:var(--bg);border-top:1px solid var(--border);">
@@ -160,6 +151,31 @@
   </div>
 </section>
 
+<!-- ══ TRANSPORTS ════════════════════════════════════════════ -->
+<section id="transports" style="background:var(--surface);border-top:1px solid var(--border);">
+  <div class="section">
+    <div class="section-header reveal">
+      <p class="text-eyebrow">Se déplacer</p>
+      <span class="divider-line"></span>
+      <h2 class="text-section-title">Bus PLM</h2>
+      <p style="color:var(--text-muted);margin-top:0.75rem;font-size:0.9rem;">Navette urbaine · Lundi – Samedi · 7h–19h · 1 départ / heure</p>
+    </div>
+    <div id="plm-container" style="margin-top:2.5rem;"></div>
+  </div>
+</section>
+
+<!-- ══ LOCALISATION ══════════════════════════════════════════ -->
+<section id="localisation" style="background:var(--bg);border-top:1px solid var(--border);">
+  <div class="section">
+    <div class="section-header reveal">
+      <p class="text-eyebrow">Situation</p>
+      <span class="divider-line"></span>
+      <h2 class="text-section-title">Localisation</h2>
+    </div>
+    <div id="map" style="height:420px;border-radius:2px;margin-top:2rem;border:1px solid var(--border);"></div>
+  </div>
+</section>
+
 <!-- ══ FOOTER ═════════════════════════════════════════════════ -->
 <footer>
   <p id="footer-name" style="font-family:var(--font-display);font-size:1.1rem;font-weight:300;color:var(--text-muted);">Clair-Obscur</p>
@@ -199,6 +215,11 @@
       <i data-lucide="mail" style="width:16px;height:16px;color:var(--gold);flex-shrink:0;"></i>
       <div><p style="font-size:0.72rem;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase;">Email</p>
       <p id="help-email-addr" style="font-size:0.88rem;color:var(--text);">contact@example.fr</p></div>
+    </a>
+    <a id="help-invoice-link" href="#" class="help-contact-row" style="display:none;">
+      <i data-lucide="receipt" style="width:16px;height:16px;color:var(--gold);flex-shrink:0;"></i>
+      <div><p style="font-size:0.72rem;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase;">Facture</p>
+      <p style="font-size:0.88rem;color:var(--text);">Demander ma facture</p></div>
     </a>
   </div>
 </div>
@@ -277,6 +298,14 @@
         <div class="adm-form-group">
           <label class="adm-label">Description</label>
           <textarea class="adm-input" id="dp-desc" rows="4" placeholder="Description détaillée…"></textarea>
+        </div>
+        <div class="adm-form-group">
+          <label class="adm-label">Adresse complète</label>
+          <input type="text" class="adm-input" id="dp-address" placeholder="14 Rue Denis Papin, 71600 Paray-le-Monial">
+        </div>
+        <div class="adm-form-group">
+          <label class="adm-label">Voyageurs max</label>
+          <input type="text" class="adm-input" id="dp-max-guests" placeholder="4 voyageurs max">
         </div>
         <div class="adm-form-group">
           <label class="adm-label">Statut</label>
@@ -377,6 +406,10 @@
       <div class="adm-form-group">
         <label class="adm-label">Heure check-in</label>
         <input type="time" class="adm-input" id="dr-checkin-time">
+      </div>
+      <div class="adm-form-group">
+        <label class="adm-label">Code boîte à clés</label>
+        <input type="text" class="adm-input" id="dr-key-box" placeholder="1234#">
       </div>
       <div class="adm-form-group">
         <label class="adm-label">Instructions <span style="font-weight:400;color:var(--adm-text-dim,#666);">— une ligne = une étape</span></label>

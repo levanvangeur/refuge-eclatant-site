@@ -878,6 +878,28 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   pointer-events: all;
 }
 
+/* ── PLM Bus ───────────────────────────────────────────── */
+.plm-card { background:var(--surface-2);border:1px solid var(--border);border-top:2px solid var(--gold);padding:2rem; }
+.plm-header { display:flex;align-items:center;gap:1.25rem;margin-bottom:1.75rem; }
+.plm-badge { background:var(--gold);color:var(--bg);font-size:0.7rem;font-weight:700;letter-spacing:0.12em;padding:0.3rem 0.6rem; }
+.plm-title { font-size:0.9rem;font-weight:500;color:var(--text);margin:0; }
+.plm-sub { font-size:0.72rem;color:var(--text-muted);margin:0.2rem 0 0; }
+.plm-body { display:grid;grid-template-columns:1fr 1fr;gap:2rem; }
+.plm-col-title { font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);font-weight:500;margin:0 0 0.75rem; }
+.plm-times { display:flex;flex-wrap:wrap;gap:0.4rem; }
+.plm-time { background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:0.78rem;padding:0.3rem 0.55rem;font-variant-numeric:tabular-nums; }
+.plm-stops { display:flex;flex-direction:column;gap:0.3rem; }
+.plm-stop { font-size:0.78rem;color:var(--text-muted);padding:0.15rem 0; border-bottom:1px solid var(--border); }
+.plm-stop-more { color:var(--gold);font-size:0.72rem; }
+@media (max-width:600px) { .plm-body { grid-template-columns:1fr; } }
+
+/* ── Carte Leaflet ─────────────────────────────────────── */
+#map { z-index:0; }
+.leaflet-container { background:var(--surface);font-family:var(--font-body); }
+.leaflet-popup-content-wrapper { background:var(--surface-2);color:var(--text);border:1px solid var(--border);border-radius:2px;box-shadow:0 8px 32px rgba(0,0,0,0.4); }
+.leaflet-popup-tip { background:var(--surface-2); }
+.leaflet-popup-close-button { color:var(--text-muted) !important; }
+
 /* ── Footer ────────────────────────────────────────────── */
 footer {
   padding: 3rem 2rem;
@@ -976,19 +998,6 @@ footer p { font-size: 0.78rem; color: var(--text-dim); }
 .checkin-steps {
   display: flex;
   flex-direction: column;
-  position: relative;
-}
-
-/* Ligne verticale reliant les points */
-.checkin-steps::before {
-  content: '';
-  position: absolute;
-  left: 5px;
-  top: 20px;
-  bottom: 10px;
-  width: 1px;
-  background: linear-gradient(to bottom, var(--gold), transparent);
-  opacity: 0.35;
 }
 
 .checkin-step {
@@ -1002,17 +1011,36 @@ footer p { font-size: 0.78rem; color: var(--text-dim); }
 
 .checkin-step:last-child { padding-bottom: 0; }
 
-/* Joli point doré */
+/* Point doré avec pulse */
 .checkin-dot {
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--gold);
   flex-shrink: 0;
-  margin-top: 5px;
+  margin-top: 6px;
   position: relative;
   z-index: 1;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 18%, transparent);
+}
+.checkin-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0;
+  animation: dotPing 2.8s ease-out infinite;
+}
+.checkin-step:nth-child(2) .checkin-dot::after { animation-delay: 0.45s; }
+.checkin-step:nth-child(3) .checkin-dot::after { animation-delay: 0.9s;  }
+.checkin-step:nth-child(4) .checkin-dot::after { animation-delay: 1.35s; }
+.checkin-step:nth-child(5) .checkin-dot::after { animation-delay: 1.8s;  }
+.checkin-step:nth-child(6) .checkin-dot::after { animation-delay: 2.25s; }
+
+@keyframes dotPing {
+  0%   { transform: scale(1);   opacity: 0.55; }
+  65%  { transform: scale(3);   opacity: 0;    }
+  100% { transform: scale(3);   opacity: 0;    }
 }
 
 .checkin-step-text {
@@ -1091,6 +1119,200 @@ footer p { font-size: 0.78rem; color: var(--text-dim); }
 .wifi-copy-btn:hover { border-color: var(--gold); color: var(--gold); }
 @media (max-width: 600px) {
   .wifi-card { padding: 1.25rem 1.5rem; }
+}
+
+/* ── Quickinfo encadré ─────────────────────────────────────── */
+#quickinfo-bar {
+  background: var(--bg);
+  padding: 5rem 2rem;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+#quickinfo-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(201,168,110,0.04), transparent);
+  pointer-events: none;
+}
+#quickinfo-inner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 560px;
+  background: var(--surface-2);
+  border: 1px solid rgba(201,168,110,0.14);
+  border-radius: 14px;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.4),
+    0 0 0 1px rgba(201,168,110,0.03);
+  overflow: hidden;
+}
+#quickinfo-inner::before {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 5%, var(--gold) 40%, var(--gold-light) 50%, var(--gold) 60%, transparent 95%);
+  flex-shrink: 0;
+}
+
+/* Reveal : fondu + montée douce */
+#quickinfo-inner.reveal {
+  opacity: 0;
+  transform: translateY(28px) scale(0.99);
+  transition: opacity 1s ease, transform 1s var(--ease-out-expo);
+}
+#quickinfo-inner.reveal.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ── Paire Arrivée / Départ ── */
+.qi-time-pair {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+}
+.qi-time-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 1.9rem 1.5rem 1.7rem;
+  text-decoration: none;
+  transition: background 0.3s;
+  position: relative;
+}
+.qi-time-cell:hover { background: rgba(201,168,110,0.04); }
+.qi-time-icon { color: var(--gold); opacity: 0.65; }
+.qi-time-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  font-weight: 500;
+}
+.qi-time-value {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 300;
+  color: var(--white);
+  letter-spacing: 0.01em;
+  line-height: 1;
+}
+.qi-time-sep {
+  width: 1px;
+  background: var(--border);
+  align-self: stretch;
+  margin: 1.5rem 0;
+}
+.qi-time-pair--single {
+  grid-template-columns: 1fr;
+}
+
+/* ── Chips secondaires ── */
+.qi-chip {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.5rem;
+  border-top: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--text);
+  transition: background 0.25s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.qi-chip::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--gold-light), var(--gold));
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 0.3s var(--ease-out-expo);
+}
+.qi-chip:hover { background: rgba(201,168,110,0.04); }
+.qi-chip:hover::after { transform: scaleY(1); }
+
+.qi-chip-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(201,168,110,0.07);
+  border: 1px solid rgba(201,168,110,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.25s, border-color 0.25s;
+}
+.qi-chip:hover .qi-chip-icon {
+  background: rgba(201,168,110,0.12);
+  border-color: rgba(201,168,110,0.28);
+}
+.qi-chip-icon svg { width: 14px; height: 14px; color: var(--gold); }
+
+.qi-chip-content { flex: 1; min-width: 0; }
+.qi-label {
+  font-size: 0.57rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  font-weight: 500;
+  margin-bottom: 0.1rem;
+}
+.qi-value {
+  font-size: 0.86rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.qi-subvalue {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.qi-arrow {
+  color: var(--gold);
+  opacity: 0.25;
+  flex-shrink: 0;
+  transition: opacity 0.25s, transform 0.25s;
+}
+.qi-chip:hover .qi-arrow { opacity: 0.7; transform: translateX(3px); }
+
+/* Stagger d'entrée des éléments */
+.qi-time-pair,
+.qi-chip {
+  opacity: 0;
+  transform: translateY(10px);
+}
+#quickinfo-inner.visible .qi-time-pair {
+  animation: qiFadeUp 0.55s 0.15s var(--ease-out-expo) forwards;
+}
+#quickinfo-inner.visible .qi-chip:nth-of-type(1) { animation: qiFadeUp 0.5s 0.3s var(--ease-out-expo) forwards; }
+#quickinfo-inner.visible .qi-chip:nth-of-type(2) { animation: qiFadeUp 0.5s 0.42s var(--ease-out-expo) forwards; }
+#quickinfo-inner.visible .qi-chip:nth-of-type(3) { animation: qiFadeUp 0.5s 0.54s var(--ease-out-expo) forwards; }
+#quickinfo-inner.visible .qi-chip:nth-of-type(4) { animation: qiFadeUp 0.5s 0.66s var(--ease-out-expo) forwards; }
+#quickinfo-inner.visible .qi-chip:nth-of-type(5) { animation: qiFadeUp 0.5s 0.78s var(--ease-out-expo) forwards; }
+
+@keyframes qiFadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+  .qi-time-value { font-size: 1.9rem; }
+  .qi-time-cell  { padding: 1.75rem 1rem 1.5rem; }
+  .qi-chip       { padding: 0.9rem 1.25rem; }
 }
 
 /* Contact cards */

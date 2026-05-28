@@ -1,45 +1,51 @@
-Set-Location "C:\Users\Admin\Code\Site_accueil_courte_duree\refuge-eclatant-site"
+# PUBLIER.ps1 — Déploiement vers Netlify
+# Exécuter depuis le dossier du site : .\PUBLIER.ps1
 
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  PUBLICATION LE REFUGE ECLATANT" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+param(
+  [string]$Message = "Mise à jour du site"
+)
+
+Write-Host ""
+Write-Host "=== Déploiement Netlify ===" -ForegroundColor Cyan
 Write-Host ""
 
-Write-Host "1. Sauvegarde base de donnees..." -ForegroundColor Yellow
-try {
-    $node = "C:\Program Files\nodejs\node.exe"
-    & $node -e "const{DatabaseSync}=require('node:sqlite');const db=new DatabaseSync('database.sqlite');db.exec('PRAGMA wal_checkpoint(TRUNCATE)');db.close();" 2>$null
-    Write-Host "   OK" -ForegroundColor Green
-} catch {
-    Write-Host "   (serveur non actif, OK)" -ForegroundColor Gray
+# Vérifie que git est initialisé
+if (-not (Test-Path ".git")) {
+  Write-Host "⚠  Pas de dépôt git. Initialisation..." -ForegroundColor Yellow
+  git init
+  git branch -M main
 }
 
-Write-Host "2. Ajout des modifications..." -ForegroundColor Yellow
+# Vérifie qu'un remote GitHub est configuré
+$remote = git remote get-url origin 2>$null
+if (-not $remote) {
+  Write-Host "❌  Aucun remote GitHub configuré." -ForegroundColor Red
+  Write-Host "    Créez un dépôt sur github.com puis exécutez :"
+  Write-Host "    git remote add origin https://github.com/VOTRE-COMPTE/NOM-DU-DEPOT.git"
+  exit 1
+}
+
+Write-Host "📦  Ajout des fichiers..." -ForegroundColor Gray
 git add -A
-Write-Host "   OK" -ForegroundColor Green
 
-Write-Host "3. Commit..." -ForegroundColor Yellow
-$msg = "Mise a jour - " + (Get-Date -Format "yyyy-MM-dd HH:mm")
-git commit -m $msg 2>&1 | Out-Null
-if ($LASTEXITCODE -eq 0) {
-    Write-Host "   OK" -ForegroundColor Green
-} else {
-    Write-Host "   Rien de nouveau a publier" -ForegroundColor Gray
+$status = git status --short
+if (-not $status) {
+  Write-Host "✓  Aucune modification détectée — rien à publier." -ForegroundColor Green
+  exit 0
 }
 
-Write-Host "4. Envoi vers GitHub..." -ForegroundColor Yellow
-$push = git push origin main 2>&1
-if ($LASTEXITCODE -eq 0) {
-    Write-Host "   OK - Render met a jour le site dans 2-3 min" -ForegroundColor Green
-} else {
-    Write-Host "   ERREUR :" -ForegroundColor Red
-    Write-Host $push -ForegroundColor Red
-}
+Write-Host "💬  Commit : $Message" -ForegroundColor Gray
+git commit -m $Message
 
+Write-Host "🚀  Envoi vers GitHub (déclenche Netlify)..." -ForegroundColor Gray
+git push origin main
+
+if ($LASTEXITCODE -eq 0) {
+  Write-Host ""
+  Write-Host "✅  Publié ! Netlify va déployer automatiquement." -ForegroundColor Green
+  Write-Host "    Suivez l'avancement sur : https://app.netlify.com" -ForegroundColor Cyan
+} else {
+  Write-Host ""
+  Write-Host "❌  Échec du push. Vérifiez vos droits GitHub." -ForegroundColor Red
+}
 Write-Host ""
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  TERMINE !" -ForegroundColor Cyan
-Write-Host "  https://refuge-eclatant-site.onrender.com" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host ""
-Read-Host "Appuyez sur Entree pour fermer"

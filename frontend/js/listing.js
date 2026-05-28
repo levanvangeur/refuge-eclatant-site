@@ -95,10 +95,10 @@ function renderProperties(props) {
 
 function buildPhotoList(p) {
   const photos = [];
-  if (p.main_image) photos.push(`/uploads/${p.main_image}`);
+  if (p.main_image) photos.push(imgUrl(p.main_image));
   if (p.gallery && p.gallery.length) {
     p.gallery.forEach(g => {
-      const url = `/uploads/${g.filename}`;
+      const url = imgUrl(g.filename);
       if (!photos.includes(url)) photos.push(url);
     });
   }
@@ -303,13 +303,13 @@ async function adminLoadGallery() {
   try {
     const p = await apiFetch(`/api/properties/${selectedPropId}`, false);
     previewEl.innerHTML = p.main_image
-      ? `<img src="/uploads/${p.main_image}" style="width:100%;height:80px;object-fit:cover;border:1px solid var(--adm-border,#2a2a30);" alt="Photo principale">`
+      ? `<img src="${imgUrl(p.main_image)}" style="width:100%;height:80px;object-fit:cover;border:1px solid var(--adm-border,#2a2a30);" alt="Photo principale">`
       : `<p style="font-size:0.75rem;color:var(--adm-text-dim,#555560);">Aucune photo hero définie</p>`;
     const gallery = p.gallery || [];
     if (!gallery.length) { gridEl.innerHTML = '<p style="font-size:0.75rem;color:var(--adm-text-dim,#555560);grid-column:1/-1;">Aucune photo de galerie.</p>'; return; }
     gridEl.innerHTML = gallery.map(g => `
       <div style="position:relative;aspect-ratio:1;overflow:hidden;background:var(--adm-surface-2,#1a1a1e);">
-        <img src="/uploads/${g.filename}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" alt="">
+        <img src="${imgUrl(g.filename)}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" alt="">
         <button onclick="adminDeleteGalleryImg(${g.id})" style="position:absolute;top:3px;right:3px;background:rgba(0,0,0,.7);border:none;cursor:pointer;padding:3px;display:flex;align-items:center;justify-content:center;" title="Supprimer">
           <i data-lucide="x" style="width:10px;height:10px;color:#f0f0f0;"></i>
         </button>
@@ -428,6 +428,11 @@ window.toast = function(msg, type = 'success') {
   lucide.createIcons({ nodes: [el] });
   setTimeout(() => { el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(() => el.remove(), 300); }, 3500);
 };
+
+function imgUrl(filename) {
+  if (!filename) return '';
+  return /^https?:\/\//.test(filename) ? filename : '/uploads/' + filename;
+}
 
 function esc(str) {
   if (!str) return '';

@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "refuge-eclatant",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["backend/server.js"],
+      "port": 3003,
+      "cwd": "C:\\Users\\Admin\\Code\\Site_accueil_courte_duree\\refuge-eclatant-site"
+    }
+  ]
+}
