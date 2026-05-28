@@ -32,11 +32,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch {
     showLoadError();
   }
-  } finally {
-    // Révèle le hero après chargement (succès ou erreur)
-    const hc = document.getElementById('hero-content');
-    if (hc) { hc.style.transition = 'opacity 0.6s ease'; hc.style.opacity = '1'; }
-  }
 
   setupNavScroll();
   setupScrollReveal();
