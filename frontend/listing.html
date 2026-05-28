@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -19,7 +19,7 @@
 <!-- ══ NAVIGATION ═══════════════════════════════════════════ -->
 <nav id="navbar">
   <a href="/" class="nav-logo" id="nav-logo">Clair-Obscur</a>
-  <button id="admin-nav-btn" onclick="handleAdminTrigger()" title="Administration" aria-label="Administration">
+  <button id="admin-nav-btn" style="display:none" onclick="handleAdminTrigger()" title="Administration" aria-label="Administration">
     <i data-lucide="settings-2" style="width:18px;height:18px;"></i>
   </button>
 </nav>
@@ -158,5 +158,6 @@
 <div id="admin-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:850;" onclick="closeAdminDrawer()"></div>
 
 <script src="/js/listing.js"></script>
+<script>if(["localhost","127.0.0.1"].includes(location.hostname))document.getElementById("admin-nav-btn").style.display="";</script>
 </body>
 </html>
