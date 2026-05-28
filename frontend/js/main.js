@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 // ══════════════════════════════════════════════════════════
 // ÉTAT GLOBAL
@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderAll(propertyData);
   } catch {
     showLoadError();
+  }
+  } finally {
+    // Révèle le hero après chargement (succès ou erreur)
+    const hc = document.getElementById('hero-content');
+    if (hc) { hc.style.transition = 'opacity 0.6s ease'; hc.style.opacity = '1'; }
   }
 
   setupNavScroll();
@@ -137,7 +142,14 @@ function renderHero(data) {
   document.getElementById('hero-title').textContent = data.name;
   document.getElementById('hero-tagline').textContent = data.tagline || '';
 
-  // Priorité : hero_images (slideshow). Fallback : main_image seul.
+  // Met à jour le bouton de réservation avec l'URL réelle depuis la BD
+  const firstBooking = (data.bookings || []).find(b => b.is_active && b.booking_url);
+  const ctaBtn = document.getElementById('hero-cta');
+  if (ctaBtn && firstBooking && firstBooking.booking_url) {
+    ctaBtn.href = firstBooking.booking_url;
+  }
+
+    // Priorité : hero_images (slideshow). Fallback : main_image seul.
   const heroImgs = data.hero_images && data.hero_images.length
     ? data.hero_images
     : data.main_image ? [{ filename: data.main_image }] : [];
