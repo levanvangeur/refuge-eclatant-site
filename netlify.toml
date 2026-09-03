@@ -1,24 +1,10 @@
+# Déploiement Netlify — livret d'accueil statique
+# Le dossier « frontend » est publié tel quel (aucun build nécessaire).
 [build]
   publish = "frontend"
-  functions = "netlify/functions"
+  command = ""
 
-[build.environment]
-  NODE_VERSION = "20"
-
-# Toutes les requêtes /api/* → fonction serverless
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/api"
-  status = 200
-  force = true
-
-# Page admin
-[[redirects]]
-  from = "/admin"
-  to = "/admin/index.html"
-  status = 200
-
-# SPA fallback
+# Repli : toute route inconnue renvoie vers le livret
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -28,6 +14,6 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "DENY"
+    X-Frame-Options = "SAMEORIGIN"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"

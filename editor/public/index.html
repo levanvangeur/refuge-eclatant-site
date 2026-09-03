@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Éditeur du livret</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/editor.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="star">✦</span> <span><span id="appName">Livret</span><small>Éditeur d'accueil</small></span></div>
+    <div class="spacer"></div>
+    <span class="save-state" id="saveState">—</span>
+    <a class="btn" id="previewBtn" href="/preview" target="_blank" rel="noopener">👁 Aperçu du livret</a>
+    <button class="btn gold" id="publishBtn">✦ Publier</button>
+  </header>
+
+  <div class="layout">
+    <nav class="sidenav" id="sidenav"></nav>
+    <main class="main" id="main"></main>
+  </div>
+
+  <!-- Modal de publication -->
+  <div class="modal-bg" id="publishModal">
+    <div class="modal">
+      <div class="modal-head"><h3>Publier le livret en ligne</h3></div>
+      <div class="modal-body" id="publishBody"></div>
+      <div class="modal-foot">
+        <button class="btn ghost" id="publishCancel">Annuler</button>
+        <button class="btn gold" id="publishConfirm">Publier maintenant</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="assets/editor.js"></script>
+</body>
+</html>

@@ -1,0 +1,681 @@
+{
+  "meta": {
+    "apartmentName": "Le Refuge Éclatant",
+    "tagline": "Un écrin doré où la brique s'embrase de lumière.",
+    "city": "Paray-le-Monial",
+    "region": "Bourgogne du Sud · Saône-et-Loire",
+    "motto": "Votre séjour, notre priorité",
+    "logo": "images/logo.png",
+    "bookingUrl": "https://reservation.logementsparay.fr"
+  },
+  "welcome": {
+    "title": "Bienvenue",
+    "paragraphs": [
+      "Nous sommes ravis de vous accueillir dans notre logement. Nous avons pensé chaque détail pour que votre séjour à Paray-le-Monial soit reposant et chaleureux.",
+      "Ce livret rassemble toutes les informations utiles sur l'appartement ainsi que nos meilleures adresses et découvertes autour de la ville. N'hésitez pas à nous contacter à la moindre question : nous restons à votre entière disposition.",
+      "Nous vous souhaitons un excellent séjour parmi nous."
+    ],
+    "signature": "— Votre conciergerie"
+  },
+  "practical": {
+    "wifi": {
+      "network": "Refuge-Eclatant",
+      "password": "Free999999999"
+    },
+    "arrival": {
+      "checkIn": "À partir de 16h00",
+      "checkOut": "Avant 11h00",
+      "keys": "Boîte à clés à l'entrée — le code d'accès vous est communiqué le jour de votre arrivée.",
+      "instructions": "Arrivée autonome à partir de 16h. Le logement se situe au 17 rue Paul Cambon. Les clés sont disponibles dans la boîte à clés à l'entrée. Nous restons joignables à tout moment en cas de besoin."
+    },
+    "address": {
+      "full": "17 rue Paul Cambon, 71600 Paray-le-Monial",
+      "floor": "",
+      "buildingCode": "",
+      "parking": "Stationnement gratuit à proximité immédiate du logement."
+    },
+    "assistance": {
+      "phones": [
+        "06 88 13 35 50",
+        "06 51 39 43 75"
+      ],
+      "availability": "7j/7"
+    }
+  },
+  "comfort": {
+    "intro": "Tout a été prévu pour votre confort. Voici quelques repères pour profiter pleinement du logement.",
+    "sections": [
+      {
+        "title": "Cuisine & électroménager",
+        "items": [
+          "Réfrigérateur / congélateur, plaques à induction et hotte à disposition.",
+          "Four / micro-ondes : notice à côté de l'appareil.",
+          "Lave-vaisselle : pastilles fournies sous l'évier.",
+          "Cafetière Tassimo, bouilloire, grille-pain, ustensiles et vaisselle dans les placards."
+        ]
+      },
+      {
+        "title": "Chauffage & radiateurs",
+        "items": [
+          "Chaque radiateur se règle indépendamment grâce à sa molette ou à son thermostat, pièce par pièce.",
+          "Modes courants : ☀ Confort en journée · ☾ Éco la nuit · ❄ Hors-gel en cas d'absence prolongée.",
+          "Pour plus de chaleur, tournez la molette vers le « + » ou augmentez la consigne (idéalement 19–20 °C).",
+          "Merci de ne rien poser ni faire sécher sur les radiateurs, et de baisser le chauffage en aérant.",
+          "Eau chaude disponible en continu."
+        ]
+      },
+      {
+        "title": "Multimédia",
+        "items": [
+          "Télévision HD : allumez avec la télécommande principale.",
+          "Wi-Fi fibre optique haut débit dans tout le logement (codes ci-dessus)."
+        ]
+      },
+      {
+        "title": "Linge & entretien",
+        "items": [
+          "Lave-linge : lessive à disposition.",
+          "Linge de lit et de toilette fournis.",
+          "Aspirateur, balai et produits ménagers dans le placard d'entrée."
+        ]
+      },
+      {
+        "title": "Tri & poubelles",
+        "items": [
+          "Les sacs doivent être déposés dehors, en bas de l'immeuble, juste devant le portail noir.",
+          "Tri sélectif (emballages, verre) : points de collecte à proximité."
+        ]
+      }
+    ]
+  },
+  "rules": {
+    "respect": [
+      "Logement entièrement non-fumeur (balcons / extérieur autorisés).",
+      "Animaux non admis (sauf sur demande).",
+      "Fêtes et soirées non autorisées.",
+      "Merci de respecter le calme du voisinage, en particulier après 22h00.",
+      "Signalez tout problème sans attendre.",
+      "Capacité maximale : 4 personnes."
+    ],
+    "beforeLeaving": [
+      "Faire la vaisselle et vider le lave-vaisselle.",
+      "Sortir les poubelles et le tri.",
+      "Déhousser les draps et regrouper le linge dans les panières.",
+      "Baisser le chauffage et fermer les fenêtres.",
+      "Laisser le logement propre et rangé.",
+      "Déposer les clés dans la boîte à clés."
+    ],
+    "thanks": "Votre attention nous permet d'accueillir chaque voyageur dans les meilleures conditions. Nous vous en sommes très reconnaissants."
+  },
+  "gallery": {
+    "intro": "Découvrez le logement en images.",
+    "rooms": [
+      {
+        "name": "Le logement en images",
+        "equipment": [
+          "Télévision 4K",
+          "Fibre optique WiFi",
+          "Climatisation",
+          "Plaque à induction",
+          "Four",
+          "Lave-vaisselle",
+          "Cafetière Nespresso",
+          "Literie & oreillers",
+          "Stores occultants",
+          "Douche italienne",
+          "Sèche-cheveux"
+        ],
+        "images": [
+          "images/gallery/apt-3-1779649586240.jpeg",
+          "images/gallery/apt-3-1779649590926.jpg",
+          "images/gallery/apt-3-1779649594211.jpg",
+          "images/gallery/apt-3-1787864635155.jpg",
+          "images/gallery/apt-3-1787864638478.jpg",
+          "images/gallery/apt-3-1787864646871.jpg",
+          "images/gallery/apt-3-1787864652027.jpg",
+          "images/gallery/apt-3-1787864662107.jpg",
+          "images/gallery/apt-3-1787864664114.jpg",
+          "images/gallery/hero-hero-1779649052526.jpeg",
+          "images/gallery/hero-hero-1779649058125.jpg",
+          "images/gallery/hero-hero-1779649071946.jpeg"
+        ]
+      }
+    ]
+  },
+  "discover": {
+    "intro": "Nichée en Bourgogne du Sud, Paray-le-Monial est mondialement connue pour sa basilique romane et son sanctuaire, l'un des plus grands lieux de pèlerinage de France. Ses ruelles paisibles, ses bords de rivière et son patrimoine clunisien en font une étape pleine de charme.",
+    "places": [
+      {
+        "name": "La Basilique du Sacré-Cœur",
+        "desc": "Chef-d'œuvre de l'art roman clunisien (XIᵉ–XIIᵉ siècle), considérée comme une réplique en réduction de la grande abbaye de Cluny. Son élévation et l'harmonie de ses clochers sont remarquables.",
+        "meta": "Centre-ville · Entrée libre · À 5 min à pied"
+      },
+      {
+        "name": "Le Sanctuaire & la Chapelle des Apparitions",
+        "desc": "Au monastère de la Visitation, sainte Marguerite-Marie Alacoque reçut entre 1673 et 1675 les apparitions du Sacré-Cœur. Un haut lieu de recueillement au cœur de la ville.",
+        "meta": "Rue de la Visitation · Entrée libre"
+      },
+      {
+        "name": "Le Musée du Hiéron",
+        "desc": "Musée d'art sacré « Musée de France » abritant la spectaculaire Via Vitae, œuvre monumentale d'orfèvrerie. Belles expositions temporaires.",
+        "meta": "Rue de la Paix · Payant · Fermé le lundi (à vérifier)"
+      },
+      {
+        "name": "La Tour Saint-Nicolas",
+        "desc": "Élégant clocher Renaissance (XVIᵉ siècle) d'une ancienne église, dressé au bord de la Bourbince, en plein centre historique.",
+        "meta": "Bords de Bourbince · Extérieur libre"
+      }
+    ]
+  },
+  "stroll": {
+    "intro": "Prendre son temps, flâner et respirer, au fil de l'eau et des jardins.",
+    "places": [
+      {
+        "name": "Les bords de la Bourbince",
+        "desc": "Promenade paisible le long de la rivière et du Canal du Centre, avec de belles vues sur la basilique. Idéal à pied ou à vélo.",
+        "meta": "Accès direct depuis le centre"
+      },
+      {
+        "name": "Le Parc des Chapelains",
+        "desc": "Vaste esplanade des grands pèlerinages, avec son diorama et ses jardins propices à la détente et à la promenade.",
+        "meta": "À quelques minutes du centre"
+      },
+      {
+        "name": "Le marché",
+        "desc": "Produits du terroir, fromages, charcuteries et spécialités charolaises. Un rendez-vous convivial à ne pas manquer.",
+        "meta": "Généralement le vendredi matin — centre-ville (à confirmer)"
+      },
+      {
+        "name": "À vélo autour de la ville",
+        "desc": "Le territoire se prête aux balades à vélo le long des voies vertes et du canal. Location possible en ville.",
+        "meta": "Voie verte · Canal du Centre"
+      }
+    ]
+  },
+  "eat": {
+    "intro": "Les tables de Paray-le-Monial, pour tous les goûts. Pensez à réserver et à vérifier les horaires, qui varient selon la saison.",
+    "groups": [
+      {
+        "title": "Restaurants",
+        "items": [
+          {
+            "name": "La Taverne Charolais",
+            "type": "",
+            "address": "Route de l'Aérodrome",
+            "phone": "03 85 88 85 49"
+          },
+          {
+            "name": "Hostellerie des Trois Pigeons",
+            "type": "Traditionnel",
+            "address": "2 rue Dargaud",
+            "phone": "03 85 81 03 77"
+          },
+          {
+            "name": "Le Prieuré – La Bourbince",
+            "type": "Bistronomique",
+            "address": "8 av. Jean-Paul II",
+            "phone": "03 85 88 83 17"
+          },
+          {
+            "name": "Restaurant du Champ de Foire",
+            "type": "Traditionnel",
+            "address": "Place du Champ de Foire",
+            "phone": "03 85 81 01 68"
+          },
+          {
+            "name": "Trattoria Paola",
+            "type": "Italien",
+            "address": "14 av. Charles de Gaulle",
+            "phone": "06 28 08 66 99"
+          },
+          {
+            "name": "Au P'tit Bec de Paray",
+            "type": "Bistrot",
+            "address": "29 rue des Deux Ponts",
+            "phone": "03 85 81 22 43"
+          },
+          {
+            "name": "Aux Baguettes d'Or",
+            "type": "Asiatique",
+            "address": "14 rue de la République",
+            "phone": "03 85 88 82 78"
+          },
+          {
+            "name": "Le Coin Sucré et Salé",
+            "type": "Marocain",
+            "address": "16 place Guignault",
+            "phone": "03 85 81 57 82"
+          },
+          {
+            "name": "La Crêperie",
+            "type": "Crêpes",
+            "address": "27 rue des Deux Ponts",
+            "phone": "09 87 01 47 14"
+          },
+          {
+            "name": "Le Quarré",
+            "type": "Café-restaurant",
+            "address": "2 av. de Béthléem",
+            "phone": "03 73 55 07 25"
+          }
+        ]
+      },
+      {
+        "title": "Pizza, kebab & sur le pouce",
+        "items": [
+          {
+            "name": "Le Pinocchio",
+            "type": "Pizzeria",
+            "address": "26 rue Louis Desrichard",
+            "phone": "03 85 24 53 58"
+          },
+          {
+            "name": "Sud",
+            "type": "Pizzeria-Kebab",
+            "address": "26 quai du Commerce",
+            "phone": "07 81 79 95 44"
+          },
+          {
+            "name": "Le Cappadoce",
+            "type": "Kebab",
+            "address": "1 rue de la République",
+            "phone": "03 85 81 64 39"
+          }
+        ]
+      }
+    ]
+  },
+  "drinks": {
+    "intro": "Boire un verre et se régaler : bars, cafés, boulangeries et gourmandises.",
+    "groups": [
+      {
+        "title": "Bars & cafés",
+        "items": [
+          {
+            "name": "Brasserie du Théâtre",
+            "type": "Bar-brasserie",
+            "address": "26 av. Charles de Gaulle",
+            "phone": "03 85 81 13 32"
+          },
+          {
+            "name": "Bar Brasserie de la Poste",
+            "type": "Brasserie",
+            "address": "Cours Jean Jaurès",
+            "phone": "03 85 81 69 97"
+          },
+          {
+            "name": "Café L'Alouise",
+            "type": "Café-restau",
+            "address": "36 rue de la République",
+            "phone": "03 85 25 14 33"
+          },
+          {
+            "name": "Le Quarré",
+            "type": "Café-bar",
+            "address": "2 av. de Béthléem",
+            "phone": "03 73 55 07 25"
+          },
+          {
+            "name": "Bouillon Eliane",
+            "type": "Café-bar",
+            "address": "2 route de Saint-Germain",
+            "phone": ""
+          },
+          {
+            "name": "Au Cappuccio'",
+            "type": "Café",
+            "address": "",
+            "phone": "03 85 81 06 80"
+          },
+          {
+            "name": "L'Essaim",
+            "type": "Bar",
+            "address": "",
+            "phone": "06 77 47 36 56"
+          }
+        ]
+      },
+      {
+        "title": "Boulangeries & pâtisseries",
+        "items": [
+          {
+            "name": "Boulangerie Hubert",
+            "type": "Artisan",
+            "address": "6 rue Louis Desrichard",
+            "phone": "03 85 81 09 16"
+          },
+          {
+            "name": "La Charmille de Tin-Tin",
+            "type": "Boulangerie",
+            "address": "Champ Bossu",
+            "phone": "03 85 81 40 99"
+          },
+          {
+            "name": "Les Délices de Janice",
+            "type": "Pâtisserie",
+            "address": "Champ Bossu",
+            "phone": "03 85 81 99 70"
+          }
+        ]
+      },
+      {
+        "title": "Chocolatiers & glaciers",
+        "items": [
+          {
+            "name": "Maison Dufoux",
+            "type": "Chocolatier · salon de thé",
+            "address": "5 rue Victor Hugo",
+            "phone": "03 85 81 76 99"
+          },
+          {
+            "name": "Pâtisserie-Chocolaterie Charles Pubill",
+            "type": "Chocolatier",
+            "address": "25 av. Charles de Gaulle",
+            "phone": "03 85 81 11 38"
+          },
+          {
+            "name": "Les Gourmandises de Lucie",
+            "type": "Chocolats · glaces",
+            "address": "2 rue Victor Hugo",
+            "phone": "09 81 39 12 19"
+          }
+        ]
+      }
+    ]
+  },
+  "services": {
+    "intro": "Bien pratique : tout ce qu'il faut pour faciliter votre séjour.",
+    "groups": [
+      {
+        "title": "Locations",
+        "items": [
+          {
+            "name": "Vélos & VAE",
+            "type": "",
+            "address": "Office de Tourisme · 25 av. Jean-Paul II",
+            "phone": "03 85 81 10 92"
+          },
+          {
+            "name": "Voitures & utilitaires",
+            "type": "ADA",
+            "address": "ZA du Champ Bossu · réservation sur ada.fr",
+            "phone": ""
+          },
+          {
+            "name": "Bateau sans permis",
+            "type": "Les Canalous",
+            "address": "Port de plaisance, Digoin",
+            "phone": "03 85 53 76 74"
+          }
+        ]
+      },
+      {
+        "title": "Bus urbain « Le PLM »",
+        "items": [
+          {
+            "name": "Réseau",
+            "type": "",
+            "address": "Navette urbaine du Grand Charolais · 36 arrêts dans la ville",
+            "phone": ""
+          },
+          {
+            "name": "Fréquence",
+            "type": "",
+            "address": "Env. 1 bus/heure, de 7h à 19h · du lundi au samedi",
+            "phone": ""
+          },
+          {
+            "name": "Horaires & plan",
+            "type": "",
+            "address": "legrandcharolais.fr/transports-urbains",
+            "phone": ""
+          }
+        ]
+      },
+      {
+        "title": "Taxis",
+        "items": [
+          {
+            "name": "Taxis Parodiens",
+            "type": "",
+            "address": "",
+            "phone": "03 85 88 84 30"
+          },
+          {
+            "name": "Taxi Martin",
+            "type": "",
+            "address": "29A quai de l'Industrie",
+            "phone": "06 21 84 06 65"
+          }
+        ]
+      },
+      {
+        "title": "Fleuriste",
+        "items": [
+          {
+            "name": "E.P. Delaveau",
+            "type": "",
+            "address": "48 av. Charles de Gaulle",
+            "phone": "03 85 81 11 10"
+          }
+        ]
+      },
+      {
+        "title": "Laveries",
+        "items": [
+          {
+            "name": "Laverie Libre Service",
+            "type": "",
+            "address": "47 av. Charles de Gaulle",
+            "phone": ""
+          },
+          {
+            "name": "Laverie Eurolav",
+            "type": "",
+            "address": "3 rte Saint-Vincent",
+            "phone": "06 16 92 28 27"
+          }
+        ]
+      }
+    ]
+  },
+  "shops": {
+    "intro": "Le quotidien : courses, santé et services essentiels.",
+    "groups": [
+      {
+        "title": "Faire ses courses",
+        "items": [
+          {
+            "name": "E.Leclerc",
+            "type": "Hypermarché",
+            "address": "22 bd du Champ Bossu",
+            "phone": "03 85 81 92 92"
+          },
+          {
+            "name": "Carrefour Express",
+            "type": "",
+            "address": "28 rue Victor Hugo",
+            "phone": "03 85 81 67 05"
+          },
+          {
+            "name": "Lidl",
+            "type": "",
+            "address": "Bd du Champ Bossu",
+            "phone": ""
+          },
+          {
+            "name": "Netto",
+            "type": "",
+            "address": "Quai du Commerce",
+            "phone": ""
+          },
+          {
+            "name": "Intermarché",
+            "type": "",
+            "address": "Paray-le-Monial (à confirmer)",
+            "phone": ""
+          }
+        ]
+      },
+      {
+        "title": "Santé & argent",
+        "items": [
+          {
+            "name": "Pharmacie de la Gare",
+            "type": "",
+            "address": "2 av. de la Gare",
+            "phone": "03 85 81 11 84"
+          },
+          {
+            "name": "Pharmacie de garde",
+            "type": "",
+            "address": "Numéro national",
+            "phone": "3237"
+          },
+          {
+            "name": "Distributeur (DAB)",
+            "type": "",
+            "address": "Banques du centre-ville (rue des Deux Ponts)",
+            "phone": ""
+          }
+        ]
+      },
+      {
+        "title": "Services",
+        "items": [
+          {
+            "name": "Office de tourisme",
+            "type": "",
+            "address": "25 av. Jean-Paul II",
+            "phone": "03 85 81 10 92"
+          },
+          {
+            "name": "La Poste",
+            "type": "",
+            "address": "Centre-ville (à confirmer)",
+            "phone": ""
+          },
+          {
+            "name": "Gare SNCF",
+            "type": "",
+            "address": "Av. de la Gare · centre-ville",
+            "phone": ""
+          }
+        ]
+      }
+    ]
+  },
+  "escapes": {
+    "intro": "Une journée d'escapade autour de Paray-le-Monial, en Bourgogne du Sud.",
+    "places": [
+      {
+        "name": "Cluny & son abbaye",
+        "desc": "La prestigieuse abbaye bénédictine, jadis la plus grande église de la chrétienté. Un incontournable de l'art roman bourguignon, avec son haras national et sa cité médiévale.",
+        "meta": "À env. 30 km · 35 min en voiture"
+      },
+      {
+        "name": "Le Brionnais roman",
+        "desc": "Route des églises romanes à travers un paysage de bocage vallonné : Anzy-le-Duc, Semur-en-Brionnais (l'un des plus beaux villages), Montceaux-l'Étoile, La Clayette et son château… un joyau méconnu.",
+        "meta": "À env. 20–40 min · idéal en boucle"
+      },
+      {
+        "name": "Les vignobles & le Mâconnais",
+        "desc": "Vers l'est, la route des vins du Mâconnais et ses villages de pierres dorées (Pouilly-Fuissé, Roche de Solutré) pour les amateurs de belles dégustations.",
+        "meta": "À env. 45 min–1 h"
+      }
+    ]
+  },
+  "digoinCharolles": {
+    "intro": "À deux pas de Paray : deux cités attachantes à découvrir.",
+    "digoin": {
+      "title": "Digoin · à env. 13 km",
+      "places": [
+        {
+          "name": "Le Pont-Canal",
+          "desc": "Impressionnant ouvrage de 243 m qui fait passer le canal au-dessus de la Loire. Traversée gratuite à pied, avec une vue splendide sur le fleuve.",
+          "meta": ""
+        },
+        {
+          "name": "L'ObservaLoire",
+          "desc": "Musée interactif dédié à la Loire, sa faune et ses métiers, avec un panorama à 180° sur le pont-canal depuis sa galerie vitrée.",
+          "meta": "Payant · horaires à vérifier"
+        },
+        {
+          "name": "Le Musée de la Céramique",
+          "desc": "La tradition céramique de Digoin racontée dans une bâtisse de 1742. Balades à vélo possibles le long des voies vertes et du canal.",
+          "meta": ""
+        }
+      ]
+    },
+    "charolles": {
+      "title": "Charolles · à env. 13 km",
+      "places": [
+        {
+          "name": "La Maison du Charolais",
+          "desc": "Parcours ludique autour de la célèbre race bovine, du bocage à l'assiette, avec dégustation à la clé.",
+          "meta": ""
+        },
+        {
+          "name": "La Faïencerie de Charolles",
+          "desc": "Maison historique fondée en 1844 qui perpétue l'art de la faïence bourguignonne. Boutique et démonstrations de savoir-faire.",
+          "meta": ""
+        },
+        {
+          "name": "Cité de caractère & Musée du Prieuré",
+          "desc": "Surnommée la « Petite Venise du Charolais » pour ses canaux, la ville invite à la flânerie. Le Musée du Prieuré–Jean Laronze abrite faïences et art local.",
+          "meta": ""
+        }
+      ]
+    }
+  },
+  "numbers": {
+    "emergency": [
+      {
+        "label": "Urgences (Europe)",
+        "number": "112"
+      },
+      {
+        "label": "SAMU",
+        "number": "15"
+      },
+      {
+        "label": "Police",
+        "number": "17"
+      },
+      {
+        "label": "Pompiers",
+        "number": "18"
+      }
+    ],
+    "daily": [
+      {
+        "label": "Assistance logement",
+        "number": "06 88 13 35 50 · 06 51 39 43 75"
+      },
+      {
+        "label": "Pharmacie de garde",
+        "number": "3237"
+      },
+      {
+        "label": "Médecin / SOS",
+        "number": ""
+      },
+      {
+        "label": "Taxis Parodiens",
+        "number": "03 85 88 84 30"
+      },
+      {
+        "label": "Taxi Martin",
+        "number": "06 21 84 06 65"
+      },
+      {
+        "label": "Office de tourisme",
+        "number": "03 85 81 10 92"
+      }
+    ]
+  },
+  "goodbye": {
+    "title": "Merci de votre visite",
+    "text": "Nous espérons que vous avez passé un séjour à la hauteur de vos attentes. Votre avis nous est précieux : n'hésitez pas à partager votre expérience. Excellent voyage, et revenez quand vous voulez !"
+  }
+}

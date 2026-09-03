@@ -1,8 +1,7 @@
 node_modules/
-.env
-.netlify/
-database.sqlite
-database.sqlite-shm
-database.sqlite-wal
-uploads/
+.DS_Store
+Thumbs.db
 *.log
+.env
+_build/
+__dump.js
