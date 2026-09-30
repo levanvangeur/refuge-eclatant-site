@@ -8,6 +8,27 @@
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const el = (id) => document.getElementById(id);
 
+  // Lien « voir sur la carte » (recherche Google Maps à partir du nom/adresse).
+  function mapsLink(query, label) {
+    if (!query) return '';
+    return `<a class="map-link" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}" target="_blank" rel="noopener">📍 ${esc(label)}</a>`;
+  }
+
+  // Lien de discussion WhatsApp à partir d'un numéro français (0X… → +33X…).
+  function waLink(phone) {
+    const digits = String(phone || '').replace(/[^\d]/g, '');
+    if (!digits) return '';
+    const intl = digits.charAt(0) === '0' ? '33' + digits.slice(1) : digits;
+    return `<a class="wa-link" href="https://wa.me/${intl}" target="_blank" rel="noopener">💬 WhatsApp</a>`;
+  }
+
+  // Bouton « Appeler » (ouvre l'appli téléphone du voyageur).
+  function callLink(phone) {
+    const digits = String(phone || '').replace(/[^+\d]/g, '');
+    if (!digits) return '';
+    return `<a class="call-link" href="tel:${digits}">📞 Appeler</a>`;
+  }
+
   // Catégories du corps du livret (id de contenu → générateur de section).
   // L'ordre par défaut ci-dessous peut être remplacé par data.sectionOrder
   // (modifiable depuis l'éditeur, bouton ↑ / ↓ sur chaque catégorie).
@@ -18,22 +39,23 @@
     gallery: (d, alt) => gallery(d.gallery, alt),
     rules: (d, alt) => rules(d.rules, alt),
     departure: (d, alt) => departure(d.departure, alt),
-    discover: (d, alt) => placesSection('decouvrir', 'À deux pas de chez vous', 'Découvrir ' + ((d.meta || {}).city || ''), d.discover, alt),
-    stroll: (d, alt) => placesSection('flaner', 'Prendre son temps', 'Flâner & respirer', d.stroll, alt),
-    eat: (d, alt) => directory('manger', 'Nos recommandations', 'Où manger', d.eat, alt),
-    drinks: (d, alt) => directory('boire', 'Se régaler', 'Bars & gourmandises', d.drinks, alt),
-    services: (d, alt) => directory('services', 'Bien pratique', 'Services & locations', d.services, alt),
-    shops: (d, alt) => directory('commerces', 'Le quotidien', 'Commerces & courses', d.shops, alt),
-    escapes: (d, alt) => placesSection('escapades', 'Une journée d\'escapade', 'Grandes escapades', d.escapes, alt),
+    discover: (d, alt) => placesSection('decouvrir', 'À deux pas de chez vous', 'Découvrir ' + ((d.meta || {}).city || ''), d.discover, (d.meta || {}).city, alt),
+    stroll: (d, alt) => placesSection('flaner', 'Prendre son temps', 'Flâner & respirer', d.stroll, (d.meta || {}).city, alt),
+    eat: (d, alt) => directory('manger', 'Nos recommandations', 'Où manger', d.eat, (d.meta || {}).city, alt),
+    drinks: (d, alt) => directory('boire', 'Se régaler', 'Bars & gourmandises', d.drinks, (d.meta || {}).city, alt),
+    services: (d, alt) => directory('services', 'Bien pratique', 'Services & locations', d.services, (d.meta || {}).city, alt),
+    shops: (d, alt) => directory('commerces', 'Le quotidien', 'Commerces & courses', d.shops, (d.meta || {}).city, alt),
+    escapes: (d, alt) => placesSection('escapades', 'Une journée d\'escapade', 'Grandes escapades', d.escapes, (d.meta || {}).city, alt),
     digoinCharolles: (d, alt) => digoinCharolles(d.digoinCharolles, alt),
     numbers: (d, alt) => numbers(d.numbers, alt),
-    goodbye: (d, alt) => goodbye(d.goodbye, alt),
+    reviews: (d, alt) => reviewsSection(d.reviews, alt),
+    goodbye: (d, alt) => goodbye(d.goodbye, d.meta, alt),
   };
 
   // Ordre par défaut si data.sectionOrder est absent ou incomplet.
   const DEFAULT_ORDER = ['practical', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
     'discover', 'stroll', 'eat', 'drinks', 'services', 'shops', 'escapes',
-    'digoinCharolles', 'numbers', 'goodbye'];
+    'digoinCharolles', 'numbers', 'reviews', 'goodbye'];
 
   // Libellés de navigation (id de contenu → [ancre, libellé]).
   const NAV_LABELS = {
@@ -48,6 +70,7 @@
     services: ['services', 'Services'],
     escapes: ['escapades', 'Escapades'],
     numbers: ['numeros', 'Numéros utiles'],
+    reviews: ['avis', 'Avis des voyageurs'],
   };
 
   function resolveOrder(saved) {
@@ -73,6 +96,13 @@
     // ── Marque / logo ──
     if (m.logo) { el('navLogo').src = m.logo; } else { el('navLogo').style.display = 'none'; }
     el('navName').textContent = m.apartmentName || 'Livret d\'accueil';
+
+    // ── CTA réservation fixée dans le menu ──
+    const navCta = el('navCta');
+    if (navCta) {
+      if (m.bookingUrl) { navCta.href = m.bookingUrl; navCta.classList.add('show'); }
+      else { navCta.classList.remove('show'); }
+    }
 
     // ── Navigation ──
     const nav = [['bienvenue', 'Bienvenue']];
@@ -146,14 +176,14 @@
         </div>
         <div class="card info-card reveal">
           <h3>Adresse &amp; accès</h3>
-          ${kv('Adresse', ad.full)}
+          ${ad.full ? `<div class="kv"><div class="k">Adresse</div><div class="v">${esc(ad.full)} ${mapsLink(ad.full, 'Carte')}</div></div>` : ''}
           ${kv('Étage / porte', ad.floor)}
           ${kv('Code immeuble', ad.buildingCode)}
           ${kv('Stationnement', ad.parking)}
         </div>
         <div class="card info-card reveal">
           <h3>Assistance</h3>
-          ${(as.phones || []).map((p, i) => kv('Téléphone ' + (i + 1), p)).join('')}
+          ${(as.phones || []).map((p, i) => p ? `<div class="kv"><div class="k">Téléphone ${i + 1}</div><div class="v" data-notranslate>${esc(p)}</div>${callLink(p)}${waLink(p)}</div>` : '').join('')}
           ${kv('Disponibilité', as.availability)}
         </div>
       </div>`, alt);
@@ -209,54 +239,60 @@
         <h3 style="text-align:center">Merci !</h3><p class="lead" style="margin:0">${esc(dep.thanks)}</p></div>` : ''}`, alt);
   }
 
-  function placesSection(id, kick, title, block, alt) {
+  function placesSection(id, kick, title, block, cityHint, alt) {
     if (!block || !(block.places || []).length) return '';
     return section(id, kick, title, `
       ${block.intro ? `<p class="lead">${esc(block.intro)}</p>` : ''}
       <div class="card info-card reveal">
-        ${block.places.map((p) => placeHTML(p)).join('')}
+        ${block.places.map((p) => placeHTML(p, cityHint)).join('')}
       </div>`, alt ? 'alt' : '');
   }
 
-  function placeHTML(p) {
+  function placeHTML(p, cityHint) {
+    const mapQuery = [p.name, cityHint].filter(Boolean).join(', ');
     return `<div class="place">
       <h3>${esc(p.name)}</h3>
       ${p.desc ? `<p>${esc(p.desc)}</p>` : ''}
       ${p.meta ? `<div class="meta">${esc(p.meta)}</div>` : ''}
+      ${mapsLink(mapQuery, 'Voir sur la carte')}
     </div>`;
   }
 
-  function dirItem(it) {
+  function dirItem(it, cityHint) {
     const parts = [];
     if (it.address) parts.push(esc(it.address));
     if (it.phone) parts.push(`<span class="tel" data-notranslate>${esc(it.phone)}</span>`);
+    if (it.phone) parts.push(callLink(it.phone));
+    const mapQuery = [it.name, it.address, cityHint].filter(Boolean).join(', ');
+    const map = mapsLink(mapQuery, 'Carte');
+    if (map) parts.push(map);
     return `<div class="dir-item">
       <div class="n">${esc(it.name)}${it.type ? `<small>${esc(it.type)}</small>` : ''}</div>
       <div class="a">${parts.join(' · ')}</div>
     </div>`;
   }
 
-  function directory(id, kick, title, block, alt) {
+  function directory(id, kick, title, block, cityHint, alt) {
     if (!block || !(block.groups || []).length) return '';
     return section(id, kick, title, `
       ${block.intro ? `<p class="lead">${esc(block.intro)}</p>` : ''}
       ${block.groups.map((grp) => `
         <div class="reveal" style="margin-bottom:34px">
           <div class="group-title">${esc(grp.title)}</div>
-          <div class="card info-card">${(grp.items || []).map(dirItem).join('')}</div>
+          <div class="card info-card">${(grp.items || []).map((it) => dirItem(it, cityHint)).join('')}</div>
         </div>`).join('')}`, alt);
   }
 
   function digoinCharolles(dc, alt) {
     if (!dc) return '';
-    const col = (b) => b ? `
+    const col = (b, cityHint) => b ? `
       <div class="reveal">
         <div class="group-title">${esc(b.title)}</div>
-        <div class="card info-card">${(b.places || []).map(placeHTML).join('')}</div>
+        <div class="card info-card">${(b.places || []).map((p) => placeHTML(p, cityHint)).join('')}</div>
       </div>` : '';
     return section('digoin', 'À deux pas de Paray', 'Digoin & Charolles', `
       ${dc.intro ? `<p class="lead">${esc(dc.intro)}</p>` : ''}
-      <div class="grid cols-2">${col(dc.digoin)}${col(dc.charolles)}</div>`, alt);
+      <div class="grid cols-2">${col(dc.digoin, 'Digoin')}${col(dc.charolles, 'Charolles')}</div>`, alt);
   }
 
   function numbers(n, alt) {
@@ -264,7 +300,8 @@
     const cards = (arr) => (arr || []).map((x) => `
       <div class="phone-card">
         <div class="pl">${esc(x.label)}</div>
-        <div class="pn">${x.number ? `<a href="tel:${esc(String(x.number).replace(/[^+0-9]/g, ''))}" data-notranslate>${esc(x.number)}</a>` : '—'}</div>
+        <div class="pn" data-notranslate>${x.number ? esc(x.number) : '—'}</div>
+        ${x.number ? callLink(x.number) : ''}
       </div>`).join('');
     return section('numeros', 'En cas de besoin', 'Numéros utiles', `
       <div class="grid cols-2">
@@ -273,14 +310,38 @@
       </div>`, alt);
   }
 
-  function goodbye(g, alt) {
+  function goodbye(g, m, alt) {
     if (!g) return '';
+    m = m || {};
+    const reviewLinks = [
+      ['reviewUrlBooking', 'Avis sur Booking.com', 'platform-btn platform-btn--booking'],
+      ['reviewUrlAirbnb', 'Avis sur Airbnb', 'platform-btn platform-btn--airbnb'],
+    ].filter(([key]) => m[key]);
+    const reviewButtons = reviewLinks.length ? `
+      <div class="review-cta-wrap">
+        ${reviewLinks.map(([key, label, cls]) => `<a href="${esc(m[key])}" class="${cls}" target="_blank" rel="noopener">${esc(label)}</a>`).join('')}
+      </div>` : '';
     return sectionWrap('', false, `
       <div class="kicker">À bientôt</div>
       <h2 class="section-title">${esc(g.title || 'Merci')}</h2>
       <div class="title-rule"></div>
       <p class="lead">${esc(g.text || '')}</p>
+      ${reviewButtons}
       <div style="text-align:center;color:var(--gold);letter-spacing:.4em;margin-top:10px">✦ ✦ ✦</div>`, alt);
+  }
+
+  function reviewsSection(r, alt) {
+    if (!r || !(r.items || []).length) return '';
+    const cards = r.items.map((rv) => `
+      <div class="review-card reveal">
+        ${rv.score ? `<div class="review-score">${esc(rv.score)}<span>/10</span></div>` : ''}
+        <p class="review-text">${esc(rv.text)}</p>
+        <div class="review-author">${esc(rv.author || '')}${rv.country ? ` · ${esc(rv.country)}` : ''}</div>
+      </div>`).join('');
+    return section('avis', 'Ils ont séjourné ici', r.title || 'Avis des voyageurs', `
+      ${r.intro ? `<p class="lead">${esc(r.intro)}</p>` : ''}
+      <div class="grid cols-3">${cards}</div>
+      ${r.source ? `<p class="review-source">Avis vérifiés sur ${esc(r.source)}.</p>` : ''}`, alt);
   }
 
   function footer(data) {

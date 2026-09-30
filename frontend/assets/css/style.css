@@ -95,6 +95,26 @@ a { color: inherit; text-decoration: none; }
 /* Menu burger (mobile) */
 .nav-toggle { display: none; background: none; border: none; cursor: pointer; color: var(--ink); font-size: 1.5rem; line-height: 1; padding: 6px 4px; flex-shrink: 0; }
 
+/* Bouton de réservation fixé dans le menu (toujours visible au défilement) */
+.nav-cta {
+  display: none; align-items: center; gap: 6px; flex-shrink: 0; margin-left: 10px;
+  padding: 9px 18px; border-radius: 7px; color: #fff; text-decoration: none;
+  font-family: var(--font-sans); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold) 60%, var(--gold-dark));
+  box-shadow: 0 6px 18px rgba(155,134,99,0.4);
+  position: relative; overflow: hidden; white-space: nowrap;
+  transition: box-shadow .25s, transform .25s;
+}
+.nav-cta.show { display: inline-flex; }
+.nav-cta::before { content: "✦"; font-size: 0.68rem; }
+.nav-cta::after {
+  content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255,255,255,.55), transparent);
+  transform: skewX(-20deg);
+}
+.nav-cta:hover { box-shadow: 0 8px 22px rgba(155,134,99,0.55); transform: translateY(-1px); }
+.nav-cta:hover::after { left: 140%; transition: left .85s ease; }
+
 /* ────────────────────────────  HERO  ──────────────────────────── */
 .hero {
   position: relative; min-height: calc(100vh - var(--nav-h));
@@ -181,6 +201,38 @@ ul.diamond li::before { content: "◆"; color: var(--gold); font-size: 0.6rem; m
 .dir-item .a .tel { color: var(--gold-dark); white-space: nowrap; }
 .group-title { font-family: var(--font-serif); font-style: italic; font-size: 1.7rem; color: var(--ink); margin: 8px 0 6px; }
 
+/* Liens carte & WhatsApp */
+.map-link { color: var(--gold-dark); font-size: 0.86rem; text-decoration: none; white-space: nowrap; }
+.map-link:hover { text-decoration: underline; }
+.place .map-link { display: inline-block; margin-top: 10px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.wa-link, .call-link { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--gold-light); background: #fff; color: var(--gold-dark); border-radius: 8px; padding: 5px 12px; font-family: var(--font-sans); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: none; white-space: nowrap; transition: .2s; margin-left: 10px; }
+.wa-link:hover, .call-link:hover { background: var(--gold); color: #fff; border-color: var(--gold); }
+.phone-card .call-link { margin-left: 0; margin-top: 12px; }
+.dir-item .a .call-link { margin-left: 0; padding: 3px 10px; font-size: 0.72rem; }
+
+/* Boutons d'avis, couleur de chaque plateforme */
+.review-cta-wrap { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-top: 36px; }
+.platform-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 15px 30px; color: #fff; font-family: var(--font-sans); font-weight: 400;
+  text-transform: uppercase; letter-spacing: 0.14em; font-size: clamp(0.72rem, 2.2vw, 0.8rem);
+  border-radius: 8px; transition: background .25s, box-shadow .25s, transform .25s; max-width: 100%;
+}
+.platform-btn:hover { transform: translateY(-2px); }
+.platform-btn--booking { background: #003580; box-shadow: 0 8px 24px rgba(0,53,128,0.32); }
+.platform-btn--booking:hover { background: #002a66; box-shadow: 0 12px 32px rgba(0,53,128,0.42); }
+.platform-btn--airbnb { background: #FF385C; box-shadow: 0 8px 24px rgba(255,56,92,0.32); }
+.platform-btn--airbnb:hover { background: #E31C5F; box-shadow: 0 12px 32px rgba(255,56,92,0.42); }
+
+/* Avis des voyageurs */
+.review-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 28px 26px; display: flex; flex-direction: column; gap: 14px; }
+.review-score { font-family: var(--font-serif); font-style: italic; font-size: 1.5rem; color: var(--gold-dark); }
+.review-score span { font-family: var(--font-sans); font-style: normal; font-size: 0.8rem; color: var(--ink-faint); }
+.review-text { color: var(--ink); line-height: 1.65; flex: 1; }
+.review-text::before { content: "“"; color: var(--gold-light); font-family: var(--font-serif); font-size: 1.3rem; }
+.review-author { text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.74rem; color: var(--ink-faint); }
+.review-source { text-align: center; color: var(--ink-faint); font-size: 0.82rem; margin-top: 8px; }
+
 /* Numéros utiles */
 .phones { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
 .phone-card { border: 1px solid var(--gold-light); border-radius: 14px; padding: 20px 22px; background: #fff; }
@@ -264,6 +316,8 @@ ul.diamond li::before { content: "◆"; color: var(--gold); font-size: 0.6rem; m
   .nav-inner { gap: 8px; padding: 0 14px; }
   .flag-btn { font-size: 1rem; padding: 5px 4px; }
   .lang-flags { padding-left: 8px; }
+  .nav-cta { padding: 7px 12px; font-size: 0.62rem; letter-spacing: 0.06em; margin-left: 6px; }
+  .nav-cta::before { font-size: 0.6rem; }
 
   /* Hero */
   .hero { padding: 48px 20px 60px; min-height: calc(100vh - var(--nav-h)); }

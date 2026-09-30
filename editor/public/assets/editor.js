@@ -27,11 +27,12 @@
     escapes: 'Grandes escapades',
     digoinCharolles: 'Digoin & Charolles',
     numbers: 'Numéros utiles',
+    reviews: 'Avis des voyageurs',
     goodbye: 'Au revoir',
   };
   const DEFAULT_ORDER = ['practical', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
     'discover', 'stroll', 'eat', 'drinks', 'services', 'shops', 'escapes',
-    'digoinCharolles', 'numbers', 'goodbye'];
+    'digoinCharolles', 'numbers', 'reviews', 'goodbye'];
 
   /* ─────────── Enregistrement (auto-save) ─────────── */
   let saveTimer = null;
@@ -313,6 +314,8 @@
           g.appendChild(fieldText(d.meta, 'region', 'Région'));
           g.appendChild(fieldText(d.meta, 'motto', 'Devise (entre guillemets)'));
           g.appendChild(fieldText(d.meta, 'bookingUrl', 'Lien du bouton « Réservez votre prochain séjour »'));
+          g.appendChild(fieldText(d.meta, 'reviewUrlBooking', 'Lien « Avis Booking.com » — affiché en bas du livret si renseigné', { ph: 'https://www.booking.com/hotel/…' }));
+          g.appendChild(fieldText(d.meta, 'reviewUrlAirbnb', 'Lien « Avis Airbnb » — affiché en bas du livret si renseigné', { ph: 'https://www.airbnb.fr/rooms/…' }));
           return g; })()));
         return f;
       }],
@@ -424,6 +427,21 @@
         d.numbers.emergency = d.numbers.emergency || []; d.numbers.daily = d.numbers.daily || [];
         f.appendChild(card('Urgences', objectList(d.numbers.emergency, NF, { titleKey: 'label', addLabel: 'Ajouter un numéro' })));
         f.appendChild(card('Au quotidien', objectList(d.numbers.daily, NF, { titleKey: 'label', addLabel: 'Ajouter un numéro' })));
+        return f;
+      }],
+      ['reviews', 'Avis des voyageurs', () => {
+        const f = elh('div');
+        if (!d.reviews) d.reviews = { intro: '', source: 'Booking.com', items: [] };
+        d.reviews.items = d.reviews.items || [];
+        f.appendChild(card('Introduction (optionnel)', fieldText(d.reviews, 'intro', 'Texte d\'introduction', { textarea: true })));
+        f.appendChild(card('Source', fieldText(d.reviews, 'source', 'Plateforme d\'origine des avis (ex. Booking.com)')));
+        const REVIEW_FIELDS = [
+          { key: 'author', label: 'Prénom' },
+          { key: 'country', label: 'Pays' },
+          { key: 'score', label: 'Note (ex. 9,5)' },
+          { key: 'text', label: 'Avis', full: true, textarea: true },
+        ];
+        f.appendChild(card('Avis', objectList(d.reviews.items, REVIEW_FIELDS, { titleKey: 'author', addLabel: 'Ajouter un avis' })));
         return f;
       }],
       ['goodbye', 'Au revoir', () => {

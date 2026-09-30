@@ -6,7 +6,9 @@
     "region": "Bourgogne du Sud · Saône-et-Loire",
     "motto": "Votre séjour, notre priorité",
     "logo": "images/logo.png",
-    "bookingUrl": "https://reservation.logementsparay.fr"
+    "bookingUrl": "https://reservation.logementsparay.fr",
+    "reviewUrlBooking": "https://www.booking.com/hotel/fr/refuge-eclatant-paray-le-monial.fr.html",
+    "reviewUrlAirbnb": "https://www.airbnb.fr/rooms/1181867661039622105"
   },
   "welcome": {
     "title": "Bienvenue",
@@ -686,17 +688,83 @@
     "practical",
     "rules",
     "departure",
+    "goodbye",
     "comfort",
-    "gallery",
+    "eat",
     "discover",
     "stroll",
-    "eat",
     "drinks",
     "services",
     "shops",
     "escapes",
     "digoinCharolles",
-    "numbers",
-    "goodbye"
-  ]
+    "gallery",
+    "numbers"
+  ],
+  "reviews": {
+    "intro": "Un aperçu sincère de ce que nos voyageurs retiennent de leur séjour.",
+    "source": "Booking.com",
+    "items": [
+      {
+        "author": "Joel",
+        "country": "France",
+        "score": "10",
+        "text": "Le confort et la décoration."
+      },
+      {
+        "author": "Claudine",
+        "country": "France",
+        "score": "10",
+        "text": "Superbe appartement bien situé. Calme et paisible pour se reposer, confortable. Belle salle de bain, séparée des toilettes. Jolie coin salon."
+      },
+      {
+        "author": "Ludovic",
+        "country": "France",
+        "score": "10",
+        "text": "La déco est superbe, belle finition. Très spacieux et super calme."
+      },
+      {
+        "author": "Elise",
+        "country": "France",
+        "score": "10",
+        "text": "L'appartement est chaleureux et confortable. Fait avec goût. Quartier calme et stationnement facile."
+      },
+      {
+        "author": "Marielle",
+        "country": "France",
+        "score": "10",
+        "text": "Appartement cosy et tout confort dans un ensemble résidentiel calme. Parking à proximité immédiate."
+      },
+      {
+        "author": "Christine",
+        "country": "France",
+        "score": "10",
+        "text": "La tranquillité, le confort et les échanges cordiaux avec les propriétaires."
+      },
+      {
+        "author": "Piat",
+        "country": "France",
+        "score": "10",
+        "text": "Le rapport qualité prix."
+      },
+      {
+        "author": "Noël",
+        "country": "France",
+        "score": "9,0",
+        "text": "La proximité du centre-ville, le calme."
+      },
+      {
+        "author": "Michel",
+        "country": "France",
+        "score": "9,0",
+        "text": "L'appartement est très bien refait, bien décoré, confortable et très calme."
+      },
+      {
+        "author": "Emmanuel",
+        "country": "France",
+        "score": "8,0",
+        "text": "La propreté, les équipements, appartement très bien et très fonctionnel. L'accueil avec un set minimum de cuisine et de vaisselle."
+      }
+    ]
+  }
 }
