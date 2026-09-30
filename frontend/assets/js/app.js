@@ -8,20 +8,53 @@
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const el = (id) => document.getElementById(id);
 
-  // Sections de navigation (id, libellé, condition d'affichage)
-  const NAV = [
-    ['bienvenue', 'Bienvenue'],
-    ['pratique', 'Pratique'],
-    ['logement', 'Le logement'],
-    ['galerie', 'Galerie'],
-    ['regles', 'Règles'],
-    ['decouvrir', 'Découvrir'],
-    ['manger', 'Où manger'],
-    ['boire', 'Gourmandises'],
-    ['services', 'Services'],
-    ['escapades', 'Escapades'],
-    ['numeros', 'Numéros utiles'],
-  ];
+  // Catégories du corps du livret (id de contenu → générateur de section).
+  // L'ordre par défaut ci-dessous peut être remplacé par data.sectionOrder
+  // (modifiable depuis l'éditeur, bouton ↑ / ↓ sur chaque catégorie).
+  const SECTIONS = {
+    practical: (d, alt) => practical(d.practical, alt),
+    welcome: (d, alt) => welcome(d.welcome, alt),
+    comfort: (d, alt) => comfort(d.comfort, alt),
+    gallery: (d, alt) => gallery(d.gallery, alt),
+    rules: (d, alt) => rules(d.rules, alt),
+    departure: (d, alt) => departure(d.departure, alt),
+    discover: (d, alt) => placesSection('decouvrir', 'À deux pas de chez vous', 'Découvrir ' + ((d.meta || {}).city || ''), d.discover, alt),
+    stroll: (d, alt) => placesSection('flaner', 'Prendre son temps', 'Flâner & respirer', d.stroll, alt),
+    eat: (d, alt) => directory('manger', 'Nos recommandations', 'Où manger', d.eat, alt),
+    drinks: (d, alt) => directory('boire', 'Se régaler', 'Bars & gourmandises', d.drinks, alt),
+    services: (d, alt) => directory('services', 'Bien pratique', 'Services & locations', d.services, alt),
+    shops: (d, alt) => directory('commerces', 'Le quotidien', 'Commerces & courses', d.shops, alt),
+    escapes: (d, alt) => placesSection('escapades', 'Une journée d\'escapade', 'Grandes escapades', d.escapes, alt),
+    digoinCharolles: (d, alt) => digoinCharolles(d.digoinCharolles, alt),
+    numbers: (d, alt) => numbers(d.numbers, alt),
+    goodbye: (d, alt) => goodbye(d.goodbye, alt),
+  };
+
+  // Ordre par défaut si data.sectionOrder est absent ou incomplet.
+  const DEFAULT_ORDER = ['practical', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
+    'discover', 'stroll', 'eat', 'drinks', 'services', 'shops', 'escapes',
+    'digoinCharolles', 'numbers', 'goodbye'];
+
+  // Libellés de navigation (id de contenu → [ancre, libellé]).
+  const NAV_LABELS = {
+    practical: ['pratique', 'Pratique'],
+    comfort: ['logement', 'Le logement'],
+    gallery: ['galerie', 'Galerie'],
+    rules: ['regles', 'Règles'],
+    departure: ['depart', 'Avant le départ'],
+    discover: ['decouvrir', 'Découvrir'],
+    eat: ['manger', 'Où manger'],
+    drinks: ['boire', 'Gourmandises'],
+    services: ['services', 'Services'],
+    escapes: ['escapades', 'Escapades'],
+    numbers: ['numeros', 'Numéros utiles'],
+  };
+
+  function resolveOrder(saved) {
+    const order = (Array.isArray(saved) ? saved : []).filter((id) => SECTIONS[id]);
+    DEFAULT_ORDER.forEach((id) => { if (order.indexOf(id) === -1) order.push(id); });
+    return order;
+  }
 
   fetch('content.json', { cache: 'no-store' })
     .then((r) => r.json())
@@ -35,39 +68,31 @@
   function render(data) {
     const m = data.meta || {};
     document.documentElement.lang = 'fr';
+    const order = resolveOrder(data.sectionOrder);
 
     // ── Marque / logo ──
     if (m.logo) { el('navLogo').src = m.logo; } else { el('navLogo').style.display = 'none'; }
     el('navName').textContent = m.apartmentName || 'Livret d\'accueil';
 
     // ── Navigation ──
-    el('navLinks').innerHTML = NAV.map(([id, label]) =>
+    const nav = [['bienvenue', 'Bienvenue']];
+    order.forEach((id) => { const lab = NAV_LABELS[id]; if (lab) nav.push(lab); });
+    el('navLinks').innerHTML = nav.map(([id, label]) =>
       `<a href="#${id}" data-nav="${id}">${esc(label)}</a>`).join('');
 
     // ── Corps ──
-    const parts = [];
-    parts.push(hero(m));
-    parts.push(practical(data.practical));
-    parts.push(welcome(data.welcome));
-    parts.push(comfort(data.comfort));
-    parts.push(gallery(data.gallery));
-    parts.push(rules(data.rules));
-    parts.push(placesSection('decouvrir', 'À deux pas de chez vous', 'Découvrir ' + (m.city || ''), data.discover, false));
-    parts.push(placesSection('flaner', 'Prendre son temps', 'Flâner & respirer', data.stroll, true));
-    parts.push(directory('manger', 'Nos recommandations', 'Où manger', data.eat, false));
-    parts.push(directory('boire', 'Se régaler', 'Bars & gourmandises', data.drinks, true));
-    parts.push(directory('services', 'Bien pratique', 'Services & locations', data.services, false));
-    parts.push(directory('commerces', 'Le quotidien', 'Commerces & courses', data.shops, true));
-    parts.push(placesSection('escapades', 'Une journée d\'escapade', 'Grandes escapades', data.escapes, false));
-    parts.push(digoinCharolles(data.digoinCharolles));
-    parts.push(numbers(data.numbers));
-    parts.push(goodbye(data.goodbye));
+    const parts = [hero(m)];
+    let alt = false;
+    order.forEach((id) => {
+      const html = SECTIONS[id](data, alt ? 'alt' : '');
+      if (html) { parts.push(html); alt = !alt; }
+    });
     el('app').innerHTML = parts.filter(Boolean).join('');
 
     // ── Pied de page ──
     el('app').insertAdjacentHTML('beforeend', footer(data));
 
-    setupInteractions(data);
+    setupInteractions(data, nav);
     if (window.I18N) window.I18N.init();
   }
 
@@ -89,7 +114,7 @@
     </header>`;
   }
 
-  function welcome(w) {
+  function welcome(w, alt) {
     if (!w) return '';
     return sectionWrap('', false, `
       <div class="kicker">Un mot pour vous</div>
@@ -98,10 +123,10 @@
       <div style="max-width:760px;margin:0 auto;text-align:center">
         ${(w.paragraphs || []).map((p) => `<p class="lead" style="margin-bottom:20px">${esc(p)}</p>`).join('')}
         ${w.signature ? `<p class="serif" style="font-style:italic;font-size:1.3rem;color:var(--gold-dark);margin-top:10px">${esc(w.signature)}</p>` : ''}
-      </div>`, '');
+      </div>`, alt);
   }
 
-  function practical(pr) {
+  function practical(pr, alt) {
     if (!pr) return '';
     const wifi = pr.wifi || {}, ar = pr.arrival || {}, ad = pr.address || {}, as = pr.assistance || {};
     const kv = (k, v) => v ? `<div class="kv"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>` : '';
@@ -131,10 +156,10 @@
           ${(as.phones || []).map((p, i) => kv('Téléphone ' + (i + 1), p)).join('')}
           ${kv('Disponibilité', as.availability)}
         </div>
-      </div>`);
+      </div>`, alt);
   }
 
-  function comfort(c) {
+  function comfort(c, alt) {
     if (!c) return '';
     return section('logement', 'Le confort', 'Votre logement', `
       ${c.intro ? `<p class="lead">${esc(c.intro)}</p>` : ''}
@@ -144,10 +169,10 @@
             <h3>${esc(s.title)}</h3>
             <ul class="diamond">${(s.items || []).map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
           </div>`).join('')}
-      </div>`, 'alt');
+      </div>`, alt);
   }
 
-  function gallery(g) {
+  function gallery(g, alt) {
     if (!g || !(g.rooms || []).length) return '';
     const rooms = g.rooms.map((room, ri) => {
       const imgs = (room.images || []).filter(Boolean);
@@ -161,23 +186,27 @@
       </div>`;
     }).join('');
     return section('galerie', 'Visite en images', 'Le logement pièce par pièce', `
-      ${g.intro ? `<p class="lead">${esc(g.intro)}</p>` : ''}${rooms}`);
+      ${g.intro ? `<p class="lead">${esc(g.intro)}</p>` : ''}${rooms}`, alt);
   }
 
-  function rules(r) {
+  function rules(r, alt) {
     if (!r) return '';
-    const list = (title, arr) => `
-      <div class="card info-card reveal">
-        <h3>${esc(title)}</h3>
-        <ul class="diamond">${(arr || []).map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
-      </div>`;
     return section('regles', 'Pour le bien de tous', 'Règles de la maison', `
-      <div class="grid cols-2">
-        ${list('Le respect des lieux', r.respect)}
-        ${list('Avant votre départ', r.beforeLeaving)}
+      <div class="card info-card reveal">
+        <h3>Le respect des lieux</h3>
+        <ul class="diamond">${(r.respect || []).map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
+      </div>`, alt);
+  }
+
+  function departure(dep, alt) {
+    if (!dep) return '';
+    return section('depart', 'Dernière ligne droite', dep.title || 'Avant votre départ', `
+      ${dep.intro ? `<p class="lead">${esc(dep.intro)}</p>` : ''}
+      <div class="card info-card reveal">
+        <ul class="diamond">${(dep.items || []).map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
       </div>
-      ${r.thanks ? `<div class="card info-card reveal" style="margin-top:22px;text-align:center;border-color:var(--gold-light)">
-        <h3 style="text-align:center">Merci !</h3><p class="lead" style="margin:0">${esc(r.thanks)}</p></div>` : ''}`, 'alt');
+      ${dep.thanks ? `<div class="card info-card reveal" style="margin-top:22px;text-align:center;border-color:var(--gold-light)">
+        <h3 style="text-align:center">Merci !</h3><p class="lead" style="margin:0">${esc(dep.thanks)}</p></div>` : ''}`, alt);
   }
 
   function placesSection(id, kick, title, block, alt) {
@@ -215,10 +244,10 @@
         <div class="reveal" style="margin-bottom:34px">
           <div class="group-title">${esc(grp.title)}</div>
           <div class="card info-card">${(grp.items || []).map(dirItem).join('')}</div>
-        </div>`).join('')}`, alt ? 'alt' : '');
+        </div>`).join('')}`, alt);
   }
 
-  function digoinCharolles(dc) {
+  function digoinCharolles(dc, alt) {
     if (!dc) return '';
     const col = (b) => b ? `
       <div class="reveal">
@@ -227,10 +256,10 @@
       </div>` : '';
     return section('digoin', 'À deux pas de Paray', 'Digoin & Charolles', `
       ${dc.intro ? `<p class="lead">${esc(dc.intro)}</p>` : ''}
-      <div class="grid cols-2">${col(dc.digoin)}${col(dc.charolles)}</div>`, 'alt');
+      <div class="grid cols-2">${col(dc.digoin)}${col(dc.charolles)}</div>`, alt);
   }
 
-  function numbers(n) {
+  function numbers(n, alt) {
     if (!n) return '';
     const cards = (arr) => (arr || []).map((x) => `
       <div class="phone-card">
@@ -241,17 +270,17 @@
       <div class="grid cols-2">
         <div class="reveal"><div class="group-title">Urgences</div><div class="phones">${cards(n.emergency)}</div></div>
         <div class="reveal"><div class="group-title">Au quotidien</div><div class="phones">${cards(n.daily)}</div></div>
-      </div>`);
+      </div>`, alt);
   }
 
-  function goodbye(g) {
+  function goodbye(g, alt) {
     if (!g) return '';
     return sectionWrap('', false, `
       <div class="kicker">À bientôt</div>
       <h2 class="section-title">${esc(g.title || 'Merci')}</h2>
       <div class="title-rule"></div>
       <p class="lead">${esc(g.text || '')}</p>
-      <div style="text-align:center;color:var(--gold);letter-spacing:.4em;margin-top:10px">✦ ✦ ✦</div>`, 'alt');
+      <div style="text-align:center;color:var(--gold);letter-spacing:.4em;margin-top:10px">✦ ✦ ✦</div>`, alt);
   }
 
   function footer(data) {
@@ -288,7 +317,7 @@
   }
 
   /* ───────────────── Interactions ───────────────── */
-  function setupInteractions(data) {
+  function setupInteractions(data, nav) {
     // Menu mobile
     const toggle = el('navToggle'), links = el('navLinks');
     toggle.addEventListener('click', () => links.classList.toggle('open'));
@@ -329,7 +358,7 @@
         }
       });
     }, { rootMargin: '-40% 0px -55% 0px' });
-    NAV.forEach(([id]) => { const s = el(id); if (s) spy.observe(s); });
+    nav.forEach(([id]) => { const s = el(id); if (s) spy.observe(s); });
 
     setupLightbox(data);
   }

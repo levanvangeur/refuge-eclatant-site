@@ -9,6 +9,30 @@
   const elh = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
   const slug = (s) => String(s || 'piece').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'piece';
 
+  // Catégories du corps du livret pouvant être réordonnées (doit correspondre
+  // à SECTIONS dans frontend/assets/js/app.js).
+  const CATEGORY_LABELS = {
+    practical: 'Infos pratiques',
+    welcome: 'Mot de bienvenue',
+    comfort: 'Le logement',
+    gallery: 'Galerie (photos)',
+    rules: 'Règles',
+    departure: 'Avant le départ',
+    discover: 'Découvrir',
+    stroll: 'Flâner & respirer',
+    eat: 'Où manger',
+    drinks: 'Bars & gourmandises',
+    services: 'Services & locations',
+    shops: 'Commerces & courses',
+    escapes: 'Grandes escapades',
+    digoinCharolles: 'Digoin & Charolles',
+    numbers: 'Numéros utiles',
+    goodbye: 'Au revoir',
+  };
+  const DEFAULT_ORDER = ['practical', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
+    'discover', 'stroll', 'eat', 'drinks', 'services', 'shops', 'escapes',
+    'digoinCharolles', 'numbers', 'goodbye'];
+
   /* ─────────── Enregistrement (auto-save) ─────────── */
   let saveTimer = null;
   function setState(txt, cls) { const s = $('saveState'); s.textContent = txt; s.className = 'save-state ' + (cls || ''); }
@@ -242,6 +266,40 @@
     return frag;
   }
 
+  // Panneau de réordonnancement des catégories du livret public
+  function orderPanel() {
+    const d = content;
+    if (!Array.isArray(d.sectionOrder) || !d.sectionOrder.length) {
+      d.sectionOrder = DEFAULT_ORDER.slice();
+    } else {
+      d.sectionOrder = d.sectionOrder.filter((id) => CATEGORY_LABELS[id]);
+      DEFAULT_ORDER.forEach((id) => { if (d.sectionOrder.indexOf(id) === -1) d.sectionOrder.push(id); });
+    }
+    const frag = elh('div');
+    frag.appendChild(elh('p', 'subtle', 'Utilisez les flèches pour changer l\'ordre d\'apparition des catégories dans le livret en ligne. Les modifications sont enregistrées automatiquement.'));
+    const box = elh('div');
+    function render() {
+      box.innerHTML = '';
+      d.sectionOrder.forEach((id, i) => {
+        const row = elh('div', 'order-row');
+        row.appendChild(elh('span', 'handle', '⋮⋮'));
+        row.appendChild(elh('span', 'order-pos', String(i + 1)));
+        row.appendChild(elh('span', 'order-lbl', CATEGORY_LABELS[id] || id));
+        const up = elh('button', 'btn sm', '↑');
+        up.disabled = i === 0;
+        up.onclick = () => { if (i > 0) { [d.sectionOrder[i - 1], d.sectionOrder[i]] = [d.sectionOrder[i], d.sectionOrder[i - 1]]; scheduleSave(); render(); } };
+        const dn = elh('button', 'btn sm', '↓');
+        dn.disabled = i === d.sectionOrder.length - 1;
+        dn.onclick = () => { if (i < d.sectionOrder.length - 1) { [d.sectionOrder[i + 1], d.sectionOrder[i]] = [d.sectionOrder[i], d.sectionOrder[i + 1]]; scheduleSave(); render(); } };
+        row.append(up, dn);
+        box.appendChild(row);
+      });
+    }
+    render();
+    frag.appendChild(card('Ordre des catégories', box));
+    return frag;
+  }
+
   // Définition des panneaux (ordre du menu)
   function panels() {
     const d = content;
@@ -258,6 +316,7 @@
           return g; })()));
         return f;
       }],
+      ['order', 'Ordre des catégories', () => orderPanel()],
       ['welcome', 'Mot de bienvenue', () => {
         const f = elh('div');
         f.appendChild(card('Titre', fieldText(d.welcome, 'title', 'Titre')));
@@ -326,10 +385,17 @@
       }],
       ['rules', 'Règles', () => {
         const f = elh('div');
-        d.rules.respect = d.rules.respect || []; d.rules.beforeLeaving = d.rules.beforeLeaving || [];
+        d.rules.respect = d.rules.respect || [];
         f.appendChild(card('Le respect des lieux', stringList(d.rules.respect, { addLabel: 'Ajouter une règle' })));
-        f.appendChild(card('Avant votre départ', stringList(d.rules.beforeLeaving, { addLabel: 'Ajouter une consigne' })));
-        f.appendChild(card('Remerciement', fieldText(d.rules, 'thanks', 'Message de remerciement', { textarea: true })));
+        return f;
+      }],
+      ['departure', 'Avant le départ', () => {
+        const f = elh('div');
+        if (!d.departure) d.departure = { intro: '', items: [], thanks: '' };
+        d.departure.items = d.departure.items || [];
+        f.appendChild(card('Introduction (optionnel)', fieldText(d.departure, 'intro', 'Texte d\'introduction', { textarea: true })));
+        f.appendChild(card('Consignes avant de partir', stringList(d.departure.items, { addLabel: 'Ajouter une consigne' })));
+        f.appendChild(card('Remerciement', fieldText(d.departure, 'thanks', 'Message de remerciement', { textarea: true })));
         return f;
       }],
       ['discover', 'Découvrir', () => placesPanel(d.discover)],

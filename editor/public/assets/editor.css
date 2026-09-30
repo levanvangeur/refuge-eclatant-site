@@ -58,6 +58,11 @@ button{font-family:inherit;cursor:pointer}
 .list-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
 .list-row textarea{min-height:44px}
 .list-row .handle{color:var(--ink-faint);cursor:grab;padding-top:11px;user-select:none}
+.order-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--cream)}
+.order-row .handle{color:var(--ink-faint);user-select:none}
+.order-row .order-pos{color:var(--ink-faint);font-size:.78rem;min-width:18px}
+.order-row .order-lbl{flex:1;font-size:.95rem;color:var(--ink)}
+.order-row button:disabled{opacity:.35;cursor:default}
 .obj-item{border:1px solid var(--border);border-radius:11px;padding:14px;margin-bottom:12px;background:var(--cream)}
 .obj-item .obj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .obj-item .obj-grid .full{grid-column:1/-1}

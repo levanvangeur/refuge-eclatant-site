@@ -96,8 +96,11 @@
       "Merci de respecter le calme du voisinage, en particulier après 22h00.",
       "Signalez tout problème sans attendre.",
       "Capacité maximale : 4 personnes."
-    ],
-    "beforeLeaving": [
+    ]
+  },
+  "departure": {
+    "intro": "",
+    "items": [
       "Faire la vaisselle et vider le lave-vaisselle.",
       "Sortir les poubelles et le tri.",
       "Déhousser les draps et regrouper le linge dans les panières.",
@@ -677,5 +680,23 @@
   "goodbye": {
     "title": "Merci de votre visite",
     "text": "Nous espérons que vous avez passé un séjour à la hauteur de vos attentes. Votre avis nous est précieux : n'hésitez pas à partager votre expérience. Excellent voyage, et revenez quand vous voulez !"
-  }
+  },
+  "sectionOrder": [
+    "welcome",
+    "practical",
+    "rules",
+    "departure",
+    "comfort",
+    "gallery",
+    "discover",
+    "stroll",
+    "eat",
+    "drinks",
+    "services",
+    "shops",
+    "escapes",
+    "digoinCharolles",
+    "numbers",
+    "goodbye"
+  ]
 }
