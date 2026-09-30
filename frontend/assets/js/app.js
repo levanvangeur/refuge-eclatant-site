@@ -19,14 +19,18 @@
     const digits = String(phone || '').replace(/[^\d]/g, '');
     if (!digits) return '';
     const intl = digits.charAt(0) === '0' ? '33' + digits.slice(1) : digits;
-    return `<a class="wa-link" href="https://wa.me/${intl}" target="_blank" rel="noopener">💬 WhatsApp</a>`;
+    return `<a class="icon-btn wa-btn" href="https://wa.me/${intl}" target="_blank" rel="noopener" aria-label="WhatsApp">`
+      + `<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.04 2c-5.46 0-9.9 4.43-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.43 9.9-9.9 0-2.64-1.03-5.12-2.9-6.98A9.82 9.82 0 0 0 12.04 2zm5.8 14.16c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.11.11-1.79-.11a15 15 0 0 1-1.62-.6c-2.86-1.24-4.72-4.14-4.86-4.33-.14-.19-1.16-1.55-1.16-2.95 0-1.4.73-2.09 1-2.38.26-.28.57-.35.76-.35h.55c.18 0 .42-.03.64.5.24.57.8 1.98.87 2.12.07.15.12.32.02.51-.1.19-.15.31-.29.48-.14.17-.3.37-.43.5-.14.14-.29.29-.13.57.17.28.74 1.24 1.6 2 1.1.98 2.03 1.29 2.31 1.44.28.14.44.12.6-.07.17-.19.72-.84.91-1.13.19-.28.38-.24.64-.14.26.09 1.65.78 1.93.92.28.14.47.21.54.33.07.12.07.68-.17 1.36z"/></svg>`
+      + `</a>`;
   }
 
   // Bouton « Appeler » (ouvre l'appli téléphone du voyageur).
   function callLink(phone) {
     const digits = String(phone || '').replace(/[^+\d]/g, '');
     if (!digits) return '';
-    return `<a class="call-link" href="tel:${digits}">📞 Appeler</a>`;
+    return `<a class="icon-btn call-btn" href="tel:${digits}" aria-label="Appeler">`
+      + `<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v2.6a2 2 0 0 1-2.2 2 19.4 19.4 0 0 1-8.4-3 19.1 19.1 0 0 1-5.9-5.9 19.4 19.4 0 0 1-3-8.4A2 2 0 0 1 4.5 2h2.6a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.8 2.2z"/></svg>`
+      + `</a>`;
   }
 
   // Catégories du corps du livret (id de contenu → générateur de section).
@@ -259,16 +263,16 @@
   }
 
   function dirItem(it, cityHint) {
-    const parts = [];
-    if (it.address) parts.push(esc(it.address));
-    if (it.phone) parts.push(`<span class="tel" data-notranslate>${esc(it.phone)}</span>`);
-    if (it.phone) parts.push(callLink(it.phone));
+    const text = [];
+    if (it.address) text.push(esc(it.address));
+    if (it.phone) text.push(`<span class="tel" data-notranslate>${esc(it.phone)}</span>`);
     const mapQuery = [it.name, it.address, cityHint].filter(Boolean).join(', ');
     const map = mapsLink(mapQuery, 'Carte');
-    if (map) parts.push(map);
+    if (map) text.push(map);
+    const actions = it.phone ? callLink(it.phone) : '';
     return `<div class="dir-item">
       <div class="n">${esc(it.name)}${it.type ? `<small>${esc(it.type)}</small>` : ''}</div>
-      <div class="a">${parts.join(' · ')}</div>
+      <div class="a"><span>${text.join(' · ')}</span>${actions}</div>
     </div>`;
   }
 
