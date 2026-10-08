@@ -685,6 +685,7 @@
   },
   "sectionOrder": [
     "welcome",
+    "earlyLate",
     "practical",
     "rules",
     "departure",
@@ -766,5 +767,14 @@
         "text": "La propreté, les équipements, appartement très bien et très fonctionnel. L'accueil avec un set minimum de cuisine et de vaisselle."
       }
     ]
+  },
+  "earlyLate": {
+    "enabled": true,
+    "standardCheckIn": 16,
+    "standardCheckOut": 11,
+    "earliestArrival": 12,
+    "latestDeparture": 15,
+    "pricePerHour": 5,
+    "notifyEmail": "bpf.immo71@gmail.com"
   }
 }

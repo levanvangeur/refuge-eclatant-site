@@ -39,6 +39,7 @@
   const SECTIONS = {
     practical: (d, alt) => practical(d.practical, alt),
     welcome: (d, alt) => welcome(d.welcome, alt),
+    earlyLate: (d, alt) => earlyLate(d.earlyLate, alt),
     comfort: (d, alt) => comfort(d.comfort, alt),
     gallery: (d, alt) => gallery(d.gallery, alt),
     rules: (d, alt) => rules(d.rules, alt),
@@ -57,7 +58,7 @@
   };
 
   // Ordre par défaut si data.sectionOrder est absent ou incomplet.
-  const DEFAULT_ORDER = ['practical', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
+  const DEFAULT_ORDER = ['practical', 'welcome', 'earlyLate', 'comfort', 'gallery', 'rules', 'departure',
     'discover', 'stroll', 'eat', 'drinks', 'services', 'shops', 'escapes',
     'digoinCharolles', 'numbers', 'reviews', 'goodbye'];
 
@@ -157,6 +158,22 @@
       <div style="max-width:760px;margin:0 auto;text-align:center">
         ${(w.paragraphs || []).map((p) => `<p class="lead" style="margin-bottom:20px">${esc(p)}</p>`).join('')}
         ${w.signature ? `<p class="serif" style="font-style:italic;font-size:1.3rem;color:var(--gold-dark);margin-top:10px">${esc(w.signature)}</p>` : ''}
+      </div>`, alt);
+  }
+
+  // Boutons « arrivée anticipée » / « départ tardif » (page horaires.html, paiement Stripe)
+  function earlyLate(e, alt) {
+    if (!e || e.enabled === false) return '';
+    const price = Number(e.pricePerHour) || 0;
+    const std = (n) => esc(String(n));
+    return section('horaires', e.kicker || 'Votre arrivée & votre départ', e.title || 'Besoin de plus de temps ?', `
+      <div class="el-wrap reveal">
+        <p class="lead" style="margin-bottom:26px">${esc(e.intro || ('Arrivée habituelle à partir de ' + std(e.standardCheckIn) + 'h, départ avant ' + std(e.standardCheckOut) + 'h. Vous souhaitez arriver plus tôt ou partir plus tard ? Choisissez votre horaire, chaque heure supplémentaire est facturée ' + price + ' €.'))}</p>
+        <div class="el-btns">
+          <a class="el-btn" href="horaires.html?type=arrivee">Demander une arrivée anticipée</a>
+          <a class="el-btn" href="horaires.html?type=depart">Demander un départ tardif</a>
+        </div>
+        <p class="el-note">${price} € par heure supplémentaire · sous réserve de disponibilité</p>
       </div>`, alt);
   }
 

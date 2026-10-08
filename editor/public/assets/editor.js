@@ -14,6 +14,7 @@
   const CATEGORY_LABELS = {
     practical: 'Infos pratiques',
     welcome: 'Mot de bienvenue',
+    earlyLate: 'Arrivée anticipée / départ tardif',
     comfort: 'Le logement',
     gallery: 'Galerie (photos)',
     rules: 'Règles',
@@ -30,7 +31,7 @@
     reviews: 'Avis des voyageurs',
     goodbye: 'Au revoir',
   };
-  const DEFAULT_ORDER = ['practical', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
+  const DEFAULT_ORDER = ['practical', 'welcome', 'earlyLate', 'comfort', 'gallery', 'rules', 'departure',
     'discover', 'stroll', 'eat', 'drinks', 'services', 'shops', 'escapes',
     'digoinCharolles', 'numbers', 'reviews', 'goodbye'];
 
@@ -62,10 +63,11 @@
     const f = elh('div', 'field');
     if (label) f.appendChild(elh('label', null, label));
     const input = opts.textarea ? elh('textarea') : elh('input');
-    if (!opts.textarea) input.type = 'text';
+    if (!opts.textarea) input.type = opts.number ? 'number' : 'text';
+    if (opts.number) { input.min = '0'; input.step = '1'; }
     input.value = obj[key] == null ? '' : obj[key];
     if (opts.ph) input.placeholder = opts.ph;
-    input.addEventListener('input', () => { obj[key] = input.value; scheduleSave(); });
+    input.addEventListener('input', () => { obj[key] = opts.number ? (input.value === '' ? '' : Number(input.value)) : input.value; scheduleSave(); });
     f.appendChild(input);
     return f;
   }
@@ -326,6 +328,30 @@
         d.welcome.paragraphs = d.welcome.paragraphs || [];
         f.appendChild(card('Paragraphes', stringList(d.welcome.paragraphs, { addLabel: 'Ajouter un paragraphe' })));
         f.appendChild(card('Signature', fieldText(d.welcome, 'signature', 'Signature')));
+        return f;
+      }],
+      ['earlyLate', 'Arrivée anticipée / départ tardif', () => {
+        const e = d.earlyLate || (d.earlyLate = { enabled: true, standardCheckIn: 16, standardCheckOut: 11, earliestArrival: 12, latestDeparture: 15, pricePerHour: 5 });
+        const f = elh('div');
+        f.appendChild(elh('p', 'subtle', 'Les deux boutons apparaissent juste après « Bienvenue ». Le client choisit son heure sur une horloge et paie par carte (Stripe). Chaque heure d\'écart avec l\'horaire habituel est facturée au tarif ci-dessous.'));
+        const on = elh('div', 'field');
+        const lab = elh('label', null, 'Activer le service');
+        const cb = elh('input'); cb.type = 'checkbox'; cb.checked = e.enabled !== false;
+        cb.addEventListener('change', () => { e.enabled = cb.checked; scheduleSave(); });
+        lab.prepend(cb); on.appendChild(lab);
+        f.appendChild(card('Service', on));
+        f.appendChild(card('Horaires & tarif', (() => { const g = elh('div');
+          g.appendChild(fieldText(e, 'standardCheckIn', 'Heure d\'arrivée habituelle (ex. 16)', { number: true }));
+          g.appendChild(fieldText(e, 'earliestArrival', 'Arrivée la plus tôt possible (ex. 12)', { number: true }));
+          g.appendChild(fieldText(e, 'standardCheckOut', 'Heure de départ habituelle (ex. 11)', { number: true }));
+          g.appendChild(fieldText(e, 'latestDeparture', 'Départ le plus tard possible (ex. 15)', { number: true }));
+          g.appendChild(fieldText(e, 'pricePerHour', 'Prix par heure supplémentaire, en € (ex. 5)', { number: true }));
+          g.appendChild(fieldText(e, 'notifyEmail', 'Email qui reçoit chaque demande payée', { ph: 'bpf.immo71@gmail.com' }));
+          return g; })()));
+        f.appendChild(card('Textes (optionnel)', (() => { const g = elh('div');
+          g.appendChild(fieldText(e, 'title', 'Titre', { ph: 'Besoin de plus de temps ?' }));
+          g.appendChild(fieldText(e, 'intro', 'Texte d\'introduction (laisser vide = texte automatique)', { textarea: true }));
+          return g; })()));
         return f;
       }],
       ['practical', 'Infos pratiques', () => {

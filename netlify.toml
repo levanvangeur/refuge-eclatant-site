@@ -17,3 +17,7 @@
     X-Frame-Options = "SAMEORIGIN"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Fonction de paiement (arrivée anticipée / départ tardif)
+[functions]
+  directory = "netlify/functions"
