@@ -43,9 +43,9 @@
         ? `L'arrivée est habituellement à partir de ${std}h. Touchez l'heure à laquelle vous souhaitez arriver.`
         : `Le départ est habituellement avant ${std}h. Touchez l'heure à laquelle vous souhaitez partir.`}
         Chaque heure supplémentaire est facturée ${eur(cfg.pricePerHour)}.</p>
-      <svg class="hz-clock" viewBox="0 0 300 300" role="group" aria-label="Choix de l'heure" id="hzClock"></svg>
-      <div class="hz-legend">Heures proposées : de ${from}h à ${to}h</div>
-      <div class="hz-price empty" id="hzPrice"><div class="hz-detail">Choisissez une heure sur l'horloge</div></div>
+      <div class="hz-times" id="hzTimes" role="radiogroup" aria-label="Choix de l'heure"></div>
+      <div class="hz-legend">Horaire habituel : ${std}h</div>
+      <div class="hz-price empty" id="hzPrice"><div class="hz-detail">Choisissez une heure</div></div>
       <form class="hz-form" id="hzForm" novalidate>
         <label>Nom et prénom<input name="name" autocomplete="name" required></label>
         <label>Email (pour le reçu)<input name="email" type="email" autocomplete="email" required></label>
@@ -55,42 +55,26 @@
       </form>
       <p class="hz-note">Paiement sécurisé par carte via Stripe. La demande reste soumise à la disponibilité du logement : en cas d'impossibilité, vous êtes remboursé.</p>`;
 
-    // ── Horloge (cadran 12 h) ──
-    const svg = document.getElementById('hzClock');
-    const NS = 'http://www.w3.org/2000/svg';
-    const C = 150, R = 118;
-    const pt = (pos, r) => { const a = (pos % 12) * Math.PI / 6; return [C + r * Math.sin(a), C - r * Math.cos(a)]; };
-    const mk = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); (parent || svg).appendChild(e); return e; };
-    mk('circle', { cx: C, cy: C, r: 140, class: 'hz-face' });
-    for (let i = 0; i < 12; i++) { const [x1, y1] = pt(i, 130), [x2, y2] = pt(i, 136); mk('line', { x1, y1, x2, y2, class: 'hz-tick' }); }
-    for (let i = 1; i <= 12; i++) {
-      if (hours.some((h) => h % 12 === i % 12) || std % 12 === i % 12) continue;
-      const [x, y] = pt(i, 100); mk('text', { x, y, class: 'hz-num' }).textContent = i;
-    }
-    const hand = mk('line', { x1: C, y1: C, x2: C, y2: C, class: 'hz-hand' });
-    mk('circle', { cx: C, cy: C, r: 6, class: 'hz-hub' });
-    const bubble = (cls, pos, label, extra) => {
-      const [x, y] = pt(pos, R);
-      const g = mk('g', Object.assign({ class: cls }, extra || {}));
-      mk('circle', { cx: x, cy: y, r: 22 }, g);
-      mk('text', { x, y }, g).textContent = label;
-      return g;
-    };
-    bubble('hz-opt hz-std', std, std + 'h', { style: 'cursor:default' });
-    const groups = {};
+    // ── Choix de l'heure : pastilles avec le prix ──
+    const box = document.getElementById('hzTimes');
+    const buttons = {};
     hours.forEach((h) => {
-      const g = bubble('hz-opt', h, h + 'h', { tabindex: 0, role: 'button', 'aria-label': h + ' heures' });
-      g.addEventListener('click', () => pick(h));
-      g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(h); } });
-      groups[h] = g;
+      const n = Math.abs(h - std);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'hz-time';
+      btn.setAttribute('role', 'radio');
+      btn.setAttribute('aria-checked', 'false');
+      btn.innerHTML = '<i class="hz-dot"></i><span class="hz-h">' + (isArr ? 'Arriver à ' : 'Partir à ') + h + 'h</span><em class="hz-p">+ ' + eur(n * cfg.pricePerHour) + '</em>';
+      btn.addEventListener('click', () => pick(h));
+      box.appendChild(btn);
+      buttons[h] = btn;
     });
 
     const priceBox = document.getElementById('hzPrice'), pay = document.getElementById('hzPay'), err = document.getElementById('hzErr');
     function pick(h) {
       selected = h;
-      Object.keys(groups).forEach((k) => groups[k].classList.toggle('sel', Number(k) === h));
-      const [x, y] = pt(h % 12, R - 24);
-      hand.setAttribute('x2', x); hand.setAttribute('y2', y);
+      Object.keys(buttons).forEach((k) => { const on = Number(k) === h; buttons[k].classList.toggle('sel', on); buttons[k].setAttribute('aria-checked', on); });
       const n = Math.abs(h - std);
       priceBox.classList.remove('empty');
       priceBox.innerHTML = `<div class="hz-big">${eur(n * cfg.pricePerHour)}</div>

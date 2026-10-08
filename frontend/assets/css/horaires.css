@@ -8,20 +8,15 @@
 .hz-main .hz-apt { color: var(--ink-soft); letter-spacing: .12em; text-transform: uppercase; font-size: .78rem; margin-top: 18px; }
 .hz-lead { color: var(--ink-soft); margin: 10px auto 24px; max-width: 480px; line-height: 1.6; }
 
-.hz-clock { width: min(320px, 86vw); height: auto; display: block; margin: 0 auto; touch-action: manipulation; }
-.hz-face { fill: #fff; stroke: var(--border); stroke-width: 2; }
-.hz-tick { stroke: var(--border); stroke-width: 2; }
-.hz-num { font-family: 'Jost', sans-serif; font-size: 13px; fill: var(--ink-faint); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
-.hz-hand { stroke: var(--gold); stroke-width: 3; stroke-linecap: round; transition: all .25s ease; }
-.hz-hub { fill: var(--gold); }
-.hz-opt { cursor: pointer; }
-.hz-opt circle { fill: var(--cream); stroke: var(--gold-light); stroke-width: 1.5; transition: all .2s ease; }
-.hz-opt text { font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 500; fill: var(--gold-dark); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
-.hz-opt:hover circle, .hz-opt:focus circle { fill: var(--gold-light); outline: none; }
-.hz-opt.sel circle { fill: var(--gold); stroke: var(--gold-dark); }
-.hz-opt.sel text { fill: #fff; }
-.hz-std circle, .hz-std:hover circle { fill: none; stroke: var(--ink-faint); stroke-dasharray: 3 3; stroke-width: 1.2; }
-.hz-std text { font-size: 11px; fill: var(--ink-faint); }
+.hz-times { display: grid; gap: 10px; margin: 8px 0 4px; max-width: 420px; margin-left: auto; margin-right: auto; }
+.hz-time { display: flex; align-items: center; gap: 14px; padding: 15px 18px; background: #fff; border: 1.5px solid var(--border); border-radius: 12px; cursor: pointer; font: inherit; color: var(--ink); text-align: left; transition: border-color .2s, background .2s; }
+.hz-time:hover { border-color: var(--gold-light); }
+.hz-dot { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--gold-light); flex: none; transition: all .2s; }
+.hz-time .hz-h { flex: 1; font-size: 1.05rem; }
+.hz-time .hz-p { font-style: normal; color: var(--ink-soft); font-size: .95rem; }
+.hz-time.sel { border-color: var(--gold); background: #FBF8F2; }
+.hz-time.sel .hz-dot { background: var(--gold); border-color: var(--gold); box-shadow: inset 0 0 0 4px #fff; }
+.hz-time.sel .hz-p { color: var(--gold-dark); font-weight: 500; }
 
 .hz-legend { color: var(--ink-faint); font-size: .8rem; margin-top: 8px; }
 .hz-price { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin: 22px 0; box-shadow: var(--shadow); }
