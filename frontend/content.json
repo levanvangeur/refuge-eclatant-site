@@ -17,7 +17,21 @@
       "Ce livret rassemble toutes les informations utiles sur l'appartement ainsi que nos meilleures adresses et découvertes autour de la ville. N'hésitez pas à nous contacter à la moindre question : nous restons à votre entière disposition.",
       "Nous vous souhaitons un excellent séjour parmi nous."
     ],
-    "signature": "— Votre conciergerie"
+    "signature": "— Votre conciergerie",
+    "included": [
+      {
+        "title": "Linge de lit et de toilette fourni",
+        "detail": "Draps, serviettes et torchons. Les lits sont faits à votre arrivée."
+      },
+      {
+        "title": "Consommables de base",
+        "detail": "Papier toilette, essuie-tout et produits de première nécessité."
+      },
+      {
+        "title": "Une capsule de café par personne",
+        "detail": "Pour bien commencer votre séjour."
+      }
+    ]
   },
   "practical": {
     "wifi": {
@@ -685,7 +699,6 @@
   },
   "sectionOrder": [
     "welcome",
-    "earlyLate",
     "practical",
     "rules",
     "departure",

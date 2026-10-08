@@ -37,9 +37,8 @@
   // L'ordre par défaut ci-dessous peut être remplacé par data.sectionOrder
   // (modifiable depuis l'éditeur, bouton ↑ / ↓ sur chaque catégorie).
   const SECTIONS = {
-    practical: (d, alt) => practical(d.practical, alt),
+    practical: (d, alt) => practical(d.practical, alt, d.earlyLate),
     welcome: (d, alt) => welcome(d.welcome, alt),
-    earlyLate: (d, alt) => earlyLate(d.earlyLate, alt),
     comfort: (d, alt) => comfort(d.comfort, alt),
     gallery: (d, alt) => gallery(d.gallery, alt),
     rules: (d, alt) => rules(d.rules, alt),
@@ -58,7 +57,7 @@
   };
 
   // Ordre par défaut si data.sectionOrder est absent ou incomplet.
-  const DEFAULT_ORDER = ['practical', 'welcome', 'earlyLate', 'comfort', 'gallery', 'rules', 'departure',
+  const DEFAULT_ORDER = ['practical', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
     'discover', 'stroll', 'eat', 'drinks', 'services', 'shops', 'escapes',
     'digoinCharolles', 'numbers', 'reviews', 'goodbye'];
 
@@ -149,6 +148,27 @@
     </header>`;
   }
 
+  // Icônes du bloc « Tout est inclus » (mêmes pictos que le site de réservation)
+  const INCLUDED_ICONS = [
+    '<rect x="4" y="6" width="16" height="12" rx="1.5"/><path d="M4 11h16M9 6v5"/>',
+    '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>',
+    '<path d="M5 9h11v5a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V9zM16 10h1.5a2 2 0 0 1 0 4H16M8 4v2M12 4v2"/>',
+  ];
+  function includedBlock(items) {
+    if (!Array.isArray(items) || !items.length) return '';
+    return `<div class="inc-wrap">
+      <div class="kicker">Dans chaque logement</div>
+      <h3 class="inc-title">Tout est inclus</h3>
+      <div class="grid cols-3 inc-grid">${items.map((it, i) => `
+        <div class="card inc-card reveal">
+          <svg class="inc-ico" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${INCLUDED_ICONS[i % INCLUDED_ICONS.length]}</svg>
+          <h4>${esc(it.title)}</h4>
+          <p>${esc(it.detail || '')}</p>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
   function welcome(w, alt) {
     if (!w) return '';
     return sectionWrap('', false, `
@@ -158,26 +178,21 @@
       <div style="max-width:760px;margin:0 auto;text-align:center">
         ${(w.paragraphs || []).map((p) => `<p class="lead" style="margin-bottom:20px">${esc(p)}</p>`).join('')}
         ${w.signature ? `<p class="serif" style="font-style:italic;font-size:1.3rem;color:var(--gold-dark);margin-top:10px">${esc(w.signature)}</p>` : ''}
-      </div>`, alt);
+      </div>
+      ${includedBlock(w.included)}`, alt);
   }
 
-  // Boutons « arrivée anticipée » / « départ tardif » (page horaires.html, paiement Stripe)
-  function earlyLate(e, alt) {
+  // Bouton « arrivée anticipée » / « départ tardif » affiché sous l'horaire correspondant
+  function earlyLateBtn(e, type) {
     if (!e || e.enabled === false) return '';
     const price = Number(e.pricePerHour) || 0;
-    const std = (n) => esc(String(n));
-    return section('horaires', e.kicker || 'Votre arrivée & votre départ', e.title || 'Besoin de plus de temps ?', `
-      <div class="el-wrap reveal">
-        <p class="lead" style="margin-bottom:26px">${esc(e.intro || ('Arrivée habituelle à partir de ' + std(e.standardCheckIn) + 'h, départ avant ' + std(e.standardCheckOut) + 'h. Vous souhaitez arriver plus tôt ou partir plus tard ? Choisissez votre horaire, chaque heure supplémentaire est facturée ' + price + ' €.'))}</p>
-        <div class="el-btns">
-          <a class="el-btn" href="horaires.html?type=arrivee">Demander une arrivée anticipée</a>
-          <a class="el-btn" href="horaires.html?type=depart">Demander un départ tardif</a>
-        </div>
-        <p class="el-note">${price} € par heure supplémentaire · sous réserve de disponibilité</p>
-      </div>`, alt);
+    const arr = type === 'arrivee';
+    const note = (arr ? 'dès ' + e.earliestArrival + 'h' : 'jusqu\'à ' + e.latestDeparture + 'h') + ' · ' + price + ' € par heure supplémentaire';
+    return `<div class="el-inline"><a class="el-btn sm" href="horaires.html?type=${type}">${arr ? 'Demander une arrivée anticipée' : 'Demander un départ tardif'}</a>
+      <div class="el-cap">${esc(note)}</div></div>`;
   }
 
-  function practical(pr, alt) {
+  function practical(pr, alt, el) {
     if (!pr) return '';
     const wifi = pr.wifi || {}, ar = pr.arrival || {}, ad = pr.address || {}, as = pr.assistance || {};
     const kv = (k, v) => v ? `<div class="kv"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>` : '';
@@ -192,7 +207,9 @@
         <div class="card info-card reveal">
           <h3>Arrivée &amp; départ</h3>
           ${kv('Arrivée', ar.checkIn)}
+          ${earlyLateBtn(el, 'arrivee')}
           ${kv('Départ', ar.checkOut)}
+          ${earlyLateBtn(el, 'depart')}
           ${kv('Remise des clés', ar.keys)}
         </div>
         <div class="card info-card reveal">

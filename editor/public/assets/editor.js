@@ -14,7 +14,6 @@
   const CATEGORY_LABELS = {
     practical: 'Infos pratiques',
     welcome: 'Mot de bienvenue',
-    earlyLate: 'Arrivée anticipée / départ tardif',
     comfort: 'Le logement',
     gallery: 'Galerie (photos)',
     rules: 'Règles',
@@ -31,7 +30,7 @@
     reviews: 'Avis des voyageurs',
     goodbye: 'Au revoir',
   };
-  const DEFAULT_ORDER = ['practical', 'welcome', 'earlyLate', 'comfort', 'gallery', 'rules', 'departure',
+  const DEFAULT_ORDER = ['practical', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
     'discover', 'stroll', 'eat', 'drinks', 'services', 'shops', 'escapes',
     'digoinCharolles', 'numbers', 'reviews', 'goodbye'];
 
@@ -328,12 +327,14 @@
         d.welcome.paragraphs = d.welcome.paragraphs || [];
         f.appendChild(card('Paragraphes', stringList(d.welcome.paragraphs, { addLabel: 'Ajouter un paragraphe' })));
         f.appendChild(card('Signature', fieldText(d.welcome, 'signature', 'Signature')));
+        if (!Array.isArray(d.welcome.included)) d.welcome.included = [];
+        f.appendChild(card('Bloc « Tout est inclus » (3 cartes recommandées)', objectList(d.welcome.included, [{ key: 'title', label: 'Titre', full: true }, { key: 'detail', label: 'Détail', textarea: true }], { titleKey: 'title', addLabel: 'Ajouter un élément' })));
         return f;
       }],
       ['earlyLate', 'Arrivée anticipée / départ tardif', () => {
         const e = d.earlyLate || (d.earlyLate = { enabled: true, standardCheckIn: 16, standardCheckOut: 11, earliestArrival: 12, latestDeparture: 15, pricePerHour: 5 });
         const f = elh('div');
-        f.appendChild(elh('p', 'subtle', 'Les deux boutons apparaissent juste après « Bienvenue ». Le client choisit son heure sur une horloge et paie par carte (Stripe). Chaque heure d\'écart avec l\'horaire habituel est facturée au tarif ci-dessous.'));
+        f.appendChild(elh('p', 'subtle', 'Les deux boutons apparaissent dans « Informations pratiques », sous l\'heure d\'arrivée et sous l\'heure de départ. Le client choisit son heure sur une horloge et paie par carte (Stripe). Chaque heure d\'écart avec l\'horaire habituel est facturée au tarif ci-dessous.'));
         const on = elh('div', 'field');
         const lab = elh('label', null, 'Activer le service');
         const cb = elh('input'); cb.type = 'checkbox'; cb.checked = e.enabled !== false;
