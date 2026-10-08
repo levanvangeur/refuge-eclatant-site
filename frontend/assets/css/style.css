@@ -140,16 +140,28 @@ a { color: inherit; text-decoration: none; }
   line-height: 1.4; max-width: 30ch; margin: 0 auto;
 }
 .hero-cta-wrap { margin-top: 36px; }
-.hero-cta {
+/* Boutons « double filet » avec reflet lumineux périodique (hero + page livret) */
+.hero-cta, .el-btn {
+  position: relative; overflow: hidden;
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  padding: 15px 34px; background: var(--gold); color: #fff;
-  font-family: var(--font-sans); font-weight: 400; text-transform: uppercase;
-  letter-spacing: 0.16em; font-size: clamp(0.74rem, 2.4vw, 0.84rem); border-radius: 8px;
-  transition: background .25s, box-shadow .25s, transform .25s;
-  box-shadow: 0 8px 24px rgba(155,134,99,0.28); max-width: 100%;
+  padding: 15px 34px; background: transparent; color: var(--gold-dark);
+  font-family: var(--font-sans); font-weight: 400; text-transform: uppercase; text-decoration: none;
+  letter-spacing: 0.16em; font-size: clamp(0.74rem, 2.4vw, 0.84rem);
+  border: 1.5px solid var(--gold); border-radius: 4px;
+  outline: 1px solid var(--gold-light); outline-offset: 4px; max-width: 100%;
+  transition: background .25s, color .25s, transform .25s, box-shadow .25s;
 }
-.hero-cta::before { content: "✦"; font-size: 0.75rem; }
-.hero-cta:hover { background: var(--gold-dark); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(155,134,99,0.38); }
+.hero-cta::before, .el-btn::before { content: "✦"; font-size: 0.75rem; }
+.hero-cta::after, .el-btn::after {
+  content: ""; position: absolute; top: 0; left: -70%; width: 45%; height: 100%; pointer-events: none;
+  background: linear-gradient(105deg, transparent 0%, rgba(214,190,130,.55) 50%, transparent 100%);
+  transform: skewX(-20deg);
+  animation: btnShine 5.5s ease-in-out infinite;
+}
+.el-btns .el-btn:nth-child(2)::after { animation-delay: .6s; }
+.hero-cta:hover, .el-btn:hover { background: var(--gold); color: #fff; transform: translateY(-2px); box-shadow: 0 12px 28px rgba(155,134,99,0.35); }
+@keyframes btnShine { 0%, 62% { left: -70%; } 82%, 100% { left: 130%; } }
+@media (prefers-reduced-motion: reduce) { .hero-cta::after, .el-btn::after { animation: none; display: none; } }
 .scroll-cue { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); color: var(--gold); font-size: 1.4rem; animation: bob 2s ease-in-out infinite; z-index: 2; }
 @keyframes bob { 0%,100%{ transform: translate(-50%,0);} 50%{ transform: translate(-50%,8px);} }
 
