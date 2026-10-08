@@ -38,6 +38,7 @@
   // (modifiable depuis l'éditeur, bouton ↑ / ↓ sur chaque catégorie).
   const SECTIONS = {
     practical: (d, alt) => practical(d.practical, alt, d.earlyLate),
+    included: (d, alt) => included((d.welcome || {}).included, alt),
     welcome: (d, alt) => welcome(d.welcome, alt),
     comfort: (d, alt) => comfort(d.comfort, alt),
     gallery: (d, alt) => gallery(d.gallery, alt),
@@ -57,7 +58,7 @@
   };
 
   // Ordre par défaut si data.sectionOrder est absent ou incomplet.
-  const DEFAULT_ORDER = ['practical', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
+  const DEFAULT_ORDER = ['practical', 'included', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
     'discover', 'stroll', 'eat', 'drinks', 'services', 'shops', 'escapes',
     'digoinCharolles', 'numbers', 'reviews', 'goodbye'];
 
@@ -154,19 +155,16 @@
     '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>',
     '<path d="M5 9h11v5a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V9zM16 10h1.5a2 2 0 0 1 0 4H16M8 4v2M12 4v2"/>',
   ];
-  function includedBlock(items) {
+  function included(items, alt) {
     if (!Array.isArray(items) || !items.length) return '';
-    return `<div class="inc-wrap">
-      <div class="kicker">Dans chaque logement</div>
-      <h3 class="inc-title">Tout est inclus</h3>
+    return section('inclus', 'Dans chaque logement', 'Tout est inclus', `
       <div class="grid cols-3 inc-grid">${items.map((it, i) => `
         <div class="card inc-card reveal">
           <svg class="inc-ico" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${INCLUDED_ICONS[i % INCLUDED_ICONS.length]}</svg>
           <h4>${esc(it.title)}</h4>
           <p>${esc(it.detail || '')}</p>
         </div>`).join('')}
-      </div>
-    </div>`;
+      </div>`, alt);
   }
 
   function welcome(w, alt) {
@@ -178,8 +176,7 @@
       <div style="max-width:760px;margin:0 auto;text-align:center">
         ${(w.paragraphs || []).map((p) => `<p class="lead" style="margin-bottom:20px">${esc(p)}</p>`).join('')}
         ${w.signature ? `<p class="serif" style="font-style:italic;font-size:1.3rem;color:var(--gold-dark);margin-top:10px">${esc(w.signature)}</p>` : ''}
-      </div>
-      ${includedBlock(w.included)}`, alt);
+      </div>`, alt);
   }
 
   // Bouton « arrivée anticipée » / « départ tardif » affiché sous l'horaire correspondant
@@ -198,11 +195,13 @@
     const kv = (k, v) => v ? `<div class="kv"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>` : '';
     return section('pratique', 'Informations pratiques', 'Informations pratiques', `
       <div class="grid cols-2">
-        <div class="callout reveal">
-          <div class="co-label">Connexion Wi-Fi</div>
-          <div class="co-row"><div><div class="co-label">Réseau</div><div class="co-big" data-notranslate>${esc(wifi.network || '—')}</div></div></div>
-          <div class="co-row"><div><div class="co-label">Mot de passe</div><div class="co-big" data-notranslate>${esc(wifi.password || '—')}</div></div>
-            <button class="copy-btn" data-copy="${esc(wifi.password || '')}" data-notranslate>Copier</button></div>
+        <div class="card info-card reveal">
+          <h3>Remise des clés</h3>
+          ${ar.keys ? `<div class="kv"><div class="v">${esc(ar.keys)}</div></div>` : ''}
+          ${ar.keyboxCode ? `<div class="key-reveal">
+            <button class="el-btn sm" type="button" data-keybox-btn>Obtenir le code de la boîte à clés</button>
+            <div class="key-code" data-notranslate hidden><div class="co-label">Code de la boîte à clés</div><div class="key-digits">${esc(ar.keyboxCode)}</div></div>
+          </div>` : ''}
         </div>
         <div class="card info-card reveal">
           <h3>Arrivée &amp; départ</h3>
@@ -211,13 +210,11 @@
           ${kv('Départ', ar.checkOut)}
           ${earlyLateBtn(el, 'depart')}
         </div>
-        <div class="card info-card reveal">
-          <h3>Remise des clés</h3>
-          ${ar.keys ? `<div class="kv"><div class="v">${esc(ar.keys)}</div></div>` : ''}
-          ${ar.keyboxCode ? `<div class="key-reveal">
-            <button class="el-btn sm" type="button" data-keybox-btn>Obtenir le code de la boîte à clés</button>
-            <div class="key-code" data-notranslate hidden><div class="co-label">Code de la boîte à clés</div><div class="key-digits">${esc(ar.keyboxCode)}</div></div>
-          </div>` : ''}
+        <div class="callout reveal">
+          <div class="co-label">Connexion Wi-Fi</div>
+          <div class="co-row"><div><div class="co-label">Réseau</div><div class="co-big" data-notranslate>${esc(wifi.network || '—')}</div></div></div>
+          <div class="co-row"><div><div class="co-label">Mot de passe</div><div class="co-big" data-notranslate>${esc(wifi.password || '—')}</div></div>
+            <button class="copy-btn" data-copy="${esc(wifi.password || '')}" data-notranslate>Copier</button></div>
         </div>
         <div class="card info-card reveal">
           <h3>Adresse &amp; accès</h3>

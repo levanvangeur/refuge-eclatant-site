@@ -699,8 +699,9 @@
     "text": "Nous espérons que vous avez passé un séjour à la hauteur de vos attentes. Votre avis nous est précieux : n'hésitez pas à partager votre expérience. Excellent voyage, et revenez quand vous voulez !"
   },
   "sectionOrder": [
-    "welcome",
     "practical",
+    "included",
+    "welcome",
     "rules",
     "departure",
     "goodbye",

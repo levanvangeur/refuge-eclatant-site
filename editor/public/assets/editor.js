@@ -13,6 +13,7 @@
   // à SECTIONS dans frontend/assets/js/app.js).
   const CATEGORY_LABELS = {
     practical: 'Infos pratiques',
+    included: 'Tout est inclus',
     welcome: 'Mot de bienvenue',
     comfort: 'Le logement',
     gallery: 'Galerie (photos)',
@@ -30,7 +31,7 @@
     reviews: 'Avis des voyageurs',
     goodbye: 'Au revoir',
   };
-  const DEFAULT_ORDER = ['practical', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
+  const DEFAULT_ORDER = ['practical', 'included', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
     'discover', 'stroll', 'eat', 'drinks', 'services', 'shops', 'escapes',
     'digoinCharolles', 'numbers', 'reviews', 'goodbye'];
 
