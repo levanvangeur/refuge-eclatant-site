@@ -363,7 +363,8 @@
         f.appendChild(card('Arrivée & départ', (() => { const g = elh('div');
           g.appendChild(fieldText(ar, 'checkIn', 'Heure d\'arrivée'));
           g.appendChild(fieldText(ar, 'checkOut', 'Heure de départ'));
-          g.appendChild(fieldText(ar, 'keys', 'Remise des clés', { textarea: true }));
+          g.appendChild(fieldText(ar, 'keys', 'Remise des clés (texte)', { textarea: true }));
+          g.appendChild(fieldText(ar, 'keyboxCode', 'Code de la boîte à clés (affiché au clic sur le bouton)'));
           g.appendChild(fieldText(ar, 'instructions', 'Instructions détaillées (optionnel)', { textarea: true }));
           return g; })()));
         const ad = d.practical.address || (d.practical.address = {});

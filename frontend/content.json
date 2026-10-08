@@ -41,8 +41,9 @@
     "arrival": {
       "checkIn": "À partir de 16h00",
       "checkOut": "Avant 11h00",
-      "keys": "Boîte à clés à l'entrée — le code d'accès vous est communiqué le jour de votre arrivée.",
-      "instructions": "Arrivée autonome à partir de 16h. Le logement se situe au 17 rue Paul Cambon. Les clés sont disponibles dans la boîte à clés à l'entrée. Nous restons joignables à tout moment en cas de besoin."
+      "keys": "Boîte à clés à l'entrée.",
+      "instructions": "Arrivée autonome à partir de 16h. Le logement se situe au 17 rue Paul Cambon. Les clés sont disponibles dans la boîte à clés à l'entrée. Nous restons joignables à tout moment en cas de besoin.",
+      "keyboxCode": "2305"
     },
     "address": {
       "full": "17 rue Paul Cambon, 71600 Paray-le-Monial",

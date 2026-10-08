@@ -210,7 +210,14 @@
           ${earlyLateBtn(el, 'arrivee')}
           ${kv('Départ', ar.checkOut)}
           ${earlyLateBtn(el, 'depart')}
-          ${kv('Remise des clés', ar.keys)}
+        </div>
+        <div class="card info-card reveal">
+          <h3>Remise des clés</h3>
+          ${ar.keys ? `<div class="kv"><div class="v">${esc(ar.keys)}</div></div>` : ''}
+          ${ar.keyboxCode ? `<div class="key-reveal">
+            <button class="el-btn sm" type="button" data-keybox-btn>Obtenir le code de la boîte à clés</button>
+            <div class="key-code" data-notranslate hidden><div class="co-label">Code de la boîte à clés</div><div class="key-digits">${esc(ar.keyboxCode)}</div></div>
+          </div>` : ''}
         </div>
         <div class="card info-card reveal">
           <h3>Adresse &amp; accès</h3>
@@ -417,6 +424,12 @@
 
   /* ───────────────── Interactions ───────────────── */
   function setupInteractions(data, nav) {
+    // Code de la boîte à clés : affiché au clic
+    document.querySelectorAll('[data-keybox-btn]').forEach((btn) => btn.addEventListener('click', () => {
+      const code = btn.parentElement.querySelector('.key-code');
+      if (code) { code.hidden = false; btn.hidden = true; }
+    }));
+
     // Menu mobile
     const toggle = el('navToggle'), links = el('navLinks');
     toggle.addEventListener('click', () => links.classList.toggle('open'));

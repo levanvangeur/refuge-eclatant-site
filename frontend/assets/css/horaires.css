@@ -53,3 +53,10 @@
 .el-inline { margin: 2px 0 18px; }
 .el-btn.sm { padding: 10px 18px; font-size: 0.7rem; letter-spacing: 0.1em; outline-offset: 3px; text-align: center; }
 .el-cap { color: var(--ink-faint); font-size: .78rem; margin-top: 10px; }
+
+/* Carré « Remise des clés » */
+.key-reveal { margin-top: 14px; }
+.key-code { text-align: center; padding: 18px 12px; background: var(--cream); border: 1px solid var(--border); border-radius: 12px; }
+.key-code[hidden] { display: none; }
+.key-digits { font-family: 'Cormorant Garamond', serif; font-size: 3rem; letter-spacing: .3em; padding-left: .3em; color: var(--gold-dark); line-height: 1.1; margin-top: 4px; }
+.el-btn[hidden] { display: none; }
