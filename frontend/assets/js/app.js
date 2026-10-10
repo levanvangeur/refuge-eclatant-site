@@ -131,6 +131,26 @@
 
     setupInteractions(data, nav);
     if (window.I18N) window.I18N.init();
+    jumpToHash();
+  }
+
+  // Lien direct vers une section (ex. QR code « …/#frigo ») : le contenu est généré après le chargement,
+  // le navigateur ne trouve donc pas l'ancre tout seul. On saute à la section une fois la page construite,
+  // et une 2e fois quand les images sont chargées (la mise en page peut bouger), sauf si le visiteur a déjà défilé.
+  function jumpToHash() {
+    const id = decodeURIComponent((location.hash || '').slice(1));
+    if (!id) return;
+    let moved = false;
+    ['wheel', 'touchmove', 'keydown', 'mousedown'].forEach((ev) => window.addEventListener(ev, () => { moved = true; }, { once: true, passive: true }));
+    const go = () => {
+      const t = document.getElementById(id);
+      if (!t || moved) return;
+      const y = t.getBoundingClientRect().top + window.scrollY - (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'), 10) || 64);
+      window.scrollTo({ top: Math.max(0, y), behavior: 'instant' });
+    };
+    requestAnimationFrame(go);
+    window.addEventListener('load', () => setTimeout(go, 150), { once: true });
+    setTimeout(go, 1200);
   }
 
   /* ───────────────── Sections ───────────────── */
