@@ -145,7 +145,13 @@
     const go = () => {
       const t = document.getElementById(id);
       if (!t || moved) return;
-      const y = t.getBoundingClientRect().top + window.scrollY - (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'), 10) || 64);
+      const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'), 10) || 64;
+      // QR du frigo (#frigo) : on amène directement le bouton « Ouvrir le frigo » au milieu de l'écran
+      const btn = id === 'frigo' ? t.querySelector('.fr-btn') : null;
+      const r = (btn || t).getBoundingClientRect();
+      const y = btn
+        ? r.top + window.scrollY + r.height / 2 - (window.innerHeight / 2 + navH / 2)
+        : r.top + window.scrollY - navH;
       window.scrollTo({ top: Math.max(0, y), behavior: 'instant' });
     };
     requestAnimationFrame(go);
