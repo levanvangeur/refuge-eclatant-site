@@ -180,6 +180,9 @@
     document.querySelectorAll('.flag-btn').forEach((b) => {
       b.classList.toggle('active', b.getAttribute('data-lang') === lang);
     });
+    const cur = document.querySelector('.lang-current .cur-flag');
+    const l = LANGS.find((x) => x.code === lang);
+    if (cur && l) cur.textContent = l.flag;
   }
 
   async function switchTo(lang) {
@@ -194,10 +197,18 @@
   function buildFlags() {
     const wrap = document.getElementById('langFlags');
     if (!wrap) return;
-    wrap.innerHTML = LANGS.map((l) =>
-      `<button class="flag-btn" data-lang="${l.code}" title="${l.label}" aria-label="${l.label}">${l.flag}</button>`).join('');
+    // Un seul drapeau (la langue active) + petite flèche ; le panneau liste les autres langues.
+    wrap.innerHTML = '<button type="button" class="lang-current" aria-haspopup="true" aria-expanded="false" aria-label="Changer de langue">'
+      + '<span class="cur-flag">' + LANGS[0].flag + '</span><span class="caret">▾</span></button>'
+      + '<div class="lang-panel" role="menu">' + LANGS.map((l) =>
+        `<button type="button" class="flag-btn" role="menuitem" data-lang="${l.code}" title="${l.label}" aria-label="${l.label}"><span>${l.flag}</span><span class="lbl">${l.label}</span></button>`).join('') + '</div>';
+    const toggle = wrap.querySelector('.lang-current');
+    const setOpen = (on) => { wrap.classList.toggle('open', on); toggle.setAttribute('aria-expanded', on ? 'true' : 'false'); };
+    toggle.addEventListener('click', (e) => { e.stopPropagation(); setOpen(!wrap.classList.contains('open')); });
+    document.addEventListener('click', (e) => { if (!wrap.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
     wrap.querySelectorAll('.flag-btn').forEach((b) => {
-      b.addEventListener('click', () => switchTo(b.getAttribute('data-lang')));
+      b.addEventListener('click', () => { setOpen(false); switchTo(b.getAttribute('data-lang')); });
     });
   }
 

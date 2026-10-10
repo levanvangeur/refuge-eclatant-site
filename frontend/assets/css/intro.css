@@ -12,6 +12,9 @@ html.intro-on, html.intro-on body { overflow: hidden; }
 #intro .i-kick { font: 300 .7rem/1 'Jost', sans-serif; letter-spacing: .3em; text-transform: uppercase; color: #8A7C64; margin-top: 26px; opacity: 0; }
 #intro .i-name { font: italic 500 clamp(1.7rem, 6vw, 2.3rem)/1.15 'Cormorant Garamond', serif; margin-top: 10px; opacity: 0; }
 #intro .i-rule { height: 1px; width: 0; background: #9B8663; margin-top: 14px; }
+#intro .i-welcome { font: 300 clamp(.95rem, 3.4vw, 1.1rem)/1.5 'Jost', sans-serif; letter-spacing: .04em; color: #6E5C44; max-width: 28ch; margin-top: 22px; opacity: 0; transform: translateY(8px); }
+#intro.go .i-welcome { animation: introWelcome .9s 2.9s cubic-bezier(.2,.7,.2,1) forwards; }
+@keyframes introWelcome { to { opacity: 1; transform: none; } }
 #intro.go .i-kick { animation: introFade .6s 2.2s forwards; }
 #intro.go .i-name { animation: introFade .7s 2.4s forwards; }
 #intro.go .i-rule { animation: introRule .9s 2.7s forwards; }

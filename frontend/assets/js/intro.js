@@ -16,7 +16,7 @@
   box.id = 'intro'; box.setAttribute('aria-hidden', 'true');
   box.innerHTML = '<svg viewBox="-10 -10 638 670">' + P.map(function (p) {
     return '<path pathLength="1" style="--o:' + p[1] + '" d="' + p[0] + '"/>';
-  }).join('') + '</svg><div class="i-kick" data-notranslate></div><div class="i-name" data-notranslate></div><div class="i-rule"></div>';
+  }).join('') + '</svg><div class="i-kick" data-notranslate></div><div class="i-name" data-notranslate></div><div class="i-rule"></div><div class="i-welcome">Bienvenue, gérez votre séjour depuis cette interface</div>';
   root.appendChild(box);
 
   var closed = false;
@@ -27,7 +27,7 @@
     setTimeout(function () { root.classList.remove('intro-on'); box.remove(); }, 850);
   }
   box.addEventListener('click', close);
-  setTimeout(close, 6000); // filet de sécurité
+  setTimeout(close, 8200); // filet de sécurité
 
   fetch('content.json').then(function (r) { return r.json(); }).then(function (d) {
     var m = d.meta || {};
@@ -36,5 +36,5 @@
   }).catch(function () {});
 
   requestAnimationFrame(function () { requestAnimationFrame(function () { box.classList.add('go'); }); });
-  setTimeout(close, 3900);
+  setTimeout(close, 5800);
 })();
