@@ -58,3 +58,6 @@
 .key-code[hidden] { display: none; }
 .key-digits { font-family: 'Cormorant Garamond', serif; font-size: 3rem; letter-spacing: .3em; padding-left: .3em; color: var(--gold-dark); line-height: 1.1; margin-top: 4px; }
 .el-btn[hidden] { display: none; }
+
+/* Code de la boîte à clés : chiffres très lisibles (police sans empattement, chiffres alignés, bien espacés) */
+.key-digits { font-family: 'Jost', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif; font-weight: 500; font-variant-numeric: lining-nums tabular-nums; font-size: clamp(2.6rem, 11vw, 3.4rem); letter-spacing: .22em; padding-left: .22em; color: #3a2c1a; line-height: 1.15; }
