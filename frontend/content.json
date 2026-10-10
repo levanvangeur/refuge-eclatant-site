@@ -701,6 +701,7 @@
   "sectionOrder": [
     "practical",
     "included",
+    "fridge",
     "welcome",
     "rules",
     "departure",
@@ -791,5 +792,28 @@
     "latestDeparture": 15,
     "pricePerHour": 5,
     "notifyEmail": "bpf.immo71@gmail.com"
+  },
+  "fridge": {
+    "enabled": true,
+    "title": "Boisson et snack",
+    "intro": "Un petit creux ou une petite soif ? Le frigo du logement est à votre disposition, fermé par un cadenas à code. Servez-vous : une empreinte de carte suffit, et votre consommation est débitée à la fin de votre séjour.",
+    "products": [
+      {
+        "name": "Bouteille d'eau 50 cl",
+        "price": "1,75"
+      },
+      {
+        "name": "Canette de Coca",
+        "price": "2,50"
+      },
+      {
+        "name": "Canette d'Ice Tea",
+        "price": "2,50"
+      },
+      {
+        "name": "Kinder Bueno",
+        "price": "3"
+      }
+    ]
   }
 }

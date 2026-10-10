@@ -32,7 +32,8 @@ exports.handler = async (event) => {
   if (evt.type !== 'checkout.session.completed') return { statusCode: 200, body: 'ignoré' };
   const s = evt.data.object;
   const m = s.metadata || {};
-  if (m.kind !== 'early_late' || s.payment_status !== 'paid') return { statusCode: 200, body: 'ignoré' };
+  const isFridge = m.kind === 'fridge' && s.mode === 'setup' && s.status === 'complete';
+  if (!isFridge && (m.kind !== 'early_late' || s.payment_status !== 'paid')) return { statusCode: 200, body: 'ignoré' };
 
   // Destinataire depuis le contenu publié du livret
   let to = process.env.NOTIFY_EMAIL || '';
@@ -60,17 +61,27 @@ exports.handler = async (event) => {
     [isArr ? 'Date d\'arrivée' : 'Date de départ', frDate(m.date)],
     ['Heure demandée', m.hour + 'h'], ['Montant payé', amount.toLocaleString('fr-FR') + ' €'],
   ];
+  let title = what, subject = `${what} à ${m.hour}h — ${m.apartment} — ${m.guest}`;
+  let foot = 'À valider selon le planning. En cas d\'impossibilité, remboursez le client depuis Stripe.';
+  if (isFridge) {
+    // Frigo « Boisson et snack » : empreinte de carte validée, à débiter à la fin du séjour selon la consommation
+    title = 'Frigo ouvert'; subject = `Frigo ouvert — ${m.apartment} — ${m.guest}`;
+    rows.length = 0;
+    rows.push(['Logement', m.apartment], ['Client', m.guest], ['Email', email], ['Empreinte validée le', new Date((s.created || Date.now() / 1000) * 1000).toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })]);
+    foot = `Aucun montant n'a été débité. À la fin du séjour, relevez la consommation puis débitez la carte enregistrée : Stripe → Clients → ${esc(m.guest)}`
+      + (s.customer ? ` (<a href="https://dashboard.stripe.com/customers/${esc(s.customer)}">ouvrir la fiche client</a>)` : '') + ' → Créer un paiement.';
+  }
   const html = `<div style="font-family:Arial,sans-serif;max-width:520px;margin:auto;color:#5B4B37">
-    <h2 style="font-weight:500">${esc(what)} — ${esc(m.apartment)}</h2>
+    <h2 style="font-weight:500">${esc(title)} — ${esc(m.apartment)}</h2>
     <table style="width:100%;border-collapse:collapse">${rows.map(([k, v]) =>
       `<tr><td style="padding:8px 0;border-bottom:1px solid #E4DFD5;color:#8A7C64">${esc(k)}</td><td style="padding:8px 0;border-bottom:1px solid #E4DFD5;text-align:right"><b>${esc(v)}</b></td></tr>`).join('')}</table>
-    <p style="color:#8A7C64;font-size:13px">À valider selon le planning. En cas d'impossibilité, remboursez le client depuis Stripe.</p></div>`;
+    <p style="color:#8A7C64;font-size:13px">${foot}</p></div>`;
 
   try {
     await transport.sendMail({
       from: `"Livret ${m.apartment}" <${SMTP_USER}>`,
       to, replyTo: email || undefined,
-      subject: `${what} à ${m.hour}h — ${m.apartment} — ${m.guest}`,
+      subject,
       html,
     });
   } catch (err) {

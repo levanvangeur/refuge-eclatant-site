@@ -39,6 +39,7 @@
   const SECTIONS = {
     practical: (d, alt) => practical(d.practical, alt, d.earlyLate),
     included: (d, alt) => included((d.welcome || {}).included, alt),
+    fridge: (d, alt) => fridge(d.fridge, alt),
     welcome: (d, alt) => welcome(d.welcome, alt),
     comfort: (d, alt) => comfort(d.comfort, alt),
     gallery: (d, alt) => gallery(d.gallery, alt),
@@ -58,13 +59,14 @@
   };
 
   // Ordre par défaut si data.sectionOrder est absent ou incomplet.
-  const DEFAULT_ORDER = ['practical', 'included', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
+  const DEFAULT_ORDER = ['practical', 'included', 'fridge', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
     'discover', 'stroll', 'eat', 'drinks', 'services', 'shops', 'escapes',
     'digoinCharolles', 'numbers', 'reviews', 'goodbye'];
 
   // Libellés de navigation (id de contenu → [ancre, libellé]).
   const NAV_LABELS = {
     practical: ['pratique', 'Pratique'],
+    fridge: ['frigo', 'Boisson & snack'],
     comfort: ['logement', 'Le logement'],
     gallery: ['galerie', 'Galerie'],
     rules: ['regles', 'Règles'],
@@ -404,6 +406,25 @@
   }
 
   /* ───────────────── Helpers de mise en page ───────────────── */
+  // Boisson et snack : liste du frigo + bouton « Ouvrir le frigo » (empreinte de carte → code du cadenas, voir frigo.html)
+  function fridge(f, alt) {
+    if (!f || f.enabled === false) return '';
+    const list = (f.products || []).filter((p) => p && p.name);
+    if (!list.length) return '';
+    const fmt = (v) => {
+      const n = parseFloat(String(v).replace(',', '.').replace(/[^0-9.]/g, ''));
+      return isFinite(n) ? n.toLocaleString('fr-FR', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' €' : String(v || '');
+    };
+    return section('frigo', 'Une petite envie ?', f.title || 'Boisson et snack', `
+      <div class="fr-card reveal">
+        <p class="fr-intro">${esc(f.intro || 'Un petit creux ou une petite soif ? Le frigo du logement est à votre disposition, fermé par un cadenas à code.')}</p>
+        <div class="fr-box"><ul class="fr-list">${list.map((p) =>
+          `<li><span class="fr-name">${esc(p.name)}</span><span class="fr-dots"></span><b class="fr-price" data-notranslate>${esc(fmt(p.price))}</b></li>`).join('')}</ul></div>
+        <div class="fr-cta-wrap"><a class="fr-btn" href="frigo.html">Ouvrir le frigo</a></div>
+        <p class="fr-note">Une empreinte de carte bancaire suffit : rien n'est débité maintenant, seule votre consommation l'est à la fin de votre séjour.</p>
+      </div>`, alt);
+  }
+
   function section(id, kicker, title, inner, extra) {
     return `<section class="block ${extra || ''}" id="${id}">
       <div class="container">
