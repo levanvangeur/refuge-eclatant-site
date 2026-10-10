@@ -386,3 +386,88 @@ ul.diamond li::before { content: "◆"; color: var(--gold); font-size: 0.6rem; m
   section.block { padding: 30px 0; break-inside: avoid; }
   body { background: #fff; }
 }
+
+/* ───── Bouton « Réservez » : pilule or, dégradé qui respire + flottement (2026-10-10) ───── */
+.hero-cta, .nav-cta {
+  background-image: linear-gradient(120deg, #9b8663, #e0c27a, #9b8663); background-size: 200% 100%;
+  color: #fff; border: 0; outline: 0; border-radius: 999px; font-weight: 500;
+  text-shadow: 0 1px 2px rgba(110,92,68,.35);
+  box-shadow: 0 12px 24px -10px rgba(155,134,99,.8);
+  animation: ctaFlow 4s ease-in-out infinite, ctaFloat 3s ease-in-out infinite;
+  transition: filter .25s, box-shadow .25s;
+}
+.hero-cta::after, .nav-cta::after { display: none; }
+.hero-cta:hover, .nav-cta:hover { background: linear-gradient(120deg, #9b8663, #e0c27a, #9b8663) 0 0 / 200% 100%; color: #fff; filter: brightness(1.08) saturate(1.1); box-shadow: 0 16px 30px -10px rgba(155,134,99,.9); transform: none; }
+.nav-cta { animation: ctaFlow 4s ease-in-out infinite; box-shadow: 0 8px 16px -8px rgba(155,134,99,.8); }
+@keyframes ctaFlow { 50% { background-position: 100% 0; } }
+@keyframes ctaFloat { 50% { transform: translateY(-5px); } }
+@media (prefers-reduced-motion: reduce) { .hero-cta, .nav-cta { animation: none; } }
+
+/* ───── Boutons du livret : arrivée = aube, départ = crépuscule, code = rouge (2026-10-10) ───── */
+.el-btn {
+  --sh: rgba(155,134,99,.8); isolation: isolate;
+  color: #fff; border: 0; outline: 0; border-radius: 999px; font-weight: 500; cursor: pointer;
+  text-shadow: 0 1px 2px rgba(40,20,20,.35);
+  box-shadow: 0 10px 20px -10px var(--sh);
+  transition: filter .25s;
+}
+.el-btn:hover { color: #fff; transform: none; filter: brightness(1.07) saturate(1.1); box-shadow: 0 14px 26px -10px var(--sh); }
+.el-btn::after { display: none; }
+.el-btn[href$="type=arrivee"], .el-btn[href$="type=depart"] {
+  background-size: 200% 100%; background-position: 0 0;
+  animation: ctaFlow 5s ease-in-out infinite, ctaFloat 3s ease-in-out infinite;
+}
+.el-btn[href$="type=arrivee"], .el-btn[href$="type=arrivee"]:hover { background-image: linear-gradient(120deg, #f6b86a, #f48a8a, #f6b86a); --sh: rgba(244,138,138,.9); }
+.el-btn[href$="type=depart"], .el-btn[href$="type=depart"]:hover { background-image: linear-gradient(120deg, #5b4bb0, #2b2a6b, #5b4bb0); --sh: rgba(60,50,150,.9); animation-delay: 0s, 1.2s; }
+.el-btn[href$="type=arrivee"]::before, .el-btn[href$="type=depart"]::before {
+  content: ""; width: 1.15rem; height: 1.15rem; background: #fff; flex: none; text-shadow: none;
+}
+.el-btn[href$="type=arrivee"]::before { -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='13' r='4'/%3E%3Cpath d='M12 3v2M4.5 6.5l1.4 1.4M19.5 6.5l-1.4 1.4M2 13h2M20 13h2M3 20h18'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='13' r='4'/%3E%3Cpath d='M12 3v2M4.5 6.5l1.4 1.4M19.5 6.5l-1.4 1.4M2 13h2M20 13h2M3 20h18'/%3E%3C/svg%3E") center / contain no-repeat; animation: sunRise 3s ease-in-out infinite; transform-origin: 50% 100%; }
+.el-btn[href$="type=depart"]::before { -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z'/%3E%3Cpath d='M17 4v3M15.5 5.5h3'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z'/%3E%3Cpath d='M17 4v3M15.5 5.5h3'/%3E%3C/svg%3E") center / contain no-repeat; animation: moonSway 3.6s ease-in-out infinite; }
+@keyframes sunRise { 0%,100% { transform: translateY(3px) scale(.85); opacity: .75; } 50% { transform: translateY(-1px) scale(1.1); opacity: 1; } }
+@keyframes moonSway { 50% { transform: rotate(-18deg) scale(1.1); } }
+@keyframes keyWig { 0%,70%,100% { transform: rotate(0); } 75% { transform: rotate(-18deg); } 80% { transform: rotate(16deg); } 85% { transform: rotate(-12deg); } 90% { transform: rotate(8deg); } }
+@media (prefers-reduced-motion: reduce) { .el-btn, .el-btn::before { animation: none !important; } }
+
+/* Code boîte à clés : rouge plein + liseré blanc « ver » qui court autour + clé vectorielle */
+@property --keyA { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@keyframes keyOrbit { to { --keyA: 360deg; } }
+.el-btn[data-keybox-btn] {
+  --sh: rgba(200,16,46,.75); isolation: isolate;
+  background: linear-gradient(120deg, #c8102e, #8c1d3f); color: #fff; text-shadow: 0 1px 2px rgba(60,0,10,.35); letter-spacing: .1em;
+  box-shadow: 0 12px 24px -10px var(--sh); animation: ctaFloat 3s ease-in-out infinite;
+}
+.el-btn[data-keybox-btn]:hover { background: linear-gradient(120deg, #d9132f, #9b2147); color: #fff; box-shadow: 0 16px 28px -10px var(--sh); }
+.el-btn[data-keybox-btn]::before {
+  content: ""; width: 1.35rem; height: 1.35rem; background: #fff; animation: keyWig 3.5s infinite;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='rotate(-40 12 12)'%3E%3Ccircle cx='5.5' cy='12' r='3.6'/%3E%3Ccircle cx='5.5' cy='12' r='.9' fill='black'/%3E%3Cpath d='M9.1 12H22M18 12v3.5M21 12v2.5M14.5 12v2'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='rotate(-40 12 12)'%3E%3Ccircle cx='5.5' cy='12' r='3.6'/%3E%3Ccircle cx='5.5' cy='12' r='.9' fill='black'/%3E%3Cpath d='M9.1 12H22M18 12v3.5M21 12v2.5M14.5 12v2'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+}
+.el-btn[data-keybox-btn]::after {
+  display: block; content: ""; position: absolute; inset: 0; left: 0; top: 0; width: auto; height: auto; transform: none;
+  border-radius: inherit; padding: 2.5px; z-index: 1; pointer-events: none;
+  background: conic-gradient(from var(--keyA), transparent 0 50%, rgba(255,255,255,.95) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: keyOrbit 3s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) { .el-btn[data-keybox-btn], .el-btn[data-keybox-btn]::before, .el-btn[data-keybox-btn]::after { animation: none; } }
+
+/* Arrivée & départ : pas de trait sous l'horaire quand un bouton suit */
+.kv:has(+ .el-inline) { border-bottom: none; padding-bottom: 4px; }
+.el-inline { margin: 6px 0 16px; }
+
+/* ───── Apparition au scroll « Signature » (2026-10-10) : titres qui se resserrent, filets qui s'ouvrent, cartes en cascade ───── */
+.reveal { opacity: 0; transform: none; transition: none; --d: 0; }
+.reveal.in { opacity: 1; animation: sigCard .9s cubic-bezier(.2,.7,.2,1) calc(var(--d) * .12s) backwards; }
+@keyframes sigCard { from { opacity: 0; transform: translateY(40px) scale(.97); } }
+.sig { opacity: 0; }
+.sig.in { opacity: 1; }
+.section-title.sig.in { animation: sigTitle 1.4s cubic-bezier(.2,.7,.2,1) backwards; }
+@keyframes sigTitle { from { opacity: 0; letter-spacing: .35em; } }
+.kicker.sig.in { animation: sigFade .8s ease backwards; }
+.kicker.sig.in::before, .kicker.sig.in::after { animation: sigLine 1.1s .3s ease backwards; }
+@keyframes sigFade { from { opacity: 0; } }
+@keyframes sigLine { from { width: 0; } }
+.title-rule.sig.in { animation: sigRule .9s .5s ease backwards; }
+@keyframes sigRule { from { transform: scaleX(0); } }
+@media (prefers-reduced-motion: reduce) { .reveal, .sig { opacity: 1 !important; animation: none !important; } .sig *, .kicker::before, .kicker::after { animation: none !important; } }

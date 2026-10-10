@@ -204,6 +204,13 @@
           </div>` : ''}
         </div>
         <div class="card info-card reveal">
+          <h3>Adresse &amp; accès</h3>
+          ${ad.full ? `<div class="kv"><div class="k">Adresse</div><div class="v">${esc(ad.full)} ${mapsLink(ad.full, 'Carte')}</div></div>` : ''}
+          ${kv('Étage / porte', ad.floor)}
+          ${kv('Code immeuble', ad.buildingCode)}
+          ${kv('Stationnement', ad.parking)}
+        </div>
+        <div class="card info-card reveal">
           <h3>Arrivée &amp; départ</h3>
           ${kv('Arrivée', ar.checkIn)}
           ${earlyLateBtn(el, 'arrivee')}
@@ -215,13 +222,6 @@
           <div class="co-row"><div><div class="co-label">Réseau</div><div class="co-big" data-notranslate>${esc(wifi.network || '—')}</div></div></div>
           <div class="co-row"><div><div class="co-label">Mot de passe</div><div class="co-big" data-notranslate>${esc(wifi.password || '—')}</div></div>
             <button class="copy-btn" data-copy="${esc(wifi.password || '')}" data-notranslate>Copier</button></div>
-        </div>
-        <div class="card info-card reveal">
-          <h3>Adresse &amp; accès</h3>
-          ${ad.full ? `<div class="kv"><div class="k">Adresse</div><div class="v">${esc(ad.full)} ${mapsLink(ad.full, 'Carte')}</div></div>` : ''}
-          ${kv('Étage / porte', ad.floor)}
-          ${kv('Code immeuble', ad.buildingCode)}
-          ${kv('Stationnement', ad.parking)}
         </div>
         <div class="card info-card reveal">
           <h3>Assistance</h3>
@@ -407,9 +407,9 @@
   function section(id, kicker, title, inner, extra) {
     return `<section class="block ${extra || ''}" id="${id}">
       <div class="container">
-        <div class="kicker">${esc(kicker)}</div>
-        <h2 class="section-title">${esc(title)}</h2>
-        <div class="title-rule"></div>
+        <div class="kicker sig">${esc(kicker)}</div>
+        <h2 class="section-title sig">${esc(title)}</h2>
+        <div class="title-rule sig"></div>
         ${inner}
       </div>
     </section>`;
@@ -454,7 +454,12 @@
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
     }, { threshold: 0.08 });
-    document.querySelectorAll('.reveal').forEach((n) => io.observe(n));
+    // Cascade : décalage selon le rang parmi les frères .reveal
+    document.querySelectorAll('.reveal').forEach((n) => {
+      const sibs = Array.from(n.parentElement.children).filter((c) => c.classList.contains('reveal'));
+      n.style.setProperty('--d', Math.min(sibs.indexOf(n), 6));
+    });
+    document.querySelectorAll('.reveal, .sig').forEach((n) => io.observe(n));
 
     // Nav active
     const navMap = {};
