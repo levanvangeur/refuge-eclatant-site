@@ -168,7 +168,7 @@
     const po = new IntersectionObserver((entries) => {
       entries.forEach((e) => e.target.classList.toggle('is-off', !e.isIntersecting));
     }, { rootMargin: '120px' });
-    document.querySelectorAll('.hero-cta, .nav-cta, .el-btn, .fr-btn').forEach((n) => po.observe(n));
+    document.querySelectorAll('.hero-cta, .nav-cta, .el-btn, .fr-btn, .kv-actions .icon-btn').forEach((n) => po.observe(n));
   }
 
   function hero(m) {
@@ -263,7 +263,7 @@
         </div>
         <div class="card info-card reveal">
           <h3>Assistance</h3>
-          ${(as.phones || []).map((p, i) => p ? `<div class="kv"><div class="k">Téléphone ${i + 1}</div><div class="v" data-notranslate>${esc(p)}</div>${callLink(p)}${waLink(p)}</div>` : '').join('')}
+          ${(as.phones || []).map((p, i) => p ? `<div class="kv"><div class="k">Téléphone ${i + 1}</div><div class="v" data-notranslate>${esc(p)}</div><div class="kv-actions">${callLink(p)}${waLink(p)}</div></div>` : '').join('')}
           ${kv('Disponibilité', as.availability)}
         </div>
       </div>`, alt);

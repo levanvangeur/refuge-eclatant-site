@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
+    /* Une seule police partout : Jost */
+    *, *::before, *::after { font-family: 'Jost', system-ui, sans-serif !important; font-style: normal !important; }
     :root { --cream:#F5F3EF; --card:#fff; --line:#E4DFD5; --gold:#9B8663; --gold-l:#C2B393; --gold-d:#6E5C44; --ink:#5B4B37; --ink2:#8A7C64; --ok:#2c8a5a; --err:#b3402f; }
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--cream); color: var(--ink); font-family: 'Jost', system-ui, sans-serif; font-weight: 300; min-height: 100vh; padding: 28px 16px 60px; }
@@ -23,7 +25,7 @@
     .row:last-child { margin-bottom: 0; }
     input { width: 100%; font: inherit; font-size: 1.05rem; padding: 13px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink); }
     input:focus { outline: 2px solid var(--gold-l); border-color: var(--gold); }
-    input.code { font-weight: 500; font-size: 1.5rem; letter-spacing: .25em; text-align: center; font-variant-numeric: lining-nums tabular-nums; }
+    input.code { font-family: 'Jost', system-ui, sans-serif; font-weight: 500; font-size: 1.5rem; letter-spacing: .25em; text-align: center; font-variant-numeric: lining-nums tabular-nums; }
     .hint { font-size: .75rem; color: var(--ink2); margin-top: 5px; }
     button { font: inherit; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; font-size: .85rem; cursor: pointer; border: 0; border-radius: 999px; padding: 15px 28px; background: linear-gradient(120deg, #9b8663, #e0c27a, #9b8663) 0 0 / 200% 100%; color: #fff; width: 100%; box-shadow: 0 12px 24px -12px rgba(155,134,99,.9); text-shadow: 0 1px 2px rgba(80,60,30,.35); transition: filter .25s; }
     button:hover:not(:disabled) { filter: brightness(1.08); }

@@ -117,3 +117,52 @@
 .dir-item .a .map-link { padding: 6px 12px; font-size: 0.68rem; }
 .place .map-link { align-self: flex-start; width: fit-content; max-width: 100%; }
 @media (max-width: 640px) { .place .map-link { align-self: stretch; width: 100%; justify-content: center; } }
+
+
+/* ── Assistance : boutons d'action plus grands, dans le thème des autres boutons ── */
+.kv-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.kv-actions .icon-btn {
+  --btn-grad: linear-gradient(120deg, #9b8663, #e0c27a, #9b8663); --sh: rgba(155, 134, 99, .8);
+  position: relative; overflow: hidden; isolation: isolate; margin: 0; width: 50px; height: 50px; border-radius: 50%;
+  color: #fff; border: 0; background: var(--btn-grad) !important; box-shadow: 0 10px 20px -10px var(--sh) !important;
+  animation: ctaFloat 3s ease-in-out infinite; will-change: transform; transition: filter .25s ease;
+}
+.kv-actions .wa-btn { --btn-grad: linear-gradient(120deg, #1faf56, #3ddc7c, #1faf56); --sh: rgba(37, 211, 102, .75); }
+.kv-actions .icon-btn:hover { background: var(--btn-grad) !important; filter: brightness(1.08) saturate(1.08); transform: none; }
+.kv-actions .icon-btn svg { width: 24px; height: 24px; }
+.kv-actions .icon-btn::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 2.5px; z-index: 1; pointer-events: none;
+  background: conic-gradient(from var(--keyA), transparent 0 50%, rgba(255, 255, 255, .95) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude;
+  animation: keyOrbit 3s linear infinite;
+}
+.kv:has(.kv-actions) { align-items: center; }
+@media (max-width: 640px) { .kv:has(.kv-actions) { align-items: flex-start; } .kv-actions { margin-top: 6px; } }
+@media (prefers-reduced-motion: reduce) { .kv-actions .icon-btn, .kv-actions .icon-btn::after { animation: none; } }
+
+
+/* ── Une seule police partout : Jost (celle du libellé « CONNEXION WI-FI ») — 2026-10-11 ─────────────────── */
+:root { --font-serif: 'Jost', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif; --font-sans: 'Jost', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif; }
+*, *::before, *::after { font-family: 'Jost', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif !important; font-style: normal !important; }
+/* Jost est plus large et plus haute que la police des titres : on ajuste les tailles pour garder la même allure */
+h1, h2, h3, h4, .section-title, .group-title, .hero h1, .place h3, .room-head h3, .nav-brand, .footer h4, .fr-sub, .fr-h2, .hz-main h1, .fr-modal-card h2 { font-weight: 400; letter-spacing: 0.02em; }
+.hero h1 { font-size: clamp(2.2rem, 9.5vw, 4.3rem); }
+.hero .cov-sub-tag { font-size: clamp(1.05rem, 4vw, 1.3rem); font-weight: 300; }
+.section-title { font-size: clamp(1.8rem, 3.4vw, 2.6rem); }
+.group-title { font-size: 1.45rem; }
+.place h3 { font-size: 1.35rem; }
+.room-head h3 { font-size: 1.6rem; }
+.nav-brand { font-size: 1.05rem; }
+.footer h4 { font-size: 1.4rem; }
+.callout .co-big, .phone-card .pn { font-size: 1.45rem; font-weight: 400; }
+.kv .v { font-size: 1.1rem; font-weight: 400; }
+.fr-price { font-size: 1.15rem; font-weight: 500; }
+.review-score { font-size: 1.3rem; }
+.inc-card h4 { font-size: 1.1rem; font-weight: 500; }
+.hz-main h1 { font-size: clamp(1.8rem, 5.4vw, 2.4rem); }
+.fr-sub { font-size: 1.35rem; }
+.fr-h2 { font-size: 1.6rem; }
+.fr-modal-card h2 { font-size: 1.7rem; }
+.hz-price .hz-big { font-size: 2.1rem; }
+.hero-welcome { font-weight: 300; }
