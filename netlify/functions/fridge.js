@@ -64,9 +64,9 @@ exports.handler = async (event) => {
   const cus = await post('/customers', { name, email, description: `Frigo — ${apt}`, 'metadata[kind]': 'fridge', 'metadata[apartment]': apt });
   if (!cus.ok || !cus.data.id) { console.error('Stripe customer :', cus.data.error && cus.data.error.message); return json(502, { error: 'Impossible de lancer la validation. Réessayez ou contactez-nous.' }); }
 
-  // 2. Session Checkout en mode « setup » = empreinte de carte, sans prélèvement
+  // 2. Session Checkout en mode « setup » = empreinte de carte, sans prélèvement (les moyens de paiement viennent des réglages du compte Stripe)
   const meta = { kind: 'fridge', guest: name, apartment: apt };
-  const sess = { mode: 'setup', locale: 'fr', customer: cus.data.id, 'payment_method_types[0]': 'card',
+  const sess = { mode: 'setup', locale: 'fr', customer: cus.data.id,
     success_url: `${origin}/frigo.html?ok=1&sid={CHECKOUT_SESSION_ID}`, cancel_url: `${origin}/frigo.html`,
     'custom_text[submit][message]': 'Aucun montant n’est débité maintenant : seule une empreinte de votre carte est enregistrée. Votre consommation sera débitée à la fin de votre séjour.',
     'setup_intent_data[description]': `Frigo — ${apt} — ${name}` };
