@@ -479,7 +479,7 @@
   /* ───────────────── Interactions ───────────────── */
   function setupInteractions(data, nav) {
     // Code de la boîte à clés : affiché au clic
-    // Le code peut être modifié à distance depuis l'espace privé (/admin.html du Refuge) : on le relit au clic,
+    // Le code peut être modifié à distance depuis l'espace privé (admin.logementsparay.fr) : on le relit au clic,
     // et on retombe sur le code du content.json si le service ne répond pas.
     document.querySelectorAll('[data-keybox-btn]').forEach((btn) => btn.addEventListener('click', async () => {
       const code = btn.parentElement.querySelector('.key-code');
@@ -493,7 +493,7 @@
         const ctrl = new AbortController();
         const timer = setTimeout(() => ctrl.abort(), 4000);
         const slug = location.hostname.split('.')[0];
-        const r = await fetch('https://refuge-eclatant.logementsparay.fr/.netlify/functions/codes?apt=' + encodeURIComponent(slug), { cache: 'no-store', signal: ctrl.signal });
+        const r = await fetch('https://admin.logementsparay.fr/.netlify/functions/codes?apt=' + encodeURIComponent(slug), { cache: 'no-store', signal: ctrl.signal });
         clearTimeout(timer);
         const d = r.ok ? await r.json() : {};
         digits.textContent = d.keybox || fallback;

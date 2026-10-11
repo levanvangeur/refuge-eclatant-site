@@ -166,3 +166,11 @@ h1, h2, h3, h4, .section-title, .group-title, .hero h1, .place h3, .room-head h3
 .fr-modal-card h2 { font-size: 1.7rem; }
 .hz-price .hz-big { font-size: 2.1rem; }
 .hero-welcome { font-weight: 300; }
+
+/* ── Nom de l'appartement en écriture manuscrite (Parisienne) — en-tête et écran d'intro ── */
+.hero h1, #intro .i-name {
+  font-family: 'Parisienne', 'Brush Script MT', cursive !important; font-weight: 400 !important; letter-spacing: 0 !important;
+  line-height: 1.15; text-transform: none;
+}
+.hero h1 { font-size: clamp(2.9rem, 12.5vw, 5.4rem); }
+#intro .i-name { font-size: clamp(2.3rem, 8.5vw, 3.2rem); }
