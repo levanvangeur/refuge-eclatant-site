@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mes codes — espace privé</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root { --cream:#F5F3EF; --card:#fff; --line:#E4DFD5; --gold:#9B8663; --gold-l:#C2B393; --gold-d:#6E5C44; --ink:#5B4B37; --ink2:#8A7C64; --ok:#2c8a5a; --err:#b3402f; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--cream); color: var(--ink); font-family: 'Jost', system-ui, sans-serif; font-weight: 300; min-height: 100vh; padding: 28px 16px 60px; }
+    .wrap { max-width: 520px; margin: 0 auto; }
+    h1 { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: 2.3rem; text-align: center; margin: 10px 0 4px; }
+    .sub { text-align: center; color: var(--ink2); letter-spacing: .1em; text-transform: uppercase; font-size: .75rem; margin-bottom: 26px; }
+    .star { text-align: center; color: var(--gold); }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; margin-bottom: 16px; box-shadow: 0 10px 24px -16px rgba(91,75,55,.35); }
+    .card h2 { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: 1.35rem; margin: 0 0 14px; }
+    label { display: block; font-size: .82rem; letter-spacing: .04em; color: var(--ink2); margin: 0 0 6px; }
+    .row { margin-bottom: 14px; }
+    .row:last-child { margin-bottom: 0; }
+    input { width: 100%; font: inherit; font-size: 1.05rem; padding: 13px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink); }
+    input:focus { outline: 2px solid var(--gold-l); border-color: var(--gold); }
+    input.code { font-weight: 500; font-size: 1.5rem; letter-spacing: .25em; text-align: center; font-variant-numeric: lining-nums tabular-nums; }
+    .hint { font-size: .75rem; color: var(--ink2); margin-top: 5px; }
+    button { font: inherit; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; font-size: .85rem; cursor: pointer; border: 0; border-radius: 999px; padding: 15px 28px; background: linear-gradient(120deg, #9b8663, #e0c27a, #9b8663) 0 0 / 200% 100%; color: #fff; width: 100%; box-shadow: 0 12px 24px -12px rgba(155,134,99,.9); text-shadow: 0 1px 2px rgba(80,60,30,.35); transition: filter .25s; }
+    button:hover:not(:disabled) { filter: brightness(1.08); }
+    button:disabled { opacity: .55; cursor: not-allowed; }
+    button.ghost { background: none; color: var(--gold-d); box-shadow: none; text-shadow: none; border: 1px solid var(--gold-l); padding: 10px 18px; width: auto; font-size: .75rem; }
+    .msg { min-height: 1.4em; text-align: center; font-size: .92rem; margin: 12px 0 0; }
+    .msg.ok { color: var(--ok); } .msg.err { color: var(--err); }
+    .top { display: flex; justify-content: flex-end; margin-bottom: 4px; }
+    .tag { display: inline-block; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--gold-d); background: #f3ecd9; border-radius: 999px; padding: 2px 8px; margin-left: 8px; vertical-align: middle; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="star">✦</div>
+    <h1>Mes codes</h1>
+    <div class="sub">Espace privé</div>
+
+    <!-- Connexion -->
+    <form class="card" id="loginForm" autocomplete="on">
+      <h2>Connexion</h2>
+      <div class="row">
+        <label for="pw">Mot de passe</label>
+        <input id="pw" name="password" type="password" autocomplete="current-password" required />
+      </div>
+      <button type="submit" id="loginBtn">Se connecter</button>
+      <div class="msg" id="loginMsg" role="alert"></div>
+    </form>
+
+    <!-- Codes -->
+    <form id="codesForm" hidden>
+      <div class="top"><button type="button" class="ghost" id="logout">Se déconnecter</button></div>
+      <div class="card">
+        <h2>Boîtes à clés</h2>
+        <div id="keyboxes"></div>
+      </div>
+      <div class="card">
+        <h2>Cadenas du frigo <span class="tag">Refuge</span></h2>
+        <div class="row">
+          <label for="fridge">Code remis après l'empreinte de carte</label>
+          <input class="code" id="fridge" inputmode="text" autocomplete="off" maxlength="16" />
+        </div>
+      </div>
+      <button type="submit" id="saveBtn">Enregistrer</button>
+      <div class="msg" id="saveMsg" role="status"></div>
+      <p class="hint" style="text-align:center">Le changement est immédiat : les livrets affichent le nouveau code sans être republiés.<br>1 à 16 caractères : chiffres, lettres, # * -</p>
+    </form>
+  </div>
+
+<script>
+(function () {
+  'use strict';
+  const API = '/.netlify/functions/codes';
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  let password = '';
+  try { password = sessionStorage.getItem('adminPw') || ''; } catch (e) {}
+
+  async function call(payload) {
+    const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({ password }, payload)) });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) { const e = new Error(d.error || 'Erreur ' + r.status); e.status = r.status; throw e; }
+    return d;
+  }
+
+  function fill(d) {
+    $('keyboxes').innerHTML = d.keyboxes.map((k) =>
+      `<div class="row"><label for="kb-${esc(k.slug)}">${esc(k.name)}${k.custom ? '' : ' <span class="tag">code du livret</span>'}</label>
+       <input class="code" id="kb-${esc(k.slug)}" data-slug="${esc(k.slug)}" inputmode="text" autocomplete="off" maxlength="16" value="${esc(k.code)}"></div>`).join('');
+    $('fridge').value = d.fridge || '';
+    $('loginForm').hidden = true;
+    $('codesForm').hidden = false;
+  }
+
+  async function load() {
+    const d = await call({ action: 'load' });
+    try { sessionStorage.setItem('adminPw', password); } catch (e) {}
+    fill(d);
+  }
+
+  $('loginForm').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const msg = $('loginMsg'), btn = $('loginBtn');
+    msg.className = 'msg'; msg.textContent = '';
+    password = $('pw').value;
+    btn.disabled = true; btn.textContent = 'Connexion…';
+    try { await load(); }
+    catch (e) { password = ''; msg.className = 'msg err'; msg.textContent = e.message; }
+    btn.disabled = false; btn.textContent = 'Se connecter';
+  });
+
+  $('codesForm').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const msg = $('saveMsg'), btn = $('saveBtn');
+    msg.className = 'msg'; msg.textContent = '';
+    const keyboxes = {};
+    document.querySelectorAll('#keyboxes input').forEach((i) => { keyboxes[i.dataset.slug] = i.value.trim(); });
+    btn.disabled = true; btn.textContent = 'Enregistrement…';
+    try {
+      await call({ action: 'save', keyboxes, fridge: $('fridge').value.trim() });
+      msg.className = 'msg ok'; msg.textContent = '✓ Codes enregistrés — les livrets sont à jour.';
+      await load();
+      msg.className = 'msg ok'; msg.textContent = '✓ Codes enregistrés — les livrets sont à jour.';
+    } catch (e) {
+      msg.className = 'msg err'; msg.textContent = e.message;
+      if (e.status === 401) { $('codesForm').hidden = true; $('loginForm').hidden = false; }
+    }
+    btn.disabled = false; btn.textContent = 'Enregistrer';
+  });
+
+  $('logout').addEventListener('click', () => {
+    password = ''; try { sessionStorage.removeItem('adminPw'); } catch (e) {}
+    $('codesForm').hidden = true; $('loginForm').hidden = false; $('pw').value = ''; $('pw').focus();
+  });
+
+  if (password) load().catch(() => { password = ''; try { sessionStorage.removeItem('adminPw'); } catch (e) {} });
+})();
+</script>
+</body>
+</html>

@@ -1,24 +1,33 @@
-/* Écran d'ouverture : la basilique se dessine (2026-10-10) */
+/* Écran d'ouverture : la basilique se dessine, puis fusionne avec l'en-tête (2026-10-11) */
 html.intro-on, html.intro-on body { overflow: hidden; }
+/* L'en-tête réel attend la fusion */
+html.intro-hide-hero .hero-content { opacity: 0 !important; }
+html.intro-logo-wait .hero img.logo { opacity: 0 !important; }
+html.intro-merge .hero-content { transition: opacity .9s ease .2s; }
+html.intro-merge .hero img.logo { transition: opacity .35s ease; }
+
 #intro {
-  position: fixed; inset: 0; z-index: 9999; background: #F5F3EF; color: #5B4B37;
+  position: fixed; inset: 0; z-index: 9999; background-color: #F5F3EF; color: #5B4B37;
   display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-  cursor: pointer; transition: transform .8s cubic-bezier(.7,0,.2,1), opacity .8s;
+  cursor: pointer; transition: background-color .9s ease;
 }
-#intro.out { transform: translateY(-100%); opacity: .6; pointer-events: none; }
-#intro svg { width: clamp(120px, 34vw, 170px); height: auto; overflow: visible; }
+#intro.merging { background-color: rgba(245, 243, 239, 0); pointer-events: none; cursor: default; }
+#intro svg { width: clamp(120px, 34vw, 170px); height: auto; overflow: visible; will-change: transform; }
 #intro svg path { fill: none; stroke: #9B8663; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
 #intro.go svg path { animation: introDraw .85s ease-out forwards; animation-delay: calc(var(--o) * .5s); }
 #intro .i-kick { font: 300 .7rem/1 'Jost', sans-serif; letter-spacing: .3em; text-transform: uppercase; color: #8A7C64; margin-top: 26px; opacity: 0; }
 #intro .i-name { font: italic 500 clamp(1.7rem, 6vw, 2.3rem)/1.15 'Cormorant Garamond', serif; margin-top: 10px; opacity: 0; }
 #intro .i-rule { height: 1px; width: 0; background: #9B8663; margin-top: 14px; }
 #intro .i-welcome { font: 300 clamp(.95rem, 3.4vw, 1.1rem)/1.5 'Jost', sans-serif; letter-spacing: .04em; color: #6E5C44; max-width: 28ch; margin-top: 22px; opacity: 0; transform: translateY(8px); }
-#intro.go .i-welcome { animation: introWelcome .9s 2.9s cubic-bezier(.2,.7,.2,1) forwards; }
-@keyframes introWelcome { to { opacity: 1; transform: none; } }
 #intro.go .i-kick { animation: introFade .6s 2.2s forwards; }
 #intro.go .i-name { animation: introFade .7s 2.4s forwards; }
 #intro.go .i-rule { animation: introRule .9s 2.7s forwards; }
+#intro.go .i-welcome { animation: introWelcome .9s 2.9s cubic-bezier(.2, .7, .2, 1) forwards; }
+/* Fusion : les textes de l'écran d'intro s'effacent pendant que ceux de l'en-tête apparaissent */
+#intro.merging .i-kick, #intro.merging .i-name, #intro.merging .i-rule, #intro.merging .i-welcome { animation: introOut .45s ease forwards !important; }
 @keyframes introDraw { to { stroke-dashoffset: 0; } }
 @keyframes introFade { to { opacity: 1; } }
 @keyframes introRule { to { width: 90px; } }
+@keyframes introWelcome { to { opacity: 1; transform: none; } }
+@keyframes introOut { from { opacity: 1; } to { opacity: 0; } }
 @media print { #intro { display: none !important; } }

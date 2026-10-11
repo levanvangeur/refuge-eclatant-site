@@ -8,6 +8,7 @@
     "editor": "node editor/server.js"
   },
   "dependencies": {
+    "@netlify/blobs": "8.2.0",
     "express": "^4.19.2",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.10.1"

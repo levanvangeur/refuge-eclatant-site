@@ -219,8 +219,8 @@
         "title": "Restaurants",
         "items": [
           {
-            "name": "La Taverne Charolais",
-            "type": "",
+            "name": "La Taverne",
+            "type": "Cuisine française",
             "address": "Route de l'Aérodrome",
             "phone": "03 85 88 85 49"
           },
@@ -249,21 +249,15 @@
             "phone": "06 28 08 66 99"
           },
           {
-            "name": "Au P'tit Bec de Paray",
-            "type": "Bistrot",
-            "address": "29 rue des Deux Ponts",
-            "phone": "03 85 81 22 43"
-          },
-          {
             "name": "Aux Baguettes d'Or",
             "type": "Asiatique",
             "address": "14 rue de la République",
             "phone": "03 85 88 82 78"
           },
           {
-            "name": "Le Coin Sucré et Salé",
+            "name": "L'Étoile Majorelle",
             "type": "Marocain",
-            "address": "16 place Guignault",
+            "address": "57 av. Charles de Gaulle",
             "phone": "03 85 81 57 82"
           },
           {
@@ -277,6 +271,60 @@
             "type": "Café-restaurant",
             "address": "2 av. de Béthléem",
             "phone": "03 73 55 07 25"
+          },
+          {
+            "name": "Chez Camille",
+            "type": "Restaurant · terrasse",
+            "address": "16 place Guignault",
+            "phone": "03 65 67 43 24"
+          },
+          {
+            "name": "Le Bistrot Charolais",
+            "type": "Brasserie · spécialités charolaises",
+            "address": "Galerie Leclerc, Champ Bossu",
+            "phone": "03 85 88 02 33"
+          },
+          {
+            "name": "L'Ovale",
+            "type": "Brasserie · cuisine traditionnelle",
+            "address": "25 rue Victor Hugo",
+            "phone": "03 85 81 01 61"
+          },
+          {
+            "name": "O Fil de l'Eau",
+            "type": "Traditionnel · vue sur la basilique",
+            "address": "6 rue des Deux Ponts",
+            "phone": "03 85 88 80 01"
+          },
+          {
+            "name": "Le Tire-Bouchon",
+            "type": "Bistrot · vins & cocktails",
+            "address": "15 place Guignault",
+            "phone": "03 58 42 08 50"
+          },
+          {
+            "name": "La Boucherie",
+            "type": "Viandes charolaises",
+            "address": "ZAC du Champ Bossu",
+            "phone": "03 85 24 43 55"
+          },
+          {
+            "name": "Étoile 71",
+            "type": "Buffet asiatique à volonté",
+            "address": "ZAC du Champ Bossu",
+            "phone": "03 85 84 28 98"
+          },
+          {
+            "name": "Domaine des Marguerites",
+            "type": "Hôtel-restaurant · traditionnel",
+            "address": "27 av. de la Gare",
+            "phone": "06 28 42 37 74"
+          },
+          {
+            "name": "Hôtel de la Basilique",
+            "type": "Hôtel-restaurant · cuisine bourguignonne",
+            "address": "18 rue de la Visitation",
+            "phone": "03 85 81 11 13"
           }
         ]
       },
@@ -296,10 +344,22 @@
             "phone": "07 81 79 95 44"
           },
           {
-            "name": "Le Cappadoce",
+            "name": "Kebab Store",
             "type": "Kebab",
             "address": "1 rue de la République",
             "phone": "03 85 81 64 39"
+          },
+          {
+            "name": "Gina Pizza",
+            "type": "Pizzeria",
+            "address": "1 av. Charles de Gaulle",
+            "phone": "07 89 20 22 44"
+          },
+          {
+            "name": "Le Savoureux du Monial",
+            "type": "Tacos · burgers · pizzas",
+            "address": "63 av. Charles de Gaulle",
+            "phone": "03 85 88 58 39"
           }
         ]
       }
@@ -318,8 +378,8 @@
             "phone": "03 85 81 13 32"
           },
           {
-            "name": "Bar Brasserie de la Poste",
-            "type": "Brasserie",
+            "name": "Le 1900",
+            "type": "Bar-brasserie",
             "address": "Cours Jean Jaurès",
             "phone": "03 85 81 69 97"
           },
@@ -336,22 +396,34 @@
             "phone": "03 73 55 07 25"
           },
           {
-            "name": "Bouillon Eliane",
+            "name": "Reflex Café",
             "type": "Café-bar",
             "address": "2 route de Saint-Germain",
+            "phone": "03 85 24 89 75"
+          },
+          {
+            "name": "Le Lucéane",
+            "type": "Café · jeux de société",
+            "address": "2 place de l'Hôtel de Ville",
+            "phone": "06 43 73 64 69"
+          },
+          {
+            "name": "Sisters Coffee",
+            "type": "Coffee shop · librairie",
+            "address": "11 av. Charles de Gaulle",
+            "phone": "07 82 92 37 41"
+          },
+          {
+            "name": "Le Karenzo",
+            "type": "Bar",
+            "address": "67 av. Charles de Gaulle",
             "phone": ""
           },
           {
-            "name": "Au Cappuccio'",
-            "type": "Café",
-            "address": "",
-            "phone": "03 85 81 06 80"
-          },
-          {
-            "name": "L'Essaim",
+            "name": "Wells",
             "type": "Bar",
-            "address": "",
-            "phone": "06 77 47 36 56"
+            "address": "18 place de l'Hôtel de Ville",
+            "phone": "06 07 70 85 13"
           }
         ]
       },
@@ -386,12 +458,6 @@
             "type": "Chocolatier · salon de thé",
             "address": "5 rue Victor Hugo",
             "phone": "03 85 81 76 99"
-          },
-          {
-            "name": "Pâtisserie-Chocolaterie Charles Pubill",
-            "type": "Chocolatier",
-            "address": "25 av. Charles de Gaulle",
-            "phone": "03 85 81 11 38"
           },
           {
             "name": "Les Gourmandises de Lucie",
@@ -795,7 +861,7 @@
   },
   "fridge": {
     "enabled": true,
-    "title": "Boisson et snack",
+    "title": "Boissons et snacks",
     "intro": "Un petit creux ou une petite soif ? Le frigo du logement est à votre disposition, fermé par un cadenas à code. Servez-vous : une empreinte de carte suffit, et votre consommation est débitée à la fin de votre séjour.",
     "products": [
       {

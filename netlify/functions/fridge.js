@@ -11,6 +11,8 @@
 // Le code n'est volontairement PAS dans content.json (fichier public) : il n'est renvoyé qu'après validation de la carte.
 // Le montant de la consommation est débité ensuite par le propriétaire, depuis Stripe, sur la carte enregistrée.
 
+const { readCodes } = require('../lib/codes-store');
+
 const json = (status, body) => ({ statusCode: status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }, body: JSON.stringify(body) });
 const stripe = (key, path, opts) => fetch('https://api.stripe.com/v1' + path, Object.assign({}, opts, {
   headers: Object.assign({ Authorization: 'Bearer ' + key }, (opts && opts.headers) || {}),
@@ -34,7 +36,9 @@ exports.handler = async (event) => {
     if (s.mode !== 'setup' || s.status !== 'complete' || !s.metadata || s.metadata.kind !== 'fridge' || !fresh) {
       return json(403, { error: 'Empreinte non validée ou expirée.' });
     }
-    return json(200, { code: process.env.FRIDGE_CODE || '753', guest: s.metadata.guest || '' });
+    // Code modifiable depuis /admin.html (stocké), sinon variable FRIDGE_CODE, sinon 753
+    const stored = await readCodes(event);
+    return json(200, { code: stored.fridge || process.env.FRIDGE_CODE || '753', guest: s.metadata.guest || '' });
   }
 
   // ───── Création de l'empreinte de carte ─────

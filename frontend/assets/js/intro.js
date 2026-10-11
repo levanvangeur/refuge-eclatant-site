@@ -1,10 +1,12 @@
-/* Écran d'ouverture : la basilique se dessine, puis le rideau se lève. Une fois par session. */
+/* Écran d'ouverture : la basilique se dessine, puis fusionne avec l'en-tête du livret (le logo glisse vers sa place).
+ * Une fois par session ; ignoré si le lien pointe vers une section (#ancre) ou si le visiteur réduit les animations. */
 (function () {
   var skip = location.hash || matchMedia('(prefers-reduced-motion: reduce)').matches;
   try { if (sessionStorage.getItem('introSeen')) skip = true; } catch (e) {}
   if (skip) return;
   var root = document.documentElement;
-  root.classList.add('intro-on');
+  // intro-on : défilement bloqué ; intro-hide-hero / intro-logo-wait : l'en-tête réel attend la fusion
+  root.classList.add('intro-on', 'intro-hide-hero', 'intro-logo-wait');
   var P = [
     ['M5,640 L90,640 Q105,640 105,630', 0],
     ['M105,630 L105,543 L155,510 Q162,505 162,495 L162,265 L236,5 L313,262 L313,413 L395,468 L395,395 L453,266 L510,395 L508,612', 1],
@@ -19,15 +21,42 @@
   }).join('') + '</svg><div class="i-kick" data-notranslate></div><div class="i-name" data-notranslate></div><div class="i-rule"></div><div class="i-welcome">Bienvenue, gérez votre séjour depuis cette interface</div>';
   root.appendChild(box);
 
-  var closed = false;
-  function close() {
-    if (closed) return; closed = true;
-    try { sessionStorage.setItem('introSeen', '1'); } catch (e) {}
-    box.classList.add('out');
-    setTimeout(function () { root.classList.remove('intro-on'); box.remove(); }, 850);
+  var merged = false, finished = false;
+
+  // Fin : le vrai logo apparaît en fondu à la place du tracé, puis l'écran d'intro disparaît
+  function finish() {
+    if (finished) return; finished = true;
+    root.classList.remove('intro-logo-wait');
+    var svg = box.querySelector('svg');
+    if (svg) { svg.style.transition = 'opacity .35s ease'; svg.style.opacity = '0'; }
+    setTimeout(function () { root.classList.remove('intro-on', 'intro-merge', 'intro-hide-hero'); box.remove(); }, 450);
   }
-  box.addEventListener('click', close);
-  setTimeout(close, 8200); // filet de sécurité
+
+  // Fusion : le fond s'efface, l'en-tête apparaît, le logo glisse jusqu'à son emplacement exact dans l'en-tête
+  function merge() {
+    if (merged) return; merged = true;
+    try { sessionStorage.setItem('introSeen', '1'); } catch (e) {}
+    window.scrollTo(0, 0);
+    var go = function () {
+      box.classList.add('merging');
+      root.classList.remove('intro-hide-hero'); root.classList.add('intro-merge');
+      var logo = document.querySelector('.hero img.logo'), svg = box.querySelector('svg');
+      var b = logo && logo.getBoundingClientRect();
+      if (svg && b && b.width) {
+        var a = svg.getBoundingClientRect();
+        var dx = (b.left + b.width / 2) - (a.left + a.width / 2);
+        var dy = (b.top + b.height / 2) - (a.top + a.height / 2);
+        svg.style.transition = 'transform 1.1s cubic-bezier(.65,0,.25,1)';
+        svg.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + (b.width / a.width) + ')';
+        setTimeout(finish, 1150);
+      } else { setTimeout(finish, 700); }
+    };
+    // le livret se construit après le chargement de content.json : on l'attend (4 s max)
+    var tries = 0;
+    (function wait() { if (document.querySelector('.hero-content') || tries++ > 40) go(); else setTimeout(wait, 100); })();
+  }
+  box.addEventListener('click', merge);
+  setTimeout(merge, 8200); // filet de sécurité
 
   fetch('content.json').then(function (r) { return r.json(); }).then(function (d) {
     var m = d.meta || {};
@@ -36,5 +65,5 @@
   }).catch(function () {});
 
   requestAnimationFrame(function () { requestAnimationFrame(function () { box.classList.add('go'); }); });
-  setTimeout(close, 5800);
+  setTimeout(merge, 4400);
 })();

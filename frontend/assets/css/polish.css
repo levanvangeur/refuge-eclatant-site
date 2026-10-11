@@ -1,0 +1,119 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Polish 2026-10-11 — chargé en dernier (après style.css / horaires.css / frigo.css)
+   1. Cartes & typographie « Connexion Wi-Fi » partout
+   2. Un seul design pour tous les boutons animés (celui du code de la boîte à clés)
+   3. Fluidité : animations légères, flou allégé, transitions de page
+   Les !important ci-dessous servent à unifier d'anciennes règles dispersées.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Cartes & typographie « Wi-Fi » ───────────────────────────────────── */
+.card, .phone-card, .review-card, .fr-box {
+  border: 1.5px solid var(--gold-light);
+  border-radius: 16px;
+  background: linear-gradient(160deg, #fff, #fbf9f4);
+  box-shadow: none;
+}
+.info-card { padding: 24px 28px; }
+.info-card h3 {
+  font-family: var(--font-sans); font-style: normal; font-weight: 400;
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.22em;
+  color: var(--gold); margin: 0 0 6px;
+}
+.kv .k {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.22em;
+  color: var(--gold); padding-top: 0.5em;
+}
+.kv .v { font-family: var(--font-serif); font-size: 1.3rem; line-height: 1.35; color: var(--ink); }
+.key-reveal .co-label { margin-bottom: 4px; }
+
+/* ── En-tête : plus de flèche, texte d'accueil permanent ─────────────────── */
+.scroll-cue { display: none !important; }
+.hero-welcome {
+  font-family: var(--font-sans); font-weight: 300; letter-spacing: 0.04em; line-height: 1.5;
+  font-size: clamp(0.92rem, 3.4vw, 1.05rem); color: var(--ink-soft);
+  max-width: 30ch; margin: 22px auto 0;
+}
+
+/* ── 2. Boutons animés : un seul design ──────────────────────────────────── */
+.hero-cta, .nav-cta, .el-btn, .fr-btn {
+  --btn-grad: linear-gradient(120deg, #9b8663, #e0c27a, #9b8663);
+  --sh: rgba(155, 134, 99, .8);
+  position: relative; overflow: hidden; isolation: isolate;
+  background: var(--btn-grad) !important; background-size: 100% 100% !important;
+  color: #fff !important; border: 0 !important; outline: 0 !important; border-radius: 999px !important;
+  text-shadow: 0 1px 2px rgba(40, 20, 20, .35);
+  box-shadow: 0 12px 24px -10px var(--sh) !important;
+  animation: ctaFloat 3s ease-in-out infinite !important;
+  will-change: transform;
+  transition: filter .25s ease, box-shadow .25s ease !important;
+}
+.nav-cta { animation: none !important; box-shadow: 0 8px 16px -8px var(--sh) !important; will-change: auto; }
+.hero-cta:hover, .nav-cta:hover, .el-btn:hover, .fr-btn:hover {
+  background: var(--btn-grad) !important; color: #fff !important;
+  filter: brightness(1.08) saturate(1.08); box-shadow: 0 16px 28px -10px var(--sh) !important;
+}
+/* Couleurs d'origine de chaque bouton */
+.el-btn[href$="type=arrivee"] { --btn-grad: linear-gradient(120deg, #f6b86a, #f48a8a, #f6b86a); --sh: rgba(244, 138, 138, .9); }
+.el-btn[href$="type=depart"]  { --btn-grad: linear-gradient(120deg, #5b4bb0, #2b2a6b, #5b4bb0); --sh: rgba(60, 50, 150, .9); }
+.el-btn[data-keybox-btn]      { --btn-grad: linear-gradient(120deg, #c8102e, #8c1d3f); --sh: rgba(200, 16, 46, .75); }
+.fr-btn                       { --btn-grad: linear-gradient(120deg, #1d8fd1, #5fd0e6, #1d8fd1); --sh: rgba(29, 143, 209, .85); }
+
+/* Le liseré blanc qui court autour (le « ver ») */
+.hero-cta::after, .nav-cta::after, .el-btn::after, .fr-btn::after {
+  display: block !important; content: "" !important; position: absolute !important;
+  inset: 0 !important; left: 0 !important; top: 0 !important; width: auto !important; height: auto !important; transform: none !important;
+  border-radius: inherit; padding: 2.5px; z-index: 1; pointer-events: none;
+  background: conic-gradient(from var(--keyA), transparent 0 50%, rgba(255, 255, 255, .95) 100%) !important;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude;
+  animation: keyOrbit 3s linear infinite !important;
+}
+.nav-cta::after { padding: 2px; }
+
+/* Arrivée anticipée / départ tardif / code : même taille */
+.el-btn.sm {
+  display: flex !important; justify-content: center; align-items: center; text-align: center;
+  width: min(100%, 21rem); min-height: 3.5rem; padding: 13px 22px; line-height: 1.3; white-space: normal;
+}
+
+/* Les animations en boucle se mettent en pause hors de l'écran (classe posée par app.js) */
+.is-off, .is-off::before, .is-off::after { animation-play-state: paused !important; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-cta, .nav-cta, .el-btn, .fr-btn, .hero-cta::after, .nav-cta::after, .el-btn::after, .fr-btn::after { animation: none !important; }
+}
+
+/* Page frigo : bouton principal sans animation de dégradé */
+.hz-pay.fr-open { animation: none !important; }
+
+/* ── 3. Fluidité ─────────────────────────────────────────────────────────── */
+.nav { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); background: rgba(245, 243, 239, .94); }
+@media (max-width: 900px) {
+  .nav { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(245, 243, 239, .98); }
+}
+/* Filets des titres : mouvement par transformation (pas de recalcul de mise en page) */
+.kicker::before { transform-origin: right center; }
+.kicker::after { transform-origin: left center; }
+@keyframes sigLine { from { transform: scaleX(0); } }
+/* Transition douce entre les pages du livret (livret ↔ frigo ↔ horaires) */
+@view-transition { navigation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .35s; }
+
+/* ── Boutons « Voir sur la carte » : simples, bien visibles, sans animation ── */
+.map-link, .place .map-link {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 0; padding: 9px 16px;
+  border: 1.5px solid var(--gold); border-radius: 10px; background: #fff; color: var(--gold-dark);
+  font-family: var(--font-sans); font-size: 0.74rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+  text-decoration: none; white-space: nowrap; cursor: pointer;
+  transition: background-color .2s ease, color .2s ease;
+}
+.map-link::before {
+  content: ""; flex: none; width: 1.1em; height: 1.1em; background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z'/%3E%3Ccircle cx='12' cy='10' r='2.6'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z'/%3E%3Ccircle cx='12' cy='10' r='2.6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.map-link:hover, .place .map-link:hover { background: var(--gold); color: #fff; text-decoration: none; }
+.place .map-link { margin-top: 14px; padding: 11px 20px; font-size: 0.78rem; }
+.kv .v .map-link { margin-top: 8px; padding: 7px 14px; }
+.dir-item .a .map-link { padding: 6px 12px; font-size: 0.68rem; }
+.place .map-link { align-self: flex-start; width: fit-content; max-width: 100%; }
+@media (max-width: 640px) { .place .map-link { align-self: stretch; width: 100%; justify-content: center; } }

@@ -1,4 +1,4 @@
-/* Page « Boisson et snack » : liste des produits, empreinte de carte (Stripe) puis code du cadenas du frigo.
+/* Page « Boissons et snacks » : liste des produits, empreinte de carte (Stripe) puis code du cadenas du frigo.
  * Le code n'est jamais dans content.json : il est renvoyé par netlify/functions/fridge.js une fois la carte validée. */
 (function () {
   'use strict';
@@ -57,7 +57,7 @@
     const cfg = data.fridge || {};
     const apt = (data.meta || {}).apartmentName || '';
     const list = (cfg.products || []).filter((p) => p && p.name);
-    const title = cfg.title || 'Boisson et snack';
+    const title = cfg.title || 'Boissons et snacks';
     document.title = title + ' — ' + apt;
     if (cfg.enabled === false || !list.length) { root.innerHTML = '<p class="hz-lead">Ce service n\'est pas proposé pour ce logement.</p>'; return; }
 

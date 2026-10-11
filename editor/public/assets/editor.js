@@ -14,7 +14,7 @@
   const CATEGORY_LABELS = {
     practical: 'Infos pratiques',
     included: 'Tout est inclus',
-    fridge: 'Boisson et snack',
+    fridge: 'Boissons et snacks',
     welcome: 'Mot de bienvenue',
     comfort: 'Le logement',
     gallery: 'Galerie (photos)',
@@ -333,11 +333,11 @@
         f.appendChild(card('Bloc « Tout est inclus » (3 cartes recommandées)', objectList(d.welcome.included, [{ key: 'title', label: 'Titre', full: true }, { key: 'detail', label: 'Détail', textarea: true }], { titleKey: 'title', addLabel: 'Ajouter un élément' })));
         return f;
       }],
-      ['fridge', 'Boisson et snack', () => {
-        const fr = d.fridge || (d.fridge = { enabled: true, title: 'Boisson et snack', intro: '', products: [] });
+      ['fridge', 'Boissons et snacks', () => {
+        const fr = d.fridge || (d.fridge = { enabled: true, title: 'Boissons et snacks', intro: '', products: [] });
         if (!Array.isArray(fr.products)) fr.products = [];
         const f = elh('div');
-        f.appendChild(elh('p', 'subtle', 'Section « Boisson et snack » : le voyageur laisse une empreinte de carte, reçoit le code du cadenas du frigo, puis vous le débitez à la fin de son séjour depuis Stripe selon ce que vous avez relevé. Le code du cadenas n’est pas ici (il reste caché) : il se règle avec la variable FRIDGE_CODE du site Netlify.'));
+        f.appendChild(elh('p', 'subtle', 'Section « Boissons et snacks » : le voyageur laisse une empreinte de carte, reçoit le code du cadenas du frigo, puis vous le débitez à la fin de son séjour depuis Stripe selon ce que vous avez relevé. Le code du cadenas n’est pas ici (il reste caché) : il se règle avec la variable FRIDGE_CODE du site Netlify.'));
         const on = elh('div', 'field');
         const lab = elh('label', null, 'Afficher la section');
         const cb = elh('input'); cb.type = 'checkbox'; cb.checked = fr.enabled !== false;
@@ -345,7 +345,7 @@
         lab.prepend(cb); on.appendChild(lab);
         f.appendChild(card('Service', on));
         f.appendChild(card('Textes', (() => { const g = elh('div');
-          g.appendChild(fieldText(fr, 'title', 'Titre', { ph: 'Boisson et snack' }));
+          g.appendChild(fieldText(fr, 'title', 'Titre', { ph: 'Boissons et snacks' }));
           g.appendChild(fieldText(fr, 'intro', 'Texte d’introduction', { textarea: true }));
           return g; })()));
         f.appendChild(card('Produits du frigo (prix en €, ex. 1,75)', objectList(fr.products, [{ key: 'name', label: 'Produit', full: true }, { key: 'price', label: 'Prix en € (ex. 2,50)' }], { titleKey: 'name', addLabel: 'Ajouter un produit' })));

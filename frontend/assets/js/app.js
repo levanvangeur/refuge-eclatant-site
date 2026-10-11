@@ -11,7 +11,7 @@
   // Lien « voir sur la carte » (recherche Google Maps à partir du nom/adresse).
   function mapsLink(query, label) {
     if (!query) return '';
-    return `<a class="map-link" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}" target="_blank" rel="noopener">📍 ${esc(label)}</a>`;
+    return `<a class="map-link" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}" target="_blank" rel="noopener">${esc(label)}</a>`;
   }
 
   // Lien de discussion WhatsApp à partir d'un numéro français (0X… → +33X…).
@@ -66,7 +66,7 @@
   // Libellés de navigation (id de contenu → [ancre, libellé]).
   const NAV_LABELS = {
     practical: ['pratique', 'Pratique'],
-    fridge: ['frigo', 'Boisson & snack'],
+    fridge: ['frigo', 'Boissons & snacks'],
     comfort: ['logement', 'Le logement'],
     gallery: ['galerie', 'Galerie'],
     rules: ['regles', 'Règles'],
@@ -131,6 +131,7 @@
 
     setupInteractions(data, nav);
     if (window.I18N) window.I18N.init();
+    polish();
     jumpToHash();
   }
 
@@ -161,6 +162,15 @@
 
   /* ───────────────── Sections ───────────────── */
 
+  // Fluidité : les boutons animés se mettent en pause quand ils ne sont pas à l'écran
+  function polish() {
+    if (!('IntersectionObserver' in window)) return;
+    const po = new IntersectionObserver((entries) => {
+      entries.forEach((e) => e.target.classList.toggle('is-off', !e.isIntersecting));
+    }, { rootMargin: '120px' });
+    document.querySelectorAll('.hero-cta, .nav-cta, .el-btn, .fr-btn').forEach((n) => po.observe(n));
+  }
+
   function hero(m) {
     return `
     <a id="top"></a>
@@ -171,9 +181,9 @@
         <h1 data-notranslate>${esc(m.apartmentName || '')}</h1>
         <div class="hero-rule"></div>
         ${m.tagline ? `<p class="cov-sub-tag">${esc(m.tagline)}</p>` : (m.motto ? `<p class="cov-sub-tag">« ${esc(m.motto)} »</p>` : '')}
+        <p class="hero-welcome">Bienvenue, gérez votre séjour depuis cette interface</p>
         ${m.bookingUrl ? `<div class="hero-cta-wrap"><a href="${esc(m.bookingUrl)}" class="hero-cta" target="_blank" rel="noopener">Réservez votre prochain séjour</a></div>` : ''}
       </div>
-      <a href="#pratique" class="scroll-cue" aria-label="Défiler">⌄</a>
     </header>`;
   }
 
@@ -213,7 +223,7 @@
     const price = Number(e.pricePerHour) || 0;
     const arr = type === 'arrivee';
     const note = (arr ? 'dès ' + e.earliestArrival + 'h' : 'jusqu\'à ' + e.latestDeparture + 'h') + ' · ' + price + ' € par heure supplémentaire';
-    return `<div class="el-inline"><a class="el-btn sm" href="horaires.html?type=${type}">${arr ? 'Demander une arrivée anticipée' : 'Demander un départ tardif'}</a>
+    return `<div class="el-inline"><a class="el-btn sm" href="horaires.html?type=${type}">${arr ? 'Arrivée anticipée' : 'Départ tardif'}</a>
       <div class="el-cap">${esc(note)}</div></div>`;
   }
 
@@ -221,7 +231,7 @@
     if (!pr) return '';
     const wifi = pr.wifi || {}, ar = pr.arrival || {}, ad = pr.address || {}, as = pr.assistance || {};
     const kv = (k, v) => v ? `<div class="kv"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>` : '';
-    return section('pratique', 'Informations pratiques', 'Informations pratiques', `
+    return section('pratique', '', 'Informations pratiques', `
       <div class="grid cols-2">
         <div class="card info-card reveal">
           <h3>Remise des clés</h3>
@@ -233,7 +243,7 @@
         </div>
         <div class="card info-card reveal">
           <h3>Adresse &amp; accès</h3>
-          ${ad.full ? `<div class="kv"><div class="k">Adresse</div><div class="v">${esc(ad.full)} ${mapsLink(ad.full, 'Carte')}</div></div>` : ''}
+          ${ad.full ? `<div class="kv"><div class="k">Adresse</div><div class="v">${esc(ad.full)} ${mapsLink(ad.full, 'Voir sur la carte')}</div></div>` : ''}
           ${kv('Étage / porte', ad.floor)}
           ${kv('Code immeuble', ad.buildingCode)}
           ${kv('Stationnement', ad.parking)}
@@ -281,7 +291,7 @@
         <div class="room-head"><h3>${esc(room.name)}</h3><div class="line"></div></div>
         ${(room.equipment || []).length ? `<div class="room-eq">${room.equipment.map((e) => `<span>${esc(e)}</span>`).join('')}</div>` : ''}
         ${imgs.length
-          ? `<div class="room-imgs">${imgs.map((src, ii) => `<img src="${esc(src)}" alt="${esc(room.name)}" data-room="${ri}" data-idx="${ii}" loading="lazy" />`).join('')}</div>`
+          ? `<div class="room-imgs">${imgs.map((src, ii) => `<img src="${esc(src)}" alt="${esc(room.name)}" data-room="${ri}" data-idx="${ii}" loading="lazy" decoding="async" />`).join('')}</div>`
           : `<div class="room-empty">Photos à venir.</div>`}
       </div>`;
     }).join('');
@@ -333,7 +343,7 @@
     if (it.address) text.push(esc(it.address));
     if (it.phone) text.push(`<span class="tel" data-notranslate>${esc(it.phone)}</span>`);
     const mapQuery = [it.name, it.address, cityHint].filter(Boolean).join(', ');
-    const map = mapsLink(mapQuery, 'Carte');
+    const map = mapsLink(mapQuery, 'Voir sur la carte');
     if (map) text.push(map);
     const actions = it.phone ? callLink(it.phone) : '';
     return `<div class="dir-item">
@@ -432,7 +442,7 @@
   }
 
   /* ───────────────── Helpers de mise en page ───────────────── */
-  // Boisson et snack : liste du frigo + bouton « Ouvrir le frigo » (empreinte de carte → code du cadenas, voir frigo.html)
+  // Boissons et snacks : liste du frigo + bouton « Ouvrir le frigo » (empreinte de carte → code du cadenas, voir frigo.html)
   function fridge(f, alt) {
     if (!f || f.enabled === false) return '';
     const list = (f.products || []).filter((p) => p && p.name);
@@ -441,7 +451,7 @@
       const n = parseFloat(String(v).replace(',', '.').replace(/[^0-9.]/g, ''));
       return isFinite(n) ? n.toLocaleString('fr-FR', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' €' : String(v || '');
     };
-    return section('frigo', 'Une petite envie ?', f.title || 'Boisson et snack', `
+    return section('frigo', 'Une petite envie ?', f.title || 'Boissons et snacks', `
       <div class="fr-card reveal">
         <p class="fr-intro">${esc(f.intro || 'Un petit creux ou une petite soif ? Le frigo du logement est à votre disposition, fermé par un cadenas à code.')}</p>
         <div class="fr-box"><ul class="fr-list">${list.map((p) =>
@@ -454,7 +464,7 @@
   function section(id, kicker, title, inner, extra) {
     return `<section class="block ${extra || ''}" id="${id}">
       <div class="container">
-        <div class="kicker sig">${esc(kicker)}</div>
+        ${kicker ? '<div class="kicker sig">' + esc(kicker) + '</div>' : ''}
         <h2 class="section-title sig">${esc(title)}</h2>
         <div class="title-rule sig"></div>
         ${inner}
@@ -469,9 +479,25 @@
   /* ───────────────── Interactions ───────────────── */
   function setupInteractions(data, nav) {
     // Code de la boîte à clés : affiché au clic
-    document.querySelectorAll('[data-keybox-btn]').forEach((btn) => btn.addEventListener('click', () => {
+    // Le code peut être modifié à distance depuis l'espace privé (/admin.html du Refuge) : on le relit au clic,
+    // et on retombe sur le code du content.json si le service ne répond pas.
+    document.querySelectorAll('[data-keybox-btn]').forEach((btn) => btn.addEventListener('click', async () => {
       const code = btn.parentElement.querySelector('.key-code');
-      if (code) { code.hidden = false; btn.hidden = true; }
+      if (!code) return;
+      const digits = code.querySelector('.key-digits');
+      const fallback = digits ? digits.textContent : '';
+      code.hidden = false; btn.hidden = true;
+      if (!digits) return;
+      digits.textContent = '···';
+      try {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 4000);
+        const slug = location.hostname.split('.')[0];
+        const r = await fetch('https://refuge-eclatant.logementsparay.fr/.netlify/functions/codes?apt=' + encodeURIComponent(slug), { cache: 'no-store', signal: ctrl.signal });
+        clearTimeout(timer);
+        const d = r.ok ? await r.json() : {};
+        digits.textContent = d.keybox || fallback;
+      } catch (e) { digits.textContent = fallback; }
     }));
 
     // Menu mobile
@@ -492,9 +518,12 @@
 
     // Bouton haut de page
     const toTop = el('toTop');
+    let topTick = false;
     window.addEventListener('scroll', () => {
-      toTop.classList.toggle('show', window.scrollY > 600);
-    });
+      if (topTick) return;
+      topTick = true;
+      requestAnimationFrame(() => { toTop.classList.toggle('show', window.scrollY > 600); topTick = false; });
+    }, { passive: true });
     toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
     // Reveal on scroll
