@@ -66,7 +66,7 @@ exports.handler = async (event) => {
 
   // 2. Session Checkout en mode « setup » = empreinte de carte, sans prélèvement (les moyens de paiement viennent des réglages du compte Stripe)
   const meta = { kind: 'fridge', guest: name, apartment: apt };
-  const sess = { mode: 'setup', locale: 'fr', customer: cus.data.id,
+  const sess = { mode: 'setup', currency: 'eur', locale: 'fr', customer: cus.data.id,
     success_url: `${origin}/frigo.html?ok=1&sid={CHECKOUT_SESSION_ID}`, cancel_url: `${origin}/frigo.html`,
     'custom_text[submit][message]': 'Aucun montant n’est débité maintenant : seule une empreinte de votre carte est enregistrée. Votre consommation sera débitée à la fin de votre séjour.',
     'setup_intent_data[description]': `Frigo — ${apt} — ${name}` };
