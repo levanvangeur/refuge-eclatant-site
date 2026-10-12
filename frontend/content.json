@@ -46,7 +46,7 @@
       "keyboxCode": "2305"
     },
     "address": {
-      "full": "17 rue Paul Cambon, 71600 Paray-le-Monial",
+      "full": "17 rue Paul Cambon, 71600 Paray-le-Monial Appartement N.2",
       "floor": "",
       "buildingCode": "",
       "parking": "Stationnement gratuit à proximité immédiate du logement."
@@ -65,20 +65,19 @@
       {
         "title": "Cuisine & électroménager",
         "items": [
-          "Réfrigérateur / congélateur, plaques à induction et hotte à disposition.",
-          "Four / micro-ondes : notice à côté de l'appareil.",
-          "Lave-vaisselle : pastilles fournies sous l'évier.",
-          "Cafetière Tassimo, bouilloire, grille-pain, ustensiles et vaisselle dans les placards."
+          "Réfrigérateur / congélateur, plaques à induction et hotte à disposition",
+          "Four / micro-ondes",
+          "Lave-vaisselle : pastilles fournies",
+          "Cafetière Tassimo, bouilloire, grille-pain"
         ]
       },
       {
         "title": "Chauffage & radiateurs",
         "items": [
-          "Chaque radiateur se règle indépendamment grâce à sa molette ou à son thermostat, pièce par pièce.",
-          "Modes courants : ☀ Confort en journée · ☾ Éco la nuit · ❄ Hors-gel en cas d'absence prolongée.",
-          "Pour plus de chaleur, tournez la molette vers le « + » ou augmentez la consigne (idéalement 19–20 °C).",
+          "Chaque radiateur se règle indépendamment avec le + ou le - .",
+          "Merci d'éteindre les radiateurs avant votre départ.",
           "Merci de ne rien poser ni faire sécher sur les radiateurs, et de baisser le chauffage en aérant.",
-          "Eau chaude disponible en continu."
+          "Eau chaude disponible : 80L."
         ]
       },
       {
@@ -91,23 +90,22 @@
       {
         "title": "Linge & entretien",
         "items": [
-          "Lave-linge : lessive à disposition.",
           "Linge de lit et de toilette fournis.",
-          "Aspirateur, balai et produits ménagers dans le placard d'entrée."
+          "Aspirateur, balai et produits ménagers dans le placard de la chambre."
         ]
       },
       {
         "title": "Tri & poubelles",
         "items": [
-          "Les sacs doivent être déposés dehors, en bas de l'immeuble, juste devant le portail noir.",
-          "Tri sélectif (emballages, verre) : points de collecte à proximité."
+          "Les sacs doivent être déposés dehors, en bas de l'immeuble sur la partie gauche",
+          "Tri sélectif (emballages, verre) : points de collecte à proximité (50m)"
         ]
       }
     ]
   },
   "rules": {
     "respect": [
-      "Logement entièrement non-fumeur (balcons / extérieur autorisés).",
+      "Logement entièrement non-fumeur (extérieur autorisés).",
       "Animaux non admis (sauf sur demande).",
       "Fêtes et soirées non autorisées.",
       "Merci de respecter le calme du voisinage, en particulier après 22h00.",
@@ -118,9 +116,9 @@
   "departure": {
     "intro": "",
     "items": [
-      "Faire la vaisselle et vider le lave-vaisselle.",
-      "Sortir les poubelles et le tri.",
+      "Merci de ranger votre vaisselle.",
       "Déhousser les draps et regrouper le linge dans les panières.",
+      "Sortir les poubelles et le tri.",
       "Baisser le chauffage et fermer les fenêtres.",
       "Laisser le logement propre et rangé.",
       "Déposer les clés dans la boîte à clés."
@@ -133,16 +131,12 @@
       {
         "name": "Le logement en images",
         "equipment": [
-          "Télévision 4K",
           "Fibre optique WiFi",
-          "Climatisation",
           "Plaque à induction",
           "Four",
           "Lave-vaisselle",
-          "Cafetière Nespresso",
           "Literie & oreillers",
           "Stores occultants",
-          "Douche italienne",
           "Sèche-cheveux"
         ],
         "images": [
@@ -767,8 +761,8 @@
   "sectionOrder": [
     "practical",
     "included",
-    "fridge",
     "welcome",
+    "fridge",
     "rules",
     "departure",
     "goodbye",
@@ -782,7 +776,8 @@
     "escapes",
     "digoinCharolles",
     "gallery",
-    "numbers"
+    "numbers",
+    "reviews"
   ],
   "reviews": {
     "intro": "Un aperçu sincère de ce que nos voyageurs retiennent de leur séjour.",
