@@ -18,7 +18,7 @@
   box.id = 'intro'; box.setAttribute('aria-hidden', 'true');
   box.innerHTML = '<svg viewBox="-10 -10 638 670">' + P.map(function (p) {
     return '<path pathLength="1" style="--o:' + p[1] + '" d="' + p[0] + '"/>';
-  }).join('') + '</svg><div class="i-kick" data-notranslate></div><div class="i-name" data-notranslate></div><div class="i-rule"></div><div class="i-welcome">Pilotez votre séjour…</div>';
+  }).join('') + '</svg><div class="i-kick" data-notranslate></div><div class="i-name" data-notranslate></div><div class="i-rule"></div><div class="i-welcome">Pilotez votre séjour depuis cette interface</div>';
   root.appendChild(box);
 
   var merged = false, finished = false;
