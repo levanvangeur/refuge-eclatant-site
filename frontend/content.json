@@ -178,12 +178,7 @@
         "name": "La Tour Saint-Nicolas",
         "desc": "Élégant clocher Renaissance (XVIᵉ siècle) d'une ancienne église, dressé au bord de la Bourbince, en plein centre historique.",
         "meta": "Bords de Bourbince · Extérieur libre"
-      }
-    ]
-  },
-  "stroll": {
-    "intro": "Prendre son temps, flâner et respirer, au fil de l'eau et des jardins.",
-    "places": [
+      },
       {
         "name": "Les bords de la Bourbince",
         "desc": "Promenade paisible le long de la rivière et du Canal du Centre, avec de belles vues sur la basilique. Idéal à pied ou à vélo.",
@@ -646,7 +641,7 @@
     ]
   },
   "escapes": {
-    "intro": "Une journée d'escapade autour de Paray-le-Monial, en Bourgogne du Sud.",
+    "intro": "Une journée d'escapade autour de Paray-le-Monial, en Bourgogne du Sud. Digoin et Charolles, à deux pas de Paray, se visitent aussi en une demi-journée.",
     "places": [
       {
         "name": "Cluny & son abbaye",
@@ -662,51 +657,44 @@
         "name": "Les vignobles & le Mâconnais",
         "desc": "Vers l'est, la route des vins du Mâconnais et ses villages de pierres dorées (Pouilly-Fuissé, Roche de Solutré) pour les amateurs de belles dégustations.",
         "meta": "À env. 45 min–1 h"
+      },
+      {
+        "name": "Le Pont-Canal",
+        "desc": "Impressionnant ouvrage de 243 m qui fait passer le canal au-dessus de la Loire. Traversée gratuite à pied, avec une vue splendide sur le fleuve.",
+        "meta": "Digoin · à env. 13 km",
+        "city": "Digoin"
+      },
+      {
+        "name": "L'ObservaLoire",
+        "desc": "Musée interactif dédié à la Loire, sa faune et ses métiers, avec un panorama à 180° sur le pont-canal depuis sa galerie vitrée.",
+        "meta": "Digoin · à env. 13 km · Payant · horaires à vérifier",
+        "city": "Digoin"
+      },
+      {
+        "name": "Le Musée de la Céramique",
+        "desc": "La tradition céramique de Digoin racontée dans une bâtisse de 1742. Balades à vélo possibles le long des voies vertes et du canal.",
+        "meta": "Digoin · à env. 13 km",
+        "city": "Digoin"
+      },
+      {
+        "name": "La Maison du Charolais",
+        "desc": "Parcours ludique autour de la célèbre race bovine, du bocage à l'assiette, avec dégustation à la clé.",
+        "meta": "Charolles · à env. 13 km",
+        "city": "Charolles"
+      },
+      {
+        "name": "La Faïencerie de Charolles",
+        "desc": "Maison historique fondée en 1844 qui perpétue l'art de la faïence bourguignonne. Boutique et démonstrations de savoir-faire.",
+        "meta": "Charolles · à env. 13 km",
+        "city": "Charolles"
+      },
+      {
+        "name": "Cité de caractère & Musée du Prieuré",
+        "desc": "Surnommée la « Petite Venise du Charolais » pour ses canaux, la ville invite à la flânerie. Le Musée du Prieuré–Jean Laronze abrite faïences et art local.",
+        "meta": "Charolles · à env. 13 km",
+        "city": "Charolles"
       }
     ]
-  },
-  "digoinCharolles": {
-    "intro": "À deux pas de Paray : deux cités attachantes à découvrir.",
-    "digoin": {
-      "title": "Digoin · à env. 13 km",
-      "places": [
-        {
-          "name": "Le Pont-Canal",
-          "desc": "Impressionnant ouvrage de 243 m qui fait passer le canal au-dessus de la Loire. Traversée gratuite à pied, avec une vue splendide sur le fleuve.",
-          "meta": ""
-        },
-        {
-          "name": "L'ObservaLoire",
-          "desc": "Musée interactif dédié à la Loire, sa faune et ses métiers, avec un panorama à 180° sur le pont-canal depuis sa galerie vitrée.",
-          "meta": "Payant · horaires à vérifier"
-        },
-        {
-          "name": "Le Musée de la Céramique",
-          "desc": "La tradition céramique de Digoin racontée dans une bâtisse de 1742. Balades à vélo possibles le long des voies vertes et du canal.",
-          "meta": ""
-        }
-      ]
-    },
-    "charolles": {
-      "title": "Charolles · à env. 13 km",
-      "places": [
-        {
-          "name": "La Maison du Charolais",
-          "desc": "Parcours ludique autour de la célèbre race bovine, du bocage à l'assiette, avec dégustation à la clé.",
-          "meta": ""
-        },
-        {
-          "name": "La Faïencerie de Charolles",
-          "desc": "Maison historique fondée en 1844 qui perpétue l'art de la faïence bourguignonne. Boutique et démonstrations de savoir-faire.",
-          "meta": ""
-        },
-        {
-          "name": "Cité de caractère & Musée du Prieuré",
-          "desc": "Surnommée la « Petite Venise du Charolais » pour ses canaux, la ville invite à la flânerie. Le Musée du Prieuré–Jean Laronze abrite faïences et art local.",
-          "meta": ""
-        }
-      ]
-    }
   },
   "numbers": {
     "emergency": [
@@ -892,5 +880,14 @@
       "maxQty": 6,
       "contents": "2 oreillers, housse de couette, drap housse et 2 serviettes"
     }
+  },
+  "banner": {
+    "caption": "Visite du logement",
+    "images": [
+      "images/banner/1.jpg",
+      "images/banner/2.jpg",
+      "images/banner/3.jpg",
+      "images/banner/4.jpg"
+    ]
   }
 }
