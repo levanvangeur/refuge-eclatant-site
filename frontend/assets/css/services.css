@@ -1,0 +1,35 @@
+/* Boutons « Ménage » (menthe, étincelles) et « Linge » (rose-lavande, lit) + page services du séjour — 2026-10-14 */
+.el-btn[href$="type=menage"] { --btn-grad: linear-gradient(120deg, #1fa88c, #6fdcc2, #1fa88c); --sh: rgba(31, 168, 140, .85); }
+.el-btn[href$="type=linge"]  { --btn-grad: linear-gradient(120deg, #d0699f, #a78bec, #d0699f); --sh: rgba(167, 100, 200, .85); }
+.el-btn[href$="type=menage"]::before, .el-btn[href$="type=linge"]::before {
+  content: ""; width: 1.2rem; height: 1.2rem; background: #fff; flex: none; text-shadow: none; margin-right: .5rem;
+}
+.el-btn[href$="type=menage"]::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 3l1.9 5.4L17.5 10l-5.6 1.6L10 17l-1.9-5.4L2.5 10l5.6-1.6z'/%3E%3Cpath d='M19 15l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 3l1.9 5.4L17.5 10l-5.6 1.6L10 17l-1.9-5.4L2.5 10l5.6-1.6z'/%3E%3Cpath d='M19 15l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z'/%3E%3C/svg%3E") center / contain no-repeat;
+  animation: svTwinkle 2.4s ease-in-out infinite;
+}
+.el-btn[href$="type=linge"]::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 19V6M3 15h18v4M21 15v-2.5A2.5 2.5 0 0 0 18.5 10H11v5'/%3E%3Ccircle cx='7' cy='12' r='1.6'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 19V6M3 15h18v4M21 15v-2.5A2.5 2.5 0 0 0 18.5 10H11v5'/%3E%3Ccircle cx='7' cy='12' r='1.6'/%3E%3C/svg%3E") center / contain no-repeat;
+  animation: svSway 3.4s ease-in-out infinite;
+}
+@keyframes svTwinkle { 0%,100% { transform: scale(.85) rotate(0); opacity: .8; } 50% { transform: scale(1.15) rotate(14deg); opacity: 1; } }
+@keyframes svSway { 50% { transform: translateY(-2px) rotate(-6deg); } }
+@media (prefers-reduced-motion: reduce) { .el-btn[href$="type=menage"]::before, .el-btn[href$="type=linge"]::before { animation: none; } }
+
+/* Carte « Services du séjour » : les deux boutons côte à côte quand il y a de la place */
+.sv-btns { display: grid; gap: 4px; }
+
+/* Sélecteur de quantité (linge) */
+.sv-qty { display: flex; align-items: center; justify-content: center; gap: 22px; margin: 8px 0 4px; }
+.sv-step { width: 52px; height: 52px; border-radius: 50%; border: 1.5px solid var(--gold-light); background: #fff; color: var(--gold-dark); font: 400 1.7rem/1 'Jost', sans-serif; cursor: pointer; transition: all .2s; }
+.sv-step:hover:not(:disabled) { border-color: var(--gold); background: #FBF8F2; }
+.sv-step:disabled { opacity: .35; cursor: not-allowed; }
+.sv-n { min-width: 90px; display: grid; gap: 2px; }
+.sv-n b { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 3rem; line-height: 1; color: var(--gold-dark); }
+.sv-n span { color: var(--ink-soft); font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; }
+
+/* Bouton « Réservez votre prochain séjour » devenu une catégorie du fil (id reservation) */
+.booking-block { padding: 34px 0 !important; text-align: center; background: transparent !important; }
+.booking-block .hero-cta-wrap { margin: 0 auto; }

@@ -18,7 +18,7 @@
   box.id = 'intro'; box.setAttribute('aria-hidden', 'true');
   box.innerHTML = '<svg viewBox="-10 -10 638 670">' + P.map(function (p) {
     return '<path pathLength="1" style="--o:' + p[1] + '" d="' + p[0] + '"/>';
-  }).join('') + '</svg><div class="i-kick" data-notranslate></div><div class="i-name" data-notranslate></div><div class="i-rule"></div><div class="i-welcome">Bienvenue, gérez votre séjour depuis cette interface</div>';
+  }).join('') + '</svg><div class="i-kick" data-notranslate></div><div class="i-name" data-notranslate></div><div class="i-rule"></div><div class="i-welcome">Pilotez votre séjour…</div>';
   root.appendChild(box);
 
   var merged = false, finished = false;
@@ -56,7 +56,7 @@
     (function wait() { if (document.querySelector('.hero-content') || tries++ > 40) go(); else setTimeout(wait, 100); })();
   }
   box.addEventListener('click', merge);
-  setTimeout(merge, 8200); // filet de sécurité
+  setTimeout(merge, 10200); // filet de sécurité
 
   fetch('content.json').then(function (r) { return r.json(); }).then(function (d) {
     var m = d.meta || {};
@@ -65,5 +65,5 @@
   }).catch(function () {});
 
   requestAnimationFrame(function () { requestAnimationFrame(function () { box.classList.add('go'); }); });
-  setTimeout(merge, 4400);
+  setTimeout(merge, 6400); // dessin fini à ~2,4 s, texte lisible ~4 s (2 s de plus qu'avant)
 })();

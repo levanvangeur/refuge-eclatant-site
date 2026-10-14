@@ -505,3 +505,10 @@ ul.diamond li::before { content: "◆"; color: var(--gold); font-size: 0.6rem; m
 @media (prefers-reduced-motion: reduce) { .lang-panel, .lang-current .caret { transition: none; } }
 
 @media (max-width: 640px) { .lang-flags { position: static; } .lang-panel { right: 12px; top: calc(100% + 6px); } }
+
+/* Correctif mobile 2026-10-14 : l'espacement de lettres animé du titre le faisait passer sur 2 lignes puis revenir sur 1
+   (saut de ~30 px de toute la page, très visible sur « Informations pratiques »). Sur petit écran on anime sans toucher à la largeur. */
+@keyframes sigTitleM { from { opacity: 0; transform: translateY(8px) scale(.97); } }
+@media (max-width: 900px) {
+  .section-title.sig.in { animation-name: sigTitleM; animation-duration: 1s; }
+}

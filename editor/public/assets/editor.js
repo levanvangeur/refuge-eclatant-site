@@ -12,29 +12,27 @@
   // Catégories du corps du livret pouvant être réordonnées (doit correspondre
   // à SECTIONS dans frontend/assets/js/app.js).
   const CATEGORY_LABELS = {
+    booking: 'Bouton « Réservez votre prochain séjour »',
     practical: 'Infos pratiques',
     included: 'Tout est inclus',
     fridge: 'Boissons et snacks',
     welcome: 'Mot de bienvenue',
     comfort: 'Le logement',
-    gallery: 'Galerie (photos)',
     rules: 'Règles',
     departure: 'Avant le départ',
     discover: 'Découvrir',
-    stroll: 'Flâner & respirer',
     eat: 'Où manger',
     drinks: 'Bars & gourmandises',
     services: 'Services & locations',
     shops: 'Commerces & courses',
     escapes: 'Grandes escapades',
-    digoinCharolles: 'Digoin & Charolles',
     numbers: 'Numéros utiles',
     reviews: 'Avis des voyageurs',
     goodbye: 'Au revoir',
   };
-  const DEFAULT_ORDER = ['practical', 'included', 'fridge', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
-    'discover', 'stroll', 'eat', 'drinks', 'services', 'shops', 'escapes',
-    'digoinCharolles', 'numbers', 'reviews', 'goodbye'];
+  const DEFAULT_ORDER = ['booking', 'practical', 'included', 'fridge', 'welcome', 'comfort', 'rules', 'departure',
+    'discover', 'eat', 'drinks', 'services', 'shops', 'escapes',
+    'numbers', 'reviews', 'goodbye'];
 
   /* ─────────── Enregistrement (auto-save) ─────────── */
   let saveTimer = null;
@@ -228,6 +226,7 @@
     { key: 'name', label: 'Nom', full: true },
     { key: 'desc', label: 'Description', textarea: true },
     { key: 'meta', label: 'Infos (horaires, distance…)', full: true },
+    { key: 'city', label: 'Ville pour la carte (si différente, ex. Digoin)', full: true },
   ];
 
   function directoryPanel(block) {
@@ -344,6 +343,12 @@
         cb.addEventListener('change', () => { fr.enabled = cb.checked; scheduleSave(); });
         lab.prepend(cb); on.appendChild(lab);
         f.appendChild(card('Service', on));
+        const soon = elh('div', 'field');
+        const lab2 = elh('label', null, 'Frigo pas encore installé : afficher seulement « Coming soon »');
+        const cb2 = elh('input'); cb2.type = 'checkbox'; cb2.checked = !!fr.comingSoon;
+        cb2.addEventListener('change', () => { fr.comingSoon = cb2.checked; scheduleSave(); });
+        lab2.prepend(cb2); soon.appendChild(lab2);
+        f.appendChild(card('Bientôt disponible', soon));
         f.appendChild(card('Textes', (() => { const g = elh('div');
           g.appendChild(fieldText(fr, 'title', 'Titre', { ph: 'Boissons et snacks' }));
           g.appendChild(fieldText(fr, 'intro', 'Texte d’introduction', { textarea: true }));
@@ -373,6 +378,22 @@
           g.appendChild(fieldText(e, 'title', 'Titre', { ph: 'Besoin de plus de temps ?' }));
           g.appendChild(fieldText(e, 'intro', 'Texte d\'introduction (laisser vide = texte automatique)', { textarea: true }));
           return g; })()));
+        return f;
+      }],
+      ['stayServices', 'Services du séjour (ménage, draps)', () => {
+        const ss = d.stayServices || (d.stayServices = { enabled: true, cleaning: { enabled: true, price: 40, slots: ['Matin (9h – 12h)', 'Après-midi (13h – 17h)'] }, linen: { enabled: true, price: 10, maxQty: 6, contents: '2 oreillers, housse de couette, drap housse et 2 serviettes' } });
+        const cl = ss.cleaning || (ss.cleaning = { enabled: true, price: 40, slots: [] });
+        const li = ss.linen || (ss.linen = { enabled: true, price: 10, maxQty: 6 });
+        if (!Array.isArray(cl.slots)) cl.slots = [];
+        const f = elh('div');
+        f.appendChild(elh('p', 'subtle', 'Carte « Services du séjour » dans « Informations pratiques » : un bouton « Demander un ménage » (le client choisit le jour et un créneau) et un bouton « Draps supplémentaires » (nombre de jeux). Paiement par carte via Stripe ; vous recevez un email à l\'adresse indiquée dans « Arrivée anticipée / départ tardif ».'));
+        const check = (obj, label) => { const w = elh('div', 'field'); const lb = elh('label', null, label); const cb = elh('input'); cb.type = 'checkbox'; cb.checked = obj.enabled !== false; cb.addEventListener('change', () => { obj.enabled = cb.checked; scheduleSave(); }); lb.prepend(cb); w.appendChild(lb); return w; };
+        f.appendChild(card('Carte', (() => { const g = elh('div'); g.appendChild(check(ss, 'Afficher la carte')); g.appendChild(fieldText(ss, 'title', 'Titre', { ph: 'Services du séjour' })); g.appendChild(fieldText(ss, 'intro', 'Texte d\'introduction (optionnel)', { textarea: true })); return g; })()));
+        f.appendChild(card('Ménage en cours de séjour', (() => { const g = elh('div'); g.appendChild(check(cl, 'Proposer ce service')); g.appendChild(fieldText(cl, 'price', 'Prix du ménage, en € (ex. 40)', { number: true }));
+          g.appendChild(elh('p', 'subtle', 'Créneaux proposés au client (un par ligne) :'));
+          const ta = elh('textarea'); ta.rows = 3; ta.value = cl.slots.join('\n'); ta.addEventListener('input', () => { cl.slots = ta.value.split('\n').map((x) => x.trim()).filter(Boolean); scheduleSave(); }); g.appendChild(ta);
+          return g; })()));
+        f.appendChild(card('Draps supplémentaires', (() => { const g = elh('div'); g.appendChild(check(li, 'Proposer ce service')); g.appendChild(fieldText(li, 'price', 'Prix d\'un jeu, en € (ex. 10)', { number: true })); g.appendChild(fieldText(li, 'maxQty', 'Nombre maximum de jeux par commande (ex. 6)', { number: true })); g.appendChild(fieldText(li, 'contents', 'Contenu d\'un jeu', { ph: '2 oreillers, housse de couette, drap housse et 2 serviettes' })); return g; })()));
         return f;
       }],
       ['practical', 'Infos pratiques', () => {
@@ -427,11 +448,55 @@
         r(); f.appendChild(box);
         return f;
       }],
-      ['gallery', 'Galerie (photos)', () => {
+      ['banner', 'Photos du bandeau (haut de page)', () => {
+        const b = d.banner || (d.banner = { caption: 'Visite du logement', images: [] });
+        if (!Array.isArray(b.images)) b.images = [];
         const f = elh('div');
-        f.appendChild(card('Introduction', fieldText(d.gallery, 'intro', 'Introduction')));
-        d.gallery.rooms = d.gallery.rooms || [];
-        f.appendChild(card('Pièces & photos', roomsEditor(d.gallery.rooms)));
+        f.appendChild(elh('p', 'subtle', 'Bandeau photo sous le nom du logement : les photos défilent en fondu lent, le voyageur peut aussi toucher les points ou balayer. Les photos sont réduites automatiquement avant l\'envoi. Format paysage recommandé (16/9). La catégorie « Le logement en images » n\'existe plus.'));
+        f.appendChild(card('Légende', fieldText(b, 'caption', 'Légende affichée sur la photo', { ph: 'Visite du logement' })));
+        const box = elh('div');
+        const render = () => {
+          box.innerHTML = '';
+          const thumbs = elh('div', 'thumbs');
+          b.images.forEach((src, ii) => {
+            const th = elh('div', 'thumb');
+            const img = elh('img'); img.src = '/preview/' + src; th.appendChild(img);
+            const rm = elh('button', 'rm', '✕'); rm.onclick = () => { b.images.splice(ii, 1); scheduleSave(); render(); };
+            const l = elh('button', 'mv l', '‹'); l.onclick = () => { if (ii > 0) { [b.images[ii - 1], b.images[ii]] = [b.images[ii], b.images[ii - 1]]; scheduleSave(); render(); } };
+            const r = elh('button', 'mv r', '›'); r.onclick = () => { if (ii < b.images.length - 1) { [b.images[ii + 1], b.images[ii]] = [b.images[ii], b.images[ii + 1]]; scheduleSave(); render(); } };
+            th.append(rm, l, r); thumbs.appendChild(th);
+          });
+          box.appendChild(thumbs);
+          const up = elh('div', 'uploader');
+          const file = elh('input'); file.type = 'file'; file.accept = 'image/*'; file.multiple = true;
+          // Réduction côté navigateur (1500 px, JPEG) pour un bandeau rapide à charger
+          const shrink = (f) => new Promise((resolve) => {
+            const url = URL.createObjectURL(f); const im = new Image();
+            im.onload = () => {
+              const k = Math.min(1, 1500 / im.width); const c = document.createElement('canvas');
+              c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+              c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+              c.toBlob((bl) => resolve(new File([bl], f.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' })), 'image/jpeg', 0.82);
+            };
+            im.onerror = () => resolve(f); im.src = url;
+          });
+          file.addEventListener('change', async () => {
+            if (!file.files.length) return;
+            toast('Préparation des photos…');
+            const fd = new FormData();
+            for (const f2 of Array.from(file.files)) fd.append('photos', await shrink(f2));
+            try {
+              const r = await fetch('/api/upload?folder=banner', { method: 'POST', body: fd });
+              const j = await r.json();
+              if (!j.ok) throw new Error(j.error || 'échec');
+              b.images.push(...j.paths); scheduleSave(); render(); toast('Photos ajoutées ✓', 'ok');
+            } catch (err) { toast('Échec : ' + err.message, 'err'); }
+          });
+          up.append(elh('span', null, 'Ajouter des photos : '), file);
+          box.appendChild(up);
+        };
+        render();
+        f.appendChild(card('Photos (dans l\'ordre d\'affichage)', box));
         return f;
       }],
       ['rules', 'Règles', () => {
@@ -450,25 +515,11 @@
         return f;
       }],
       ['discover', 'Découvrir', () => placesPanel(d.discover)],
-      ['stroll', 'Flâner & respirer', () => placesPanel(d.stroll)],
       ['eat', 'Où manger', () => directoryPanel(d.eat)],
       ['drinks', 'Bars & gourmandises', () => directoryPanel(d.drinks)],
       ['services', 'Services & locations', () => directoryPanel(d.services)],
       ['shops', 'Commerces & courses', () => directoryPanel(d.shops)],
       ['escapes', 'Grandes escapades', () => placesPanel(d.escapes)],
-      ['digoinCharolles', 'Digoin & Charolles', () => {
-        const f = elh('div');
-        f.appendChild(card('Introduction', fieldText(d.digoinCharolles, 'intro', 'Introduction', { textarea: true })));
-        ['digoin', 'charolles'].forEach((key) => {
-          const b = d.digoinCharolles[key] || (d.digoinCharolles[key] = { title: '', places: [] });
-          b.places = b.places || [];
-          const c = elh('div', 'card');
-          c.appendChild(fieldText(b, 'title', 'Titre (' + key + ')'));
-          c.appendChild(objectList(b.places, PLACE_FIELDS, { titleKey: 'name', addLabel: 'Ajouter un lieu' }));
-          f.appendChild(c);
-        });
-        return f;
-      }],
       ['numbers', 'Numéros utiles', () => {
         const f = elh('div');
         const NF = [{ key: 'label', label: 'Libellé' }, { key: 'number', label: 'Numéro' }];

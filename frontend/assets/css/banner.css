@@ -1,0 +1,17 @@
+/* Bandeau photos sous le titre du logement (style « cinéma ») — 2026-10-14 */
+.cin-wrap { width: min(100%, 640px); margin: 26px auto 0; }
+.cin { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden; background: #e9e3d6;
+  box-shadow: 0 18px 40px -18px rgba(110, 92, 68, .5); }
+.cin::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(40,25,10,.4)); z-index: 2; pointer-events: none; }
+.cin::after { content: ""; position: absolute; inset: 8px; border: 1.5px solid rgba(255,255,255,.75); border-radius: 12px; z-index: 3; pointer-events: none; }
+.cin-sl { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1);
+  transition: opacity 1.4s ease, transform 0s linear 1.4s; }
+.cin-sl.on { opacity: 1; transform: scale(1.08); transition: opacity 1.4s ease, transform 7s linear; }
+.cin-cap { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 4; color: #fff; white-space: nowrap;
+  font: 500 .66rem 'Jost', system-ui, sans-serif; letter-spacing: .3em; text-transform: uppercase; text-shadow: 0 1px 4px rgba(0,0,0,.5); }
+.cin-dots { display: flex; gap: 4px; justify-content: center; margin-top: 8px; }
+.cin-dots button { width: 22px; height: 22px; padding: 0; border: 0; background: none; cursor: pointer; position: relative; }
+.cin-dots button::before { content: ""; position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%;
+  background: var(--gold-light); transition: background .3s, transform .3s; }
+.cin-dots button.on::before { background: var(--gold); transform: scale(1.3); }
+@media (prefers-reduced-motion: reduce) { .cin-sl, .cin-sl.on { transition: opacity .3s; transform: none; } }

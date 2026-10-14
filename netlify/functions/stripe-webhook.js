@@ -33,7 +33,8 @@ exports.handler = async (event) => {
   const s = evt.data.object;
   const m = s.metadata || {};
   const isFridge = m.kind === 'fridge' && s.mode === 'setup' && s.status === 'complete';
-  if (!isFridge && (m.kind !== 'early_late' || s.payment_status !== 'paid')) return { statusCode: 200, body: 'ignoré' };
+  const isStay = (m.kind === 'menage' || m.kind === 'linge') && s.payment_status === 'paid';
+  if (!isFridge && !isStay && (m.kind !== 'early_late' || s.payment_status !== 'paid')) return { statusCode: 200, body: 'ignoré' };
 
   // Destinataire depuis le contenu publié du livret
   let to = process.env.NOTIFY_EMAIL || '';
@@ -71,6 +72,18 @@ exports.handler = async (event) => {
     foot = `Aucun montant n'a été débité. À la fin du séjour, relevez la consommation puis débitez la carte enregistrée : Stripe → Clients → ${esc(m.guest)}`
       + (s.customer ? ` (<a href="https://dashboard.stripe.com/customers/${esc(s.customer)}">ouvrir la fiche client</a>)` : '') + ' → Créer un paiement.';
   }
+  if (isStay) {
+    // Services du séjour : ménage en cours de séjour / linge supplémentaire (déjà payés)
+    const isCl = m.kind === 'menage';
+    title = isCl ? 'Ménage demandé' : 'Linge supplémentaire demandé';
+    subject = `${title} — ${m.apartment} — ${m.guest} — ${frDate(m.date)}`;
+    rows.length = 0;
+    rows.push(['Logement', m.apartment], ['Client', m.guest], ['Email', email], [isCl ? 'Jour du ménage' : 'Jour de dépôt', frDate(m.date)]);
+    if (isCl) rows.push(['Créneau', m.slot]); else rows.push(['Quantité', m.qty + ' jeu(x)']);
+    if (m.note) rows.push(['Précision', m.note]);
+    rows.push(['Montant payé', amount.toLocaleString('fr-FR') + ' €']);
+    foot = 'Paiement déjà encaissé. En cas d\'impossibilité, remboursez le client depuis Stripe.';
+  }
   const html = `<div style="font-family:Arial,sans-serif;max-width:520px;margin:auto;color:#5B4B37">
     <h2 style="font-weight:500">${esc(title)} — ${esc(m.apartment)}</h2>
     <table style="width:100%;border-collapse:collapse">${rows.map(([k, v]) =>
@@ -79,7 +92,7 @@ exports.handler = async (event) => {
 
   try {
     await transport.sendMail({
-      from: `"Livret ${m.apartment}" <${SMTP_USER}>`,
+      from: `"Livret ${m.apartment}" <${process.env.SMTP_FROM || SMTP_USER}>`,
       to, replyTo: email || undefined,
       subject,
       html,

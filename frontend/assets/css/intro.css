@@ -22,7 +22,7 @@ html.intro-merge .hero img.logo { transition: opacity .35s ease; }
 #intro.go .i-kick { animation: introFade .6s 2.2s forwards; }
 #intro.go .i-name { animation: introFade .7s 2.4s forwards; }
 #intro.go .i-rule { animation: introRule .9s 2.7s forwards; }
-#intro.go .i-welcome { animation: introWelcome .9s 2.9s cubic-bezier(.2, .7, .2, 1) forwards; }
+#intro.go .i-welcome { animation: introWelcome .9s 2.45s cubic-bezier(.2, .7, .2, 1) forwards; }
 /* Fusion : les textes de l'écran d'intro s'effacent pendant que ceux de l'en-tête apparaissent */
 #intro.merging .i-kick, #intro.merging .i-name, #intro.merging .i-rule, #intro.merging .i-welcome { animation: introOut .45s ease forwards !important; }
 @keyframes introDraw { to { stroke-dashoffset: 0; } }

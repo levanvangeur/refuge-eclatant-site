@@ -37,38 +37,35 @@
   // L'ordre par défaut ci-dessous peut être remplacé par data.sectionOrder
   // (modifiable depuis l'éditeur, bouton ↑ / ↓ sur chaque catégorie).
   const SECTIONS = {
-    practical: (d, alt) => practical(d.practical, alt, d.earlyLate),
+    practical: (d, alt) => practical(d.practical, alt, d.earlyLate, d.stayServices),
     included: (d, alt) => included((d.welcome || {}).included, alt),
+    booking: (d) => bookingSection(d.meta),
     fridge: (d, alt) => fridge(d.fridge, alt),
     welcome: (d, alt) => welcome(d.welcome, alt),
     comfort: (d, alt) => comfort(d.comfort, alt),
-    gallery: (d, alt) => gallery(d.gallery, alt),
     rules: (d, alt) => rules(d.rules, alt),
     departure: (d, alt) => departure(d.departure, alt),
     discover: (d, alt) => placesSection('decouvrir', 'À deux pas de chez vous', 'Découvrir ' + ((d.meta || {}).city || ''), d.discover, (d.meta || {}).city, alt),
-    stroll: (d, alt) => placesSection('flaner', 'Prendre son temps', 'Flâner & respirer', d.stroll, (d.meta || {}).city, alt),
     eat: (d, alt) => directory('manger', 'Nos recommandations', 'Où manger', d.eat, (d.meta || {}).city, alt),
     drinks: (d, alt) => directory('boire', 'Se régaler', 'Bars & gourmandises', d.drinks, (d.meta || {}).city, alt),
     services: (d, alt) => directory('services', 'Bien pratique', 'Services & locations', d.services, (d.meta || {}).city, alt),
     shops: (d, alt) => directory('commerces', 'Le quotidien', 'Commerces & courses', d.shops, (d.meta || {}).city, alt),
     escapes: (d, alt) => placesSection('escapades', 'Une journée d\'escapade', 'Grandes escapades', d.escapes, (d.meta || {}).city, alt),
-    digoinCharolles: (d, alt) => digoinCharolles(d.digoinCharolles, alt),
     numbers: (d, alt) => numbers(d.numbers, alt),
     reviews: (d, alt) => reviewsSection(d.reviews, alt),
     goodbye: (d, alt) => goodbye(d.goodbye, d.meta, alt),
   };
 
   // Ordre par défaut si data.sectionOrder est absent ou incomplet.
-  const DEFAULT_ORDER = ['practical', 'included', 'fridge', 'welcome', 'comfort', 'gallery', 'rules', 'departure',
-    'discover', 'stroll', 'eat', 'drinks', 'services', 'shops', 'escapes',
-    'digoinCharolles', 'numbers', 'reviews', 'goodbye'];
+  const DEFAULT_ORDER = ['booking', 'practical', 'included', 'fridge', 'welcome', 'comfort', 'rules', 'departure',
+    'discover', 'eat', 'drinks', 'services', 'shops', 'escapes',
+    'numbers', 'reviews', 'goodbye'];
 
   // Libellés de navigation (id de contenu → [ancre, libellé]).
   const NAV_LABELS = {
     practical: ['pratique', 'Pratique'],
     fridge: ['frigo', 'Boissons & snacks'],
     comfort: ['logement', 'Le logement'],
-    gallery: ['galerie', 'Galerie'],
     rules: ['regles', 'Règles'],
     departure: ['depart', 'Avant le départ'],
     discover: ['decouvrir', 'Découvrir'],
@@ -82,7 +79,8 @@
 
   function resolveOrder(saved) {
     const order = (Array.isArray(saved) ? saved : []).filter((id) => SECTIONS[id]);
-    DEFAULT_ORDER.forEach((id) => { if (order.indexOf(id) === -1) order.push(id); });
+    // Le bouton « Réservez… » était dans l'en-tête : s'il manque dans l'ordre enregistré, il reste tout en haut.
+    DEFAULT_ORDER.forEach((id) => { if (order.indexOf(id) === -1) { if (id === 'booking') order.unshift(id); else order.push(id); } });
     return order;
   }
 
@@ -113,16 +111,16 @@
 
     // ── Navigation ──
     const nav = [['bienvenue', 'Bienvenue']];
-    order.forEach((id) => { const lab = NAV_LABELS[id]; if (lab) nav.push(lab); });
+    order.forEach((id) => { const lab = NAV_LABELS[id]; if (lab && SECTIONS[id](data, '')) nav.push(lab); }); // pas de lien vers une rubrique vide
     el('navLinks').innerHTML = nav.map(([id, label]) =>
       `<a href="#${id}" data-nav="${id}">${esc(label)}</a>`).join('');
 
     // ── Corps ──
-    const parts = [hero(m)];
+    const parts = [hero(m, data.banner)];
     let alt = false;
     order.forEach((id) => {
       const html = SECTIONS[id](data, alt ? 'alt' : '');
-      if (html) { parts.push(html); alt = !alt; }
+      if (html) { parts.push(html); if (id !== 'booking') alt = !alt; }
     });
     el('app').innerHTML = parts.filter(Boolean).join('');
 
@@ -130,8 +128,11 @@
     el('app').insertAdjacentHTML('beforeend', footer(data));
 
     setupInteractions(data, nav);
+    setupAccordions();
+    setupBanner();
     if (window.I18N) window.I18N.init();
     polish();
+    if (window.btnFx) window.btnFx();
     jumpToHash();
   }
 
@@ -171,7 +172,7 @@
     document.querySelectorAll('.hero-cta, .nav-cta, .el-btn, .fr-btn, .kv-actions .icon-btn').forEach((n) => po.observe(n));
   }
 
-  function hero(m) {
+  function hero(m, bn) {
     return `
     <a id="top"></a>
     <header class="hero" id="bienvenue">
@@ -179,12 +180,62 @@
         ${m.logo ? `<img class="logo" src="${esc(m.logo)}" alt="${esc(m.apartmentName)}" />` : ''}
         ${m.city ? `<div class="cov-kicker" data-notranslate>${esc(m.city)}</div>` : ''}
         <h1 data-notranslate>${esc(m.apartmentName || '')}</h1>
+        ${banner(bn, m)}
         <div class="hero-rule"></div>
         ${m.tagline ? `<p class="cov-sub-tag">${esc(m.tagline)}</p>` : (m.motto ? `<p class="cov-sub-tag">« ${esc(m.motto)} »</p>` : '')}
         <p class="hero-welcome">Bienvenue, gérez votre séjour depuis cette interface</p>
-        ${m.bookingUrl ? `<div class="hero-cta-wrap"><a href="${esc(m.bookingUrl)}" class="hero-cta" target="_blank" rel="noopener">Réservez votre prochain séjour</a></div>` : ''}
       </div>
     </header>`;
+  }
+
+  // Bandeau photos du logement sous le titre (fondu lent, points cliquables, balayage au doigt)
+  function banner(b, m) {
+    const imgs = ((b && b.images) || []).filter(Boolean);
+    if (!imgs.length) return '';
+    return `<div class="cin-wrap reveal">
+      <div class="cin">
+        ${imgs.map((src, i) => `<img class="cin-sl${i === 0 ? ' on' : ''}" src="${esc(src)}" alt="${esc((m && m.apartmentName) || '')}" ${i === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" />`).join('')}
+        ${b.caption ? `<span class="cin-cap">${esc(b.caption)}</span>` : ''}
+      </div>
+      ${imgs.length > 1 ? `<div class="cin-dots">${imgs.map((_, i) => `<button type="button" class="${i === 0 ? 'on' : ''}" aria-label="Photo ${i + 1}"></button>`).join('')}</div>` : ''}
+    </div>`;
+  }
+
+  function setupBanner() {
+    const w = document.querySelector('.cin-wrap');
+    if (!w) return;
+    const sl = Array.from(w.querySelectorAll('.cin-sl')), dots = Array.from(w.querySelectorAll('.cin-dots button'));
+    if (sl.length < 2) return;
+    let cur = 0, timer = null;
+    const go = (i) => {
+      cur = (i + sl.length) % sl.length;
+      sl.forEach((x, k) => x.classList.toggle('on', k === cur));
+      dots.forEach((d, k) => d.classList.toggle('on', k === cur));
+    };
+    const stop = () => { clearInterval(timer); timer = null; };
+    const start = () => {
+      stop();
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      timer = setInterval(() => go(cur + 1), 5500);
+    };
+    dots.forEach((d, k) => d.addEventListener('click', () => { go(k); start(); }));
+    let x0 = null;
+    w.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    w.addEventListener('touchend', (e) => {
+      if (x0 == null) return;
+      const dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 40) { go(cur + (dx < 0 ? 1 : -1)); start(); }
+    }, { passive: true });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); else start(); });
+    start();
+  }
+
+  // Bouton « Réservez votre prochain séjour » : catégorie déplaçable comme les autres (id 'booking' dans sectionOrder)
+  function bookingSection(m) {
+    if (!m || !m.bookingUrl) return '';
+    return `<section class="block booking-block" id="reservation"><div class="container">
+      <div class="hero-cta-wrap reveal"><a href="${esc(m.bookingUrl)}" class="hero-cta" target="_blank" rel="noopener">Réservez votre prochain séjour</a></div>
+    </div></section>`;
   }
 
   // Icônes du bloc « Tout est inclus » (mêmes pictos que le site de réservation)
@@ -227,7 +278,28 @@
       <div class="el-cap">${esc(note)}</div></div>`;
   }
 
-  function practical(pr, alt, el) {
+  // Bouton d'un service du séjour (ménage / linge) : même famille que arrivée anticipée / départ tardif
+  function stayBtn(ss, key, type, label, note) {
+    if (!ss || ss.enabled === false) return '';
+    const c = ss[key] || {};
+    if (c.enabled === false || !(Number(c.price) > 0)) return '';
+    return `<div class="el-inline"><a class="el-btn sm" href="services.html?type=${type}">${label}</a>
+      <div class="el-cap">${esc(note(c))}</div></div>`;
+  }
+
+  function stayCard(ss) {
+    const eur = (n) => Number(n).toLocaleString('fr-FR') + ' €';
+    const a = stayBtn(ss, 'cleaning', 'menage', 'Demander un ménage', (c) => 'Ménage complet du logement · ' + eur(c.price));
+    const b = stayBtn(ss, 'linen', 'linge', 'Draps supplémentaires', (c) => 'Jeu complet · ' + eur(c.price) + ' le jeu');
+    if (!a && !b) return '';
+    return `<div class="card info-card reveal">
+          <h3>${esc((ss && ss.title) || 'Services du séjour')}</h3>
+          ${ss && ss.intro ? `<p class="lead" style="margin:0 0 14px;text-align:left">${esc(ss.intro)}</p>` : ''}
+          ${a}${b}
+        </div>`;
+  }
+
+  function practical(pr, alt, el, ss) {
     if (!pr) return '';
     const wifi = pr.wifi || {}, ar = pr.arrival || {}, ad = pr.address || {}, as = pr.assistance || {};
     const kv = (k, v) => v ? `<div class="kv"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>` : '';
@@ -255,6 +327,7 @@
           ${kv('Départ', ar.checkOut)}
           ${earlyLateBtn(el, 'depart')}
         </div>
+        ${stayCard(ss)}
         <div class="callout reveal">
           <div class="co-label">Connexion Wi-Fi</div>
           <div class="co-row"><div><div class="co-label">Réseau</div><div class="co-big" data-notranslate>${esc(wifi.network || '—')}</div></div></div>
@@ -319,19 +392,49 @@
         <h3 style="text-align:center">Merci !</h3><p class="lead" style="margin:0">${esc(dep.thanks)}</p></div>` : ''}`, alt);
   }
 
+  // Sous-catégorie dépliable (flèche ▾). Fermée par défaut ; excl = une seule ouverte à la fois dans la rubrique.
+  const CHEV = '<svg class="acc-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+  function acc(title, count, inner, opts) {
+    opts = opts || {};
+    return `<div class="acc reveal${opts.place ? ' acc-place' : ''}"${opts.excl ? ' data-excl="1"' : ''}>
+      <button class="acc-head" type="button" aria-expanded="false">
+        <span class="acc-t">${esc(title)}</span>
+        <span class="acc-r">${count ? `<span class="acc-n" data-notranslate>${count}</span>` : ''}${CHEV}</span>
+      </button>
+      <div class="acc-panel"><div class="acc-in"><div class="acc-body">${inner}</div></div></div>
+    </div>`;
+  }
+
+  function setupAccordions() {
+    document.querySelectorAll('.acc-head').forEach((btn) => btn.addEventListener('click', () => {
+      const a = btn.parentElement;
+      const willOpen = !a.classList.contains('open');
+      if (willOpen && a.dataset.excl) {
+        a.closest('.container').querySelectorAll('.acc.open[data-excl]').forEach((o) => {
+          o.classList.remove('open'); o.querySelector('.acc-head').setAttribute('aria-expanded', 'false');
+        });
+      }
+      a.classList.toggle('open', willOpen);
+      btn.setAttribute('aria-expanded', String(willOpen));
+      if (willOpen) setTimeout(() => {
+        const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'), 10) || 64;
+        const top = a.getBoundingClientRect().top;
+        if (top < navH + 8) window.scrollTo({ top: top + window.scrollY - navH - 12, behavior: 'smooth' });
+      }, 380);
+    }));
+  }
+
   function placesSection(id, kick, title, block, cityHint, alt) {
     if (!block || !(block.places || []).length) return '';
     return section(id, kick, title, `
       ${block.intro ? `<p class="lead">${esc(block.intro)}</p>` : ''}
-      <div class="card info-card reveal">
-        ${block.places.map((p) => placeHTML(p, cityHint)).join('')}
-      </div>`, alt ? 'alt' : '');
+      ${block.places.map((p) => acc(p.name, '', placeHTML(p, cityHint, true), { place: true })).join('')}`, alt ? 'alt' : '');
   }
 
-  function placeHTML(p, cityHint) {
-    const mapQuery = [p.name, cityHint].filter(Boolean).join(', ');
+  function placeHTML(p, cityHint, bare) {
+    const mapQuery = [p.name, p.city || cityHint].filter(Boolean).join(', ');
     return `<div class="place">
-      <h3>${esc(p.name)}</h3>
+      ${bare ? '' : `<h3>${esc(p.name)}</h3>`}
       ${p.desc ? `<p>${esc(p.desc)}</p>` : ''}
       ${p.meta ? `<div class="meta">${esc(p.meta)}</div>` : ''}
       ${mapsLink(mapQuery, 'Voir sur la carte')}
@@ -356,23 +459,8 @@
     if (!block || !(block.groups || []).length) return '';
     return section(id, kick, title, `
       ${block.intro ? `<p class="lead">${esc(block.intro)}</p>` : ''}
-      ${block.groups.map((grp) => `
-        <div class="reveal" style="margin-bottom:34px">
-          <div class="group-title">${esc(grp.title)}</div>
-          <div class="card info-card">${(grp.items || []).map((it) => dirItem(it, cityHint)).join('')}</div>
-        </div>`).join('')}`, alt);
-  }
-
-  function digoinCharolles(dc, alt) {
-    if (!dc) return '';
-    const col = (b, cityHint) => b ? `
-      <div class="reveal">
-        <div class="group-title">${esc(b.title)}</div>
-        <div class="card info-card">${(b.places || []).map((p) => placeHTML(p, cityHint)).join('')}</div>
-      </div>` : '';
-    return section('digoin', 'À deux pas de Paray', 'Digoin & Charolles', `
-      ${dc.intro ? `<p class="lead">${esc(dc.intro)}</p>` : ''}
-      <div class="grid cols-2">${col(dc.digoin, 'Digoin')}${col(dc.charolles, 'Charolles')}</div>`, alt);
+      ${block.groups.map((grp) => acc(grp.title, (grp.items || []).length,
+        (grp.items || []).map((it) => dirItem(it, cityHint)).join(''), { excl: true })).join('')}`, alt);
   }
 
   function numbers(n, alt) {
@@ -445,6 +533,11 @@
   // Boissons et snacks : liste du frigo + bouton « Ouvrir le frigo » (empreinte de carte → code du cadenas, voir frigo.html)
   function fridge(f, alt) {
     if (!f || f.enabled === false) return '';
+    // Logements où le frigo n'est pas encore installé : simple mention « Coming soon »
+    if (f.comingSoon) {
+      return section('frigo', 'Une petite envie ?', f.title || 'Boissons et snacks', `
+        <div class="fr-card fr-soon-card reveal"><p class="fr-soon">${esc(f.soonText || 'Coming soon')}</p></div>`, alt);
+    }
     const list = (f.products || []).filter((p) => p && p.name);
     if (!list.length) return '';
     const fmt = (v) => {

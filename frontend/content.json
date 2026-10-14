@@ -760,24 +760,22 @@
   },
   "sectionOrder": [
     "practical",
-    "included",
     "welcome",
-    "fridge",
-    "rules",
+    "included",
     "departure",
-    "goodbye",
+    "rules",
+    "fridge",
     "comfort",
     "eat",
-    "discover",
-    "stroll",
     "drinks",
+    "discover",
     "services",
     "shops",
     "escapes",
-    "digoinCharolles",
-    "gallery",
+    "goodbye",
     "numbers",
-    "reviews"
+    "reviews",
+    "booking"
   ],
   "reviews": {
     "intro": "Un aperçu sincère de ce que nos voyageurs retiennent de leur séjour.",
@@ -876,5 +874,23 @@
         "price": "3"
       }
     ]
+  },
+  "stayServices": {
+    "enabled": true,
+    "title": "Services du séjour",
+    "cleaning": {
+      "enabled": true,
+      "price": 25,
+      "slots": [
+        "Matin (9h – 12h)",
+        "Après-midi (13h – 17h)"
+      ]
+    },
+    "linen": {
+      "enabled": true,
+      "price": 10,
+      "maxQty": 6,
+      "contents": "2 oreillers, housse de couette, drap housse et 2 serviettes"
+    }
   }
 }
